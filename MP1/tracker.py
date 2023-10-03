@@ -116,7 +116,7 @@ def process_update(index):
     # rk868 10/2/2023
     # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
     # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
-    # If there were tasks in the Task Tracker and the index was valid, I called the update_task() function.
+    # If there were tasks in the Task Tracker and the index was valid, I found the task by index and assigned it to task.
     # Then, I prompted the user to enter the new name, description, and due date of the task while showing the existing value of each property using string interpolation.
     # Lastly, I called update_task(index, name=name, description=desc, due=due) to update the name, description, and due date of the task.
 
