@@ -64,7 +64,7 @@ def add_task(name: str, description: str, due: str):
     # make sure any checks/conditions clearly display an appropriate message of what failed
     
     # rk868 10/3/2023 ; edited if statements to check if name, description, and due date were provided
-    if not name and not description and not due:
+    if not name or not description or not due:
         if not name:
             print("Task not added: Name is missing")
         if not description:
