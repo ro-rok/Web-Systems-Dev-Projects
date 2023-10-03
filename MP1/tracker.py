@@ -62,7 +62,29 @@ def add_task(name: str, description: str, due: str):
     # make sure save() is still called last in this function
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # make sure any checks/conditions clearly display an appropriate message of what failed
+    
+    if not name or not description or not due:
+        print("Task not added, because of missing data \n")
+    else:
+        try:
+            task["name"] = name
+            task["description"] = description
+            task["due"] = str_to_datetime(due)
+            task["lastActivity"] = datetime.now()
+            tasks.append(task)
+            print("Task added\n")
+        except:
+            print("Task not added due to an invalid due date format. Please use 'mm/dd/yy hh:mm:ss' or 'yyyy-mm-dd hh:mm:ss'.")
+
     save()
+        
+    # rk868 10/2/2023
+    # First, I checked if the name, description, and due date were provided. If not, I printed a message saying the task was not added because of missing data.
+    # If the name, description, and due date were provided, I tried to update the name, description, and due date in the task template.
+    # If the due date was not in the correct format, I printed a message saying the task was not added due to an invalid due date format.
+    # Otherwise, I updated lastActivity with the current datetime value, added the new task to the tasks list, and printed a message saying the task was added.
+    # Lastly, I called save() to save the changes to the json file.
+
 
 def process_update(index):
     """ extracted the user input prompts to get task data then passes it to update_task() """
@@ -71,10 +93,24 @@ def process_update(index):
     # show the existing value of each property where the TODOs are marked in the text of the inputs below (replace the TODO related text with the found tasks's data)
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     
-    name = input(f"What's the name of this task? (TODO name) \n").strip()
-    desc = input(f"What's a brief descriptions of this task? (TODO description) \n").strip()
-    due = input(f"When is this task due (format: m/d/y H:M:S) (TODO due) \n").strip()
-    update_task(index, name=name, description=desc, due=due)
+    if len(tasks) == 0:
+        print("There are no tasks in the Task Tracker \n" ) 
+    elif index <0 or index >= len(tasks):
+        print(f"Invalid index, must be between 1 and {len(tasks)} \n")
+    else:
+        view_task(index)
+        name = input(f"What's the name of this task? (TODO name) \n").strip()
+        desc = input(f"What's a brief descriptions of this task? (TODO description) \n").strip()
+        due = input(f"When is this task due (format: m/d/y H:M:S) (TODO due) \n").strip()
+        update_task(index, name=name, description=desc, due=due)
+
+    # rk868 10/2/2023
+    # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
+    # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
+    # If there were tasks in the Task Tracker and the index was valid, I called view_task(index) to show the existing value of each property.
+    # Then, I prompted the user to enter the new name, description, and due date of the task.
+    # Lastly, I called update_task(index, name=name, description=desc, due=due) to update the name, description, and due date of the task.
+
 
 def update_task(index: int, name: str, description:str, due: str):
     """ Updates the name, description , due date of a task found by index if an update to the property was provided """
@@ -86,7 +122,45 @@ def update_task(index: int, name: str, description:str, due: str):
     # make sure save() is still called last in this function
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     
+    if len(tasks) == 0:
+        print("There are no tasks in the Task Tracker \n")
+        return
+    elif index <0 or index >= len(tasks):
+        print(f"Invalid index, must be between 1 and {len(tasks)} \n")
+        return
+
+    task = tasks[index]
+
+    if (not name and not description and not due) or (name == task["name"] and description == task["description"] and due == task["due"]) :
+        print("Task not updated due to missing data or no changes \n")
+        return
+    
+    if name:
+        task["name"] = name
+    if description:
+        task["description"] = description
+    if due:
+        try:
+            task["due"] = str_to_datetime(due)
+        except:
+            print("Task not updated due to an invalid due date format. Please use 'mm/dd/yy hh:mm:ss' or 'yyyy-mm-dd hh:mm:ss'.")
+            return
+    task["lastActivity"] = datetime.now()
+    print("Task updated. \n")
+
     save()
+
+    # rk868 10/3/2023
+    # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
+    # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
+    # If there were tasks in the Task Tracker and the index was valid, I checked if the name, description, and due date were provided.
+    # Or if the name, description, and due date were the same as the original task property value.
+    # If the name, description, and due date were not provided or the name, description, and due date were the same as the original task property value,
+    # I printed a message saying the task was not updated.
+    # Else, I tried to update the name, description, and due date in the task template.
+    # If the due date was not in the correct format, I printed a message saying the task was not updated due to an invalid due date format.
+    # Otherwise, I updated lastActivity with the current datetime value and printed a message saying the task was updated.
+    # Lastly, I called save() to save the changes to the json file.
 
 def mark_done(index):
     """ Updates a single task, via index, to a done datetime"""
@@ -97,7 +171,30 @@ def mark_done(index):
     # make sure save() is still called last in this function
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
 
+    if len(tasks) == 0:
+        print("There are no tasks in the Task Tracker \n" )
+        return
+    elif index <0 or index >= len(tasks):
+        print(f"Invalid index, must be between 1 and {len(tasks)} \n")
+        return
+    
+    task = tasks[index]
+    
+    if not task["done"]:
+        task["done"] = datetime.now()
+        print("Task completed \n")
+    else:
+        print("Task already completed \n")
+
     save()
+
+    # rk868 10/3/2023
+    # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
+    # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
+    # If there were tasks in the Task Tracker and the index was valid, I checked if the task was already completed.
+    # If the task was not already completed, I recorded the current datetime as the value.
+    # Then, I printed a message saying the task was completed. Otherwise, I printed a message saying the task was already completed.
+    # Lastly, I called save() to save the changes to the json file.
 
 def view_task(index):
     """ View more info about a specific task fetch by index """
@@ -106,13 +203,29 @@ def view_task(index):
     # utilize the given print statement when a task is found
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     task = {} # <-- replace or update the assignment of this variable, I just used an empty dict so it would run without changes
+
+    if len(tasks) == 0:
+        print("There are no tasks in the Task Tracker \n" )
+        return
+    elif index <0 or index >= len(tasks):
+        print(f"Invalid index, must be between 1 and {len(tasks)} \n")
+        return
+    
+    task = tasks[index]
+
     print(f"""
-        [{'x' if task['done'] else ' '}] Task: {task['name']}\n 
+        [{'x' if task['done'] else ' '}] Task{index+1}: {task['name']}\n 
         Description: {task['description']} \n 
         Last Activity: {task['lastActivity']} \n
         Due: {task['due']}\n
         Completed: {task['done'] if task['done'] else '-'} \n
         """.replace('  ', ' '))
+
+    # rk868 10/2/2023
+    # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
+    # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
+    # If there were tasks in the Task Tracker and the index was valid, 
+    # I printed the task's name, index, description, lastActivity, due date, and completed status.
 
 
 def delete_task(index):
