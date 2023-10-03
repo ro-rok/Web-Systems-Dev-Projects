@@ -104,18 +104,20 @@ def process_update(index):
         print("There are no tasks in the Task Tracker \n" ) 
     elif index <0 or index >= len(tasks):
         print(f"Invalid index, must be between 1 and {len(tasks)} \n")
+
+    # rk868 10/3/2023; edited input statements to show existing value of each property
     else:
-        view_task(index)
-        name = input(f"What's the name of this task? (TODO name) \n").strip()
-        desc = input(f"What's a brief descriptions of this task? (TODO description) \n").strip()
-        due = input(f"When is this task due (format: m/d/y H:M:S) (TODO due) \n").strip()
+        task = tasks[index]
+        name = input(f"What's the name of this task? ({task['name']}) \n").strip()
+        desc = input(f"What's a brief descriptions of this task? ({task['description']}) \n").strip()
+        due = input(f"When is this task due (format: m/d/y H:M:S) ({task['due']}) \n").strip()
         update_task(index, name=name, description=desc, due=due)
 
     # rk868 10/2/2023
     # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
     # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
-    # If there were tasks in the Task Tracker and the index was valid, I called view_task(index) to show the existing value of each property.
-    # Then, I prompted the user to enter the new name, description, and due date of the task.
+    # If there were tasks in the Task Tracker and the index was valid, I called the update_task() function.
+    # Then, I prompted the user to enter the new name, description, and due date of the task while showing the existing value of each property using string interpolation.
     # Lastly, I called update_task(index, name=name, description=desc, due=due) to update the name, description, and due date of the task.
 
 
