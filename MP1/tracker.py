@@ -63,8 +63,13 @@ def add_task(name: str, description: str, due: str):
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     # make sure any checks/conditions clearly display an appropriate message of what failed
     
-    if not name or not description or not due:
-        print("Task not added, because of missing data \n")
+    if not name:
+        print("Task not added: Name is missing")
+    if not description:
+        print("Task not added: Description is missing")
+    if not due:
+        print("Task not added: Due date is missing")
+
     else:
         try:
             task["name"] = name
