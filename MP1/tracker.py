@@ -236,7 +236,29 @@ def delete_task(index):
     # make sure save() is still called last in this function
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     
+    if len(tasks) == 0:
+        print("There are no tasks in the Task Tracker \n" )
+        return
+    elif index <0 or index >= len(tasks):
+        print(f"Invalid index, must be between 1 and {len(tasks)} \n")
+        return
+    
+    task = tasks[index]
+    
+    try:
+        tasks.remove(task)
+        print("Task deleted \n")
+    except:
+        print("Task not deleted \n")
+    
     save()
+
+    # rk868 10/3/2023
+    # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
+    # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
+    # If there were tasks in the Task Tracker and the index was valid, I tried to remove the task from the tasks list.
+    # If the task was removed, I printed a message saying the task was deleted. Otherwise, I printed a message saying the task was not deleted.
+    # Lastly, I called save() to save the changes to the json file.
 
 def get_incomplete_tasks():
     """ prints a list of tasks that are not done """
@@ -244,7 +266,17 @@ def get_incomplete_tasks():
     # pass that list into list_tasks()
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     _tasks = [] # <-- this is a placeholder to populate based on the above requirements
+
+    for task in tasks:
+        if not task["done"]:
+            _tasks.append(task)
+    
     list_tasks(_tasks)
+
+    # rk868 10/3/2023
+    # I iterated through the tasks list and added the tasks that were not done to the _tasks list.
+    # Then, I called list_tasks(_tasks) to print the list of tasks that were not done.
+    # If _tasks was empty, list_tasks(_tasks) would print "No tasks to show".
 
 def get_overdue_tasks():
     """ prints a list of tasks that are over due completion (not done and expired) """
@@ -252,7 +284,17 @@ def get_overdue_tasks():
     # pass that list into list_tasks()
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     _tasks = [] # <-- this is a placeholder to populate based on the above requirements
+
+    for task in tasks:
+        if not task["done"] and task["due"] < datetime.now():
+            _tasks.append(task)
+    
     list_tasks(_tasks)
+
+    # rk868 10/3/2023
+    # I iterated through the tasks list and added the tasks that were not done and due date was less than datetime.now() to the _tasks list.
+    # Then, I called list_tasks(_tasks) to print the list of tasks that were not done and overdue.
+    # If _tasks was empty, list_tasks(_tasks) would print "No tasks to show".
 
 def get_time_remaining(index):
     """ outputs the number of days, hours, minutes, seconds a task has before it's overdue otherwise shows similar info for how far past due it is """
@@ -266,6 +308,36 @@ def get_time_remaining(index):
     # include your ucid and date as a comment of when you implemented this, briefly summarize the solution
     task = {}# <-- this is a placeholder to populate based on the above requirements
     # do your print logic here
+
+    if len(tasks) == 0:
+        print("There are no tasks in the Task Tracker \n" )
+        return
+    elif index <0 or index >= len(tasks):
+        print(f"Invalid index, must be between 1 and {len(tasks)} \n")
+        return
+    
+    task = tasks[index]
+
+    if task["due"] < datetime.now():
+        overdue = datetime.now() - task["due"]
+        print(f"""Overdue: {overdue.days} days, {overdue.seconds//3600} hours, 
+                {(overdue.seconds//60)%60} minutes, {overdue.seconds%60} seconds overdue \n""")
+        
+
+    else:
+        time_remaining = task["due"] - datetime.now()
+        print(f"""Time Remaining: {time_remaining.days} days, {time_remaining.seconds//3600} hours, 
+                {(time_remaining.seconds//60)%60} minutes, {time_remaining.seconds%60} seconds remaining \n""")
+        
+
+    # rk868 10/3/2023
+    # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
+    # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
+    # If there were tasks in the Task Tracker and the index was valid, I checked if the due date was in the past if due date was greater than datetime.now().
+    # If the due date was in the past, I calculated the overdue time and printed the overdue time.
+    # Otherwise, I calculated the time remaining and printed the time remaining.
+
+
 
 # no changes needed below this line
 
