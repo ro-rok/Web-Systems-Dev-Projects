@@ -296,7 +296,8 @@ def get_overdue_tasks():
     _tasks = [] # <-- this is a placeholder to populate based on the above requirements
 
     for task in tasks:
-        if not task["done"] and task["due"] < datetime.now():
+        due = datetime.strptime(task["due"], '%Y-%m-%d %H:%M:%S')
+        if not task["done"] and due < datetime.now():
             _tasks.append(task)
     
     list_tasks(_tasks)
@@ -327,17 +328,16 @@ def get_time_remaining(index):
         return
     
     task = tasks[index]
+    due = datetime.strptime(task["due"], '%Y-%m-%d %H:%M:%S')
 
-    if task["due"] < datetime.now():
-        overdue = datetime.now() - task["due"]
-        print(f"""Overdue: {overdue.days} days, {overdue.seconds//3600} hours, 
-                {(overdue.seconds//60)%60} minutes, {overdue.seconds%60} seconds overdue \n""")
+    if due < datetime.now():
+        overdue = datetime.now() - due
+        print(f"Overdue: {overdue.days} days, {overdue.seconds//3600} hours,{(overdue.seconds//60)%60} minutes, {overdue.seconds%60} seconds overdue \n")
         
 
     else:
-        time_remaining = task["due"] - datetime.now()
-        print(f"""Time Remaining: {time_remaining.days} days, {time_remaining.seconds//3600} hours, 
-                {(time_remaining.seconds//60)%60} minutes, {time_remaining.seconds%60} seconds remaining \n""")
+        time_remaining = due - datetime.now()
+        print(f"Time Remaining: {time_remaining.days} days, {time_remaining.seconds//3600} hours,{(time_remaining.seconds//60)%60} minutes, {time_remaining.seconds%60} seconds remaining \n")
         
 
     # rk868 10/3/2023
