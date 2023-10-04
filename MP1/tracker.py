@@ -144,16 +144,17 @@ def update_task(index: int, name: str, description:str, due: str):
         print("Task not updated due to missing data or no changes \n")
         return
     
-    if name:
-        task["name"] = name
-    if description:
-        task["description"] = description
     if due:
         try:
             task["due"] = str_to_datetime(due)
         except:
             print("Task not updated due to an invalid due date format. Please use 'mm/dd/yy hh:mm:ss' or 'yyyy-mm-dd hh:mm:ss'.")
             return
+    if name:
+        task["name"] = name
+    if description:
+        task["description"] = description
+    
     task["lastActivity"] = datetime.now()
     print("Task updated. \n")
 
