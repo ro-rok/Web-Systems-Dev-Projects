@@ -296,6 +296,7 @@ def get_overdue_tasks():
     _tasks = [] # <-- this is a placeholder to populate based on the above requirements
 
     for task in tasks:
+        # rk868 10/3/2023; task["due"] is a string, so I converted it to a datetime object using strptime
         due = datetime.strptime(task["due"], '%Y-%m-%d %H:%M:%S')
         if not task["done"] and due < datetime.now():
             _tasks.append(task)
@@ -304,7 +305,7 @@ def get_overdue_tasks():
 
     # rk868 10/3/2023
     # I iterated through the tasks list and added the tasks that were not done and due date was less than datetime.now() to the _tasks list.
-    # Then, I called list_tasks(_tasks) to print the list of tasks that were not done and overdue.
+    # Then, I called list_tasks(_tasks) to print the list of tasks that were not done and overdue (due date was less than datetime.now()).
     # If _tasks was empty, list_tasks(_tasks) would print "No tasks to show".
 
 def get_time_remaining(index):
@@ -328,6 +329,7 @@ def get_time_remaining(index):
         return
     
     task = tasks[index]
+    # rk868 10/3/2023; task["due"] is a string, so I converted it to a datetime object using strptime
     due = datetime.strptime(task["due"], '%Y-%m-%d %H:%M:%S')
 
     if due < datetime.now():
@@ -343,7 +345,8 @@ def get_time_remaining(index):
     # rk868 10/3/2023
     # First, I checked if there were any tasks in the Task Tracker and if the index was valid.
     # If not, I printed a message saying there were no tasks in the Task Tracker or the index was invalid.
-    # If there were tasks in the Task Tracker and the index was valid, I checked if the due date was in the past if due date was greater than datetime.now().
+    # If there were tasks in the Task Tracker and the index was valid, I converted the due date from a string to a datetime object.
+    # Then I checked if the due date was in the past if due date was greater than datetime.now().
     # If the due date was in the past, I calculated the overdue time and printed the overdue time.
     # Otherwise, I calculated the time remaining and printed the time remaining.
 
