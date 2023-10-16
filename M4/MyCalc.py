@@ -49,12 +49,12 @@ class MyCalc:
         # rk868 15/10/2023: Storing the product in the instance variable 'ans'
         elif operator == "*":
             self.ans = num1*num2
-        # rk868 15/10/2023: Storing the quotient in the instance variable 'ans' and handling division by zero error     
+        # rk868 16/10/2023: Storing the quotient in the instance variable 'ans' and handling division by zero error.   
         elif operator == "/":
             try:
                 self.ans = num1/num2
             except:
-                print("Error: Division by zero")
+                raise ZeroDivisionError("Division by zero is not allowed")
         # rk868 15/10/2023: Handling invalid operator error
         else:
             print("Error: Unknown operator")
