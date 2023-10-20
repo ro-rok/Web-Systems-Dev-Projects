@@ -46,7 +46,7 @@ def test_production_line(second_order):
         print(second_order.inprogress_pumpkin)
         if j.name.lower() == second_order.inprogress_pumpkin[0].name.lower():
             print(f"Pumkin {j.name.lower()} matches in progress \
-                  {second_order.inprogress_pumpkin[0].name.lower()}")
+                {second_order.inprogress_pumpkin[0].name.lower()}")
             assert True
             return
 
