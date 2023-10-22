@@ -94,9 +94,9 @@ def test_up_to_three_extras(machine):
 # I also checked that handling the payment with the calculated cost and the expected cost should not raise an exception
 
 @pytest.mark.parametrize("pumpkin_choice, stencil_choice, extra_choice, expected_cost", 
-                        [("Medium Pumpkin", "Happy Face", "Sticker Pack", 4.5),
-                        ("Mini Pumpkin", "Scream Face", "Dry Ice", 2.25),
-                        ("Large Pumpkin", "Toothy Face", "Spooky Sound Effects", 5.25)])
+                        [("Medium Pumpkin", "Happy Face", "Sticker Pack", "$4.50"),
+                        ("Mini Pumpkin", "Scream Face", "Dry Ice", "$2.25"),
+                        ("Large Pumpkin", "Toothy Face", "Spooky Sound Effects", "$5.25")])
 def test_cost_calculation(machine, pumpkin_choice, stencil_choice, extra_choice, expected_cost):
     machine.handle_pumpkin_choice(pumpkin_choice)
     machine.handle_face_stencil_choice(stencil_choice)
@@ -104,8 +104,14 @@ def test_cost_calculation(machine, pumpkin_choice, stencil_choice, extra_choice,
     machine.handle_extra_choice(extra_choice)
     machine.handle_extra_choice("done")
     calculated_cost = machine.calculate_cost()
-    assert calculated_cost == expected_cost
-    machine.handle_pay(calculated_cost, str(expected_cost))
+    if '$' in expected_cost: # Remove $ and spaces
+        expected_cost = expected_cost.replace('$', '').replace(' ', '')
+    if '.00' in expected_cost:  # Remove .00
+        expected_cost = expected_cost.replace('.00', '')
+    elif '0' == expected_cost[-1]: # Remove 0 at the end of decimal
+        expected_cost = expected_cost[:-1]
+    assert calculated_cost == float(expected_cost) # Convert to float
+    machine.handle_pay(calculated_cost,expected_cost)
 
 # rk868 10/21/2023
 # Test 7 - Total Sales (sum of costs) must be calculated properly
