@@ -53,7 +53,7 @@
 </table></td></tr>
 <table><tr><td> <em>Deliverable 4: </em> Misc </td></tr><tr><td><em>Status: </em> <img width="100" height="20" src="https://user-images.githubusercontent.com/54863474/211707773-e6aef7cb-d5b2-4053-bbb1-b09fc609041e.png"></td></tr>
 <tr><td><table><tr><td> <em>Sub-Task 1: </em> Add pull request for the assignment</td></tr>
-<tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/ro-rok/rk868-is601-007/pull/17">https://github.com/ro-rok/rk868-is601-007/pull/17</a> </td></tr>
+<tr><td> <a rel="noreferrer noopener" target="_blank" href="https://github.com/ro-rok/rk868-is601-007/pull/19">https://github.com/ro-rok/rk868-is601-007/pull/17</a> </td></tr>
 <tr><td> <em>Sub-Task 2: </em> Explain any issues/difficulties or something you learned while doing this assignment</td></tr>
 <tr><td> <em>Response:</em> <p>I had misunderstanding the string formatting and if the total cost showing is<br>$4.00 and if&nbsp; just &#39;4&#39; will work. I talked it over with professor<br>and sorted it out . That&#39;s why there is latest commit regarding the<br>string manipulation for the user&#39;s input and getting processed in the method handle_pay()<br></p><br></td></tr>
 <tr><td> <em>Sub-Task 3: </em> Screenshots of successful output</td></tr>
