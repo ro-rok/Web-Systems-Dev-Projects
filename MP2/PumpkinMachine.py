@@ -213,6 +213,15 @@ class PumpkinMachine:
                 if total == "quit":
                     print("Quitting the pumpkin machine")
                     return 1
+                
+                # rk868 10/21/2023
+                # String manipulation for input total to match expected total
+                if '$' in total:
+                    total = total.replace('$', '').replace(' ', '')
+                if '.00' in total:
+                    total = total.replace('.00', '')
+                elif '0' == total[-1]:
+                    total = total[:-1]
                 self.handle_pay(expected, total)
 
                 choice = input("What would you like to do? (order or quit)\n")
