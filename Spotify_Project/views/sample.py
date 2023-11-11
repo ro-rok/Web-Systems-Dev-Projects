@@ -90,3 +90,17 @@ def edit():
         except Exception as e:
             resp = e
     return render_template("edit_sample.html", row=row, resp=resp)
+
+@sample.route("/delete", methods=["GET"])
+def delete():
+    id = request.args.get("id")
+    # make a mutable dict
+    args = {**request.args}
+    if id:
+        result = DB.delete("DELETE FROM IS601_Sample WHERE id = %s", id)
+        # TODO pass along feedback
+
+        # remove the id args since we don't need it in the list route
+        # but we want to persist the other query args
+        del args["id"]
+    return redirect(url_for("sample.list", **args))
