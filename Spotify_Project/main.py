@@ -9,8 +9,16 @@ print(CURR_DIR)
 sys.path.append(CURR_DIR)
 
 
+# app = Flask(__name__)
 def create_app(config_filename=''):
     app = Flask(__name__)
+    # app.config.from_pyfile(config_filename)
+    with app.app_context():
+        from views.hello import hello
+        app.register_blueprint(hello)
+        from views.sample import sample
+        app.register_blueprint(sample)
+        return app
 
 
 app = create_app()
