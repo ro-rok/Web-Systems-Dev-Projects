@@ -66,3 +66,27 @@ def list():
         error = e
     
     return render_template("list_sample.html", resp=rows, error=error)
+
+@sample.route("/edit", methods=["GET", "POST"])
+def edit():
+    id = request.args.get("id")
+    resp = None
+    row = None
+    if id is None:
+        return redirect("sample.list")
+    else:
+        if request.method == "POST" and request.form.get("value"):
+            val = request.form.get("value")
+            try:
+                result = DB.update("UPDATE IS601_Sample SET val = %s WHERE id = %s", val, id)
+                if result.status:
+                    resp = "Updated"
+            except Exception as e:
+                resp = e
+        try:
+            result = DB.selectOne("SELECT name, val FROM IS601_Sample WHERE id = %s", id)
+            if result.status:
+                row = result.row
+        except Exception as e:
+            resp = e
+    return render_template("edit_sample.html", row=row, resp=resp)
