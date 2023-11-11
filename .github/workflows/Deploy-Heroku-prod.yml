@@ -16,7 +16,7 @@ jobs:
       DB_URL: ${{secrets.DB_URL}}
       PORT: 8080
       # change to the project directory you're deploying
-      WORKING_DIRECTORY: M6
+      WORKING_DIRECTORY: Spotify_Project
     defaults:
       run:
           working-directory: ${{env.WORKING_DIRECTORY}}
