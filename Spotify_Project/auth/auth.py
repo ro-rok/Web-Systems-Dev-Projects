@@ -9,7 +9,7 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 
 from flask_principal import Identity, AnonymousIdentity, \
-     identity_changed
+    identity_changed
 
 auth = Blueprint('auth', __name__, url_prefix='/',template_folder='templates')
 
