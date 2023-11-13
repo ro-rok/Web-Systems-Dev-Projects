@@ -158,7 +158,6 @@ def login_register():
 @auth.route("/landing-page", methods=["GET"])
 @login_required
 def landing_page():
-    
     return render_template("landing_page.html")
 
 @auth.route("/logout", methods=["GET"])
