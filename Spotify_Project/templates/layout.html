@@ -9,7 +9,13 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
     <style>
+        body {
+                    background-color: black;
+                    color: white;
+                }
         .footer {
+            background-color: black;
+            color: white;
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -18,12 +24,14 @@
         }
 
         .header {
+            background-color: black;
+            color: white;
             top: 0;
             height: 60px;
             line-height: 60px;
         }
     </style>
-    <title>{% block title %}{% endblock %} - Sample</title>
+    <title>{% block title %}{% endblock %} - MusiC</title>
     {% endblock %}
 </head>
 
@@ -38,9 +46,9 @@
         </style>
     </div>
     <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer" class="footer bg-light text-center">
+    <div id="footer" class="footer bg-black text-center">
         {% block footer %}
-        &copy; Copyright 2022.
+        &copy; Copyright 2023
         {% endblock %}
     </div>
 </body>

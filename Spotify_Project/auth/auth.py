@@ -77,6 +77,55 @@ def login():
                             return redirect(url_for("auth.landing_page"))
                         else:
                             flash("Error logging in", "danger")
+                else:
+                    # invalid user and invalid password together is too much info for a potential attacker
+                    # normally we return a single message for both "invalid username or password" so an attacker doens't know which part was correct
+                    flash("Invalid user or password", "warning")
+
+            except Exception as e:
+                flash(str(e), "danger")
+    return render_template("login.html", form=form)
+
+# Update your routes to render the combined template
+@auth.route("/login_register", methods=["GET", "POST"])
+def login_register():
+    login_form = LoginForm()
+    register_form = RegisterForm()
+
+    if login_form.validate_on_submit():
+        form = LoginForm()
+        is_valid = True
+        email = form.email.data # email or username
+        password = form.password.data
+        if is_valid:
+            try:
+                result = DB.selectOne("SELECT id, email, username, password FROM IS601_Users where email= %(email)s or username=%(email)s", {"email":email})
+                if result.status and result.row:
+                    hash = result.row["password"]
+                    if bcrypt.check_password_hash(hash, password):
+                        from roles.models import Role
+                        del result.row["password"] # don't carry password/hash beyond here
+                        user = User(**result.row)
+                        # get roles
+                        result = DB.selectAll("""
+                        SELECT name FROM IS601_Roles r JOIN IS601_UserRoles ur on r.id = ur.role_id WHERE ur.user_id = %s AND r.is_active = 1 AND ur.is_active = 1
+                        """, user.id)
+                        if result.status and result.rows:
+                            print("role rows", result.rows)
+                            user.roles = [Role(**r) for r in result.rows]
+                        print(f"Roles: {user.roles}")
+                        success = login_user(user) # login the user via flask_login
+                        
+                        if success:
+                            # Tell Flask-Principal the identity changed
+                            identity_changed.send(current_app._get_current_object(),
+                                    identity=Identity(user.id))
+                            # store user object in session as json
+                            session["user"] = user.toJson()
+                            flash("Log in successful", "success")
+                            return redirect(url_for("auth.landing_page"))
+                        else:
+                            flash("Error logging in", "danger")
                     else:
                         flash("Invalid password", "warning")
                 else:
@@ -86,7 +135,23 @@ def login():
 
             except Exception as e:
                 flash(str(e), "danger")
-    return render_template("login.html", form=form)
+
+    if register_form.validate_on_submit():
+        form = RegisterForm()
+        email = form.email.data
+        password = form.password.data
+        username = form.username.data
+        try:
+            hash = bcrypt.generate_password_hash(password)
+            # save the hash, not the plaintext password
+            result = DB.insertOne("INSERT INTO IS601_Users (email, username, password) VALUES (%s, %s, %s)", email, username, hash)
+            if result.status:
+                flash("Successfully registered","success")
+        except Exception as e:
+            check_duplicate(e)
+
+    return render_template("login_register.html", login_form=login_form, register_form=register_form)
+
 
 @auth.route("/landing-page", methods=["GET"])
 @login_required

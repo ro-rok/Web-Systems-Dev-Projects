@@ -2,22 +2,21 @@
 {% block title %}Assign Roles{% endblock %}
 {% block content %}
 <div class="container-fluid">
-    <div class="h1">Assign Roles</div>
+    <div class="h1 text-light">Assign Roles</div>
     <form method="GET">
-        <input type="text" placeholder="Partial email address"
+        <input type="text" placeholder="Partial email address" class="form-control"
             value="{{request.args.get('email', '')}}" name="email" />
-        <input type="submit" class="btn btn-secondary" value="Search" />
+        <input type="submit" class="btn btn-secondary mt-2" value="Search" />
     </form>
     <form id="apply" method="POST"
         action="{{url_for('roles.apply')}}?email={{request.args.get('email', '')}}">
-        <!-- will map elements via form attribute on the element itself by form id -->
-        <input type="submit" class="btn btn-primary" value="Apply Roles" />
+        <input type="submit" class="btn btn-primary mt-2" value="Apply Roles" />
     </form>
-    <table class="table">
+    <table class="table table-dark">
         <thead>
-            <tr>
-                <td>Users</td>
-                <td>Roles</td>
+            <tr class="text-light"> 
+                <th>Users</th>
+                <th>Roles</th>
             </tr>
         </thead>
         <tbody>
@@ -28,7 +27,7 @@
                         {% set rows = users %}
                         {% if rows and rows|length > 0 %}
                         <thead>
-                            <tr class="text-capitalize">
+                            <tr class="text-capitalize text-light"> 
                                 {% for r in rows[0] %}
                                 <th>{{r}}</th>
                                 {% endfor %}
@@ -38,7 +37,7 @@
                         {% for r in rows %}
                         <tr>
                             {% for v in r.values() %}
-                            <td>{{v}}</td>
+                            <td class="text-light">{{v}}</td> 
                             {% endfor %}
                             <td>
                                 <input form="apply" type="checkbox" class="form-check"
@@ -47,7 +46,9 @@
                         </tr>
                         {% endfor %}
                         {% else %}
-                        <p>No results to show</p>
+                        <tr>
+                            <td colspan="{{rows[0]|length + 1}}" class="text-light">No results to show</td> 
+                        </tr>
                         {% endif %}
                     </table>
                     <!-- end users -->
@@ -58,7 +59,7 @@
                         {% set rows = roles %}
                         {% if rows and rows|length > 0 %}
                         <thead>
-                            <tr class="text-capitalize">
+                            <tr class="text-capitalize text-light"> 
                                 {% for r in rows[0] %}
                                 <th>{{r}}</th>
                                 {% endfor %}
@@ -68,7 +69,7 @@
                         {% for r in rows %}
                         <tr>
                             {% for v in r.values() %}
-                            <td>{{v}}</td>
+                            <td class="text-light">{{v}}</td> 
                             {% endfor %}
                             <td>
                                 <input form="apply" type="checkbox" class="form-check"
@@ -77,7 +78,9 @@
                         </tr>
                         {% endfor %}
                         {% else %}
-                        <p>No results to show</p>
+                        <tr>
+                            <td colspan="{{rows[0]|length + 1}}" class="text-light">No results to show</td> 
+                        </tr>
                         {% endif %}
                     </table>
                     <!-- end roles -->
@@ -85,7 +88,5 @@
             </tr>
         </tbody>
     </table>
-
-</div>
 </div>
 {% endblock %}
