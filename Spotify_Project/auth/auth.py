@@ -77,6 +77,8 @@ def login():
                             return redirect(url_for("auth.landing_page"))
                         else:
                             flash("Error logging in", "danger")
+                    else:
+                        flash("Invalid user or password", "warning")
                 else:
                     # invalid user and invalid password together is too much info for a potential attacker
                     # normally we return a single message for both "invalid username or password" so an attacker doens't know which part was correct
