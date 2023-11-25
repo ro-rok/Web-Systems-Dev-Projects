@@ -8,48 +8,50 @@
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        {# TODO fill in the relevant hrefs using url_for() #}
-        <!-- delete replace hrefs with #todo -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <!-- organization dropdown nav -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Organization
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Search</a>
-                        </li>
-                        <li><a class="dropdown-item" href="#">Add</a>
-                        </li>
 
-                    </ul>
-                </li>
-                <!-- donation dropdown nav -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Donation
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Search</a>
+        {# TODO fill in the relevant hrefs using url_for() #}
+
+                <!-- delete replace hrefs with #todo -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- organization dropdown nav -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Organization
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{url_for('organization.search')}}">Search</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{url_for('organization.add')}}">Add</a>
+                                </li>
+
+                            </ul>
                         </li>
-                        <li><a class="dropdown-item" href="#">Add</a></li>
-                    </ul>
-                </li>
-                <!-- admin dropdown nav -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Admin
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Import</a>
+                        <!-- donation dropdown nav -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Donation
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{url_for('donations.search')}}">Search</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{url_for('organization.add')}}">Add</a></li>
+                            </ul>
+                        </li>
+                        <!-- admin dropdown nav -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Admin
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{url_for('admin.importCSV')}}">Import</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+                </div>
+            </div>
+        </nav>
