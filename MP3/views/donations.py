@@ -12,7 +12,7 @@ def search():
     # DO NOT DELETE PROVIDED COMMENTS
     # TODO search-1 retrieve donation id as id, donor_firstname, donor_lastname, donor_email, organization_id, item_name, item_description, item_quantity, donation_date, comments, organization_name using a LEFT JOIN
     # rk868 11/25/23
-    query = """SELECT d.id, d.donor_firstname, d.donor_lastname, d.donor_email, d.organization_id, d.item_name, d.item_description, d.item_quantity, d.donation_date, d.comments, o.name , d.created, d.modifiedS
+    query = """SELECT d.id, d.donor_firstname, d.donor_lastname, d.donor_email, d.organization_id, d.item_name, d.item_description, d.item_quantity, d.donation_date, d.comments, o.name , d.created, d.modified
             FROM IS601_MP3_Donations as d LEFT JOIN IS601_MP3_Organizations as o ON d.organization_id = o.id WHERE 1=1"""
     args = {} # <--- add values to replace %s/%(named)s placeholders
     allowed_columns = ["donor_firstname", "donor_lastname", "donor_email", "organization_name" ,"item_name", "item_quantity", "created", "modified"]
