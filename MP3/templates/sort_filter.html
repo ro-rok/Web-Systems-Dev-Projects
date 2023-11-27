@@ -6,9 +6,9 @@
         value="{{request.args.get('column', '')}}">
         <option value="">Field...</option>
         {# hint expects a list of tuples representing (value, label) #}
-        {% for v,l in cols %}
-        <option {{'selected' if v==request.args.get('column', '' )}}
-            value="{{v}}">{{l | capitalize}}</option>
+        {% for col in cols %}
+        <option {{'selected' if col[0]==request.args.get('column', '' )}}
+            value="{{col[0]}}">{{col[1] | capitalize}}</option>
         {% endfor %}
     </select>
 </div>
