@@ -32,6 +32,10 @@ def search():
     order = request.args.get("order")
     limit = request.args.get("limit")
     
+    print(name)
+    print(type(country))
+    print(state)
+
     # TODO search-3 append a LIKE filter for name if provided
     #rk868 11/26/23
     if name:
@@ -80,6 +84,9 @@ def search():
     # hint: use allowed_columns in template to generate sort dropdown
     # hint2: convert allowed_columns into a list of tuples representing (value, label)
     allowed_columns = [(c, c.replace("_", " ").title()) for c in allowed_columns]
+
+    print(query)
+    print(args)
     
     return render_template("list_organizations.html", rows=rows, allowed_columns=allowed_columns)
 
@@ -199,6 +206,7 @@ def edit():
             country = request.form.get("country")
             zip_code = request.form.get("zip")
             website = request.form.get("website")
+            description = request.form.get("description")
             
             # TODO edit-3 name is required (flash proper error message)
             # rk868 11/27/23
@@ -264,17 +272,19 @@ def edit():
             # TODO edit-10 fill in proper update query
             # rk868 11/27/23
             if not has_error:
+                print("Updating organization")
                 try:
                     result = DB.update("""
                     UPDATE IS601_MP3_Organizations
-                    SET name = %s, address = %s, city = %s, state = %s, country = %s, zip = %s, website = %s
+                    SET name = %s, address = %s, city = %s, state = %s, country = %s, zip = %s, website = %s, description = %s
                     WHERE id = %s
-                    """, name, address, city, state, country, zip_code, website, id)
+                    """, name, address, city, state, country, zip_code, website, description, id)
+                    if result.status:
+                        flash("Updated record", "success")
                 except Exception as e:
                     print(f"{e}")
+                    print(e)
                     flash("Error updating organization", "danger")
-            if result.status:
-                flash("Updated record", "success")
         
         row = {}
         try:
