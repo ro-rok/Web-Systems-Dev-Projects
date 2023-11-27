@@ -16,13 +16,24 @@
             ensure all fields prefill with request arg data if provided
             #}
             <!--name filter-->
-
+            <!-- RK868 11/27/23 -->
+            <div class="row">
+                <div class="col">
+                    <input id="fn" class="form-control" placeholder="First Name" name="fn" type="text"
+                        value="{{request.args.get('fn') or ''}}">
+                </div>
             <!-- country state filter-->
+            <!-- RK868 11/27/23 -->  
             {{country_state_selector(layout="horizontal")}}
             <!-- sort filter -->
-            {# TODO pass/set the columns that can be used for sort/filter (i.e. allowed_columns) #}
-            {{sort_filter(cols=[])}}
+            <!-- RK868 11/27/23 -->
+            {{sort_filter(cols=allowed_columns)}}
             <!--limit filter-->
+            <!-- RK868 11/27/23 -->
+            <div class="col">
+                <input id="limit" type="number" class="form-control" value="10" name="limit" />
+            </div>
+            {# TODO pass/set the columns that can be used for sort/filter (i.e. allowed_columns) #}
 
             <div class="col">
                 <input type="submit" class="btn btn-primary" value="Filter" />
@@ -42,6 +53,14 @@
                     {# IMPORTANT use table column names as the headings, replace _ with space via filter #}
                     <!-- add th elements -->
 
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Zip</th>
+                    <th>Website</th>
+                    <th>Donations</th>
                     <!-- keep this -->
                     <th>Actions</th>
                 </tr>
@@ -57,6 +76,25 @@
                 an edit button that passes the organization id to organization edit
                 a delete button that passes the organization id and the request args to the organization delete route
                 #}
+                {% for row in rows %}
+                
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.address }}</td>
+                    <td>{{ row.city }}</td>
+                    <td>{{ row.state }}</td>
+                    <td>{{ row.country }}</td>
+                    <td>{{ row.zip }}</td>
+                    <td>{% if row.website %}<a href="{{ row.website }}" target="_blank">{{row.website}}</a>{% endif %}</td>
+                    <td>{{ row.donations}}</td>
+                    <td>
+                        <a href="{{ url_for('donations.search', organization_id=row['id']) }}">View</a>
+                        <a href="{{ url_for('organization.edit', id=row['id']) }}">Edit</a>
+                        <a href="{{ url_for('organization.delete', id=row['id'], **request.args.to_dict()) }}">Delete</a>
+                    </td>
+                    <!-- RK868 11/27/23 -->
+                </tr>
+                {% endfor %}
                 <!-- iterate over rows and generate proper tr and td elements with the data -->
 
             </tbody>
