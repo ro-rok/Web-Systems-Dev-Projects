@@ -65,34 +65,43 @@ def importCSV():
                 # TODO importcsv-3: extract organization data and append to organization list
                 # as a dict only with organization data if all organization fields are present (refer to above SQL)
                 # RK868 11/23/23
-                organization = {
-                        'name': row.get('organization_name'),
-                        'address': row.get('organization_address'),
-                        'city': row.get('organization_city'),
-                        'country': row.get('organization_country'),
-                        'state': row.get('organization_state'),
-                        'zip': row.get('organization_zip'),
-                        'website': row.get('organization_website'),
-                        'description': row.get('organization_description')
+                if row.get('organization_name') and row.get('organization_address') and row.get('organization_city') and row.get('organization_country') and row.get('organization_state') and row.get('organization_zip') and row.get('organization_website') and row.get('organization_description'):
+                    organization = {
+                        'name': row['organization_name'],
+                        'address': row['organization_address'],
+                        'city': row['organization_city'],
+                        'country': row['organization_country'],
+                        'state': row['organization_state'],
+                        'zip': row['organization_zip'],
+                        'website': row['organization_website'],
+                        'description': row['organization_description']
                     }
-                organizations.append(organization)
+                    organizations.append(organization)
+
 
                 # TODO importcsv-4: extract donation data and append to donation list
                 # as a dict only with donation data if all donation fields are present (refer to above SQL)
                 # RK868 11/23/23
                 # rk868 11/26/23 - ad3ded split() to donor_name to separate first and last name
-                donation = {
-                    'donor_firstname': row.get('donor_name').split()[0],
-                    'donor_lastname': row.get('donor_name').split()[1],
-                    'donor_email': row.get('donor_email'),
-                    'item_name': row.get('item_name'),
-                    'item_description': row.get('item_description'),
-                    'quantity': row.get('item_quantity'),
-                    'organization_name': row.get('organization_name'),
-                    'donation_date': row.get('donation_date'),
-                    'comments': row.get('comments')
-                }
-                donations.append(donation)
+                if row.get('donor_name') and row.get('donor_email') and row.get('item_name') and row.get('item_description') and row.get('item_quantity') and row.get('organization_name') and row.get('donation_date') and row.get('comments'):
+                    if row.get('donor_name') and len(row.get('donor_name').split()) > 1:
+                        first_name = row.get('donor_name').split()[0]
+                        last_name = row.get('donor_name').split()[1]
+                    else:
+                        first_name = row.get('donor_name')
+                        last_name = ''
+                    donation = {
+                        'donor_firstname': first_name,
+                        'donor_lastname': last_name,
+                        'donor_email': row.get('donor_email'),
+                        'item_name': row.get('item_name'),
+                        'item_description': row.get('item_description'),
+                        'quantity': row.get('item_quantity'),
+                        'organization_name': row.get('organization_name'),
+                        'donation_date': row.get('donation_date'),
+                        'comments': row.get('comments')
+                    }
+                    donations.append(donation)
 
             if len(organizations) > 0:
                 print(f"Inserting or updating {len(organizations)} organizations")

@@ -14,11 +14,11 @@ def search():
     allowed_columns = ["name", "city", "country", "state", "modified", "created"]
     
     query = """
-        SELECT o.id, o.name, o.address, o.city, o.country, o.state, o.zip, o.website, COUNT(d.id) AS donations
+        SELECT o.id, o.name, o.address, o.city, o.country, o.state, o.zip, o.website, COUNT(d.id) AS donations, o.modified, o.created
         FROM IS601_MP3_Organizations AS o
         LEFT JOIN IS601_MP3_Donations AS d ON o.id = d.organization_id
         WHERE 1=1
-        GROUP BY o.id, o.name, o.address, o.city, o.country, o.state, o.zip, o.website
+        GROUP BY o.id, o.name, o.address, o.city, o.country, o.state, o.zip, o.website 
     """
     args = {} # <--- add values to replace %s/%(named)s placeholders
 

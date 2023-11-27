@@ -70,7 +70,6 @@
         </div>
     </form>
     <table class="table">
-        {% if rows and rows|length > 0 %}
         <thead>
             <tr class="text-capitalize">
                 {# generate th tags for each column to display #}
@@ -92,6 +91,7 @@
             </tr>
         </thead>
         <tbody>
+            {% if rows and rows|length > 0 %}
             {% for row in rows %}
             {# generate tr with td tags for each piece of data #}
             {# don't show any id or organization_id columns #}
@@ -117,14 +117,12 @@
                 <!-- RK868 11/23/23 -->
             </tr>
             {% endfor %}
-        </tbody>
-        {% else %}
-        <tbody>
+            {% else %}
             <tr>
                 <td colspan="100%">No results to show</td>
             </tr>
+            {% endif %}
         </tbody>
-        {% endif %}
     </table>
 </div>
 {% endblock %}

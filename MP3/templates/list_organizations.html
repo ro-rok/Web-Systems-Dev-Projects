@@ -45,7 +45,6 @@
     </form>
     <div class="table-responsive">
         <table class="table">
-            {% if rows and rows|length > 0 %}
             <thead>
                 <tr class="text-capitalize">
                     {# generate th tags for each column to display #}
@@ -76,6 +75,7 @@
                 an edit button that passes the organization id to organization edit
                 a delete button that passes the organization id and the request args to the organization delete route
                 #}
+                {% if rows and rows|length > 0 %}
                 {% for row in rows %}
                 
                 <tr>
