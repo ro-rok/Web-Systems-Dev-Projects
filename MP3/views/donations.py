@@ -1,7 +1,7 @@
 import datetime
 from flask import Blueprint, redirect, render_template, request, flash, url_for
 from sql.db import DB
-import validate_email
+import re
 donations = Blueprint('donations', __name__, url_prefix='/donations')
 
 
@@ -74,7 +74,7 @@ def search():
     #print("query",query)
     #print("args", args)
         except ValueError:
-            flash("Limit must be a number", "error")
+            flash("Limit must be a number", "danger")
     # TODO search-10 provide a proper error message if limit isn't a number or if it's out of bounds
     # rk868 11/25/23
     try:
@@ -84,7 +84,7 @@ def search():
     except Exception as e:
         # TODO search-11 make message user friendly
         # rk868 11/25/23
-        flash(str(e), "error")
+        flash(str(e), "danger")
     
     # hint: use allowed_columns in template to generate sort dropdown
     # hint2: convert allowed_columns into a list of tuples representing (value, label)
@@ -99,7 +99,7 @@ def search():
             if result.status:
                 organization_name = result.row.get("name")
         except Exception as e:
-            flash(str(e), "error")
+            flash(str(e), "danger")
     
     allowed_columns = [(c, c.replace("_", " ").title()) for c in allowed_columns]
     
@@ -133,7 +133,7 @@ def add():
             flash("Donor Email is required", "danger")
         
         # TODO add-4a email must be in proper format (flash proper message)
-        if donor_email and not validate_email(donor_email):
+        if donor_email and not re.match(r"[^@]+@[^@]+\.[^@]+", donor_email):
             flash("Invalid Email Format", "danger")
         
         # TODO add-5 organization_id is required (flash proper error message)
@@ -167,11 +167,11 @@ def add():
         if not has_error:
             try:
                 result = DB.insertOne("""
-                INSERT INTO IS601_MP3_Donations (donor_firstname, donor_lastname, donor_email, organization_id, item_name, 
-                                    item_description, item_quantity, donation_date, comments)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (donor_firstname, donor_lastname, donor_email, organization_id, item_name, item_description,
-                    item_quantity, donation_date, comments)) # <-- TODO add-11 add query and add arguments
+                            INSERT INTO IS601_MP3_Donations 
+                            (donor_firstname, donor_lastname, donor_email, organization_id, item_name, item_description, item_quantity, donation_date, comments) 
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        """, donor_firstname, donor_lastname, donor_email, organization_id, item_name, item_description, item_quantity, donation_date, comments)
+
                 if result.status:
                     print("donation record created")
                     flash("Created Donation Record", "success")
@@ -189,7 +189,7 @@ def edit():
     # rk868 11/25/23
     donation_id = request.args.get("id")
     if not donation_id:
-        flash("Donation ID is required for editing", "error")
+        flash("Donation ID is required for editing", "danger")
         return redirect(url_for("donations.search"))
     else:
         if request.method == "POST":            
@@ -209,35 +209,35 @@ def edit():
             # TODO add-3 donor_firstname is required (flash proper error message)
             # rk868 11/25/23
             if not donor_firstname:
-                flash("Donor First Name is required", "error")
+                flash("Donor First Name is required", "danger")
                 has_error = True
             
             # TODO add-4 donor_lastname is required (flash proper error message)
             # rk868 11/25/23
             if not donor_lastname:
-                flash("Donor Last Name is required", "error")
+                flash("Donor Last Name is required", "danger")
                 has_error = True
             
             # TODO add-5 donor_email is required (flash proper error message)
             # TODO add-5a email must be in proper format (flash proper message)
             # rk868 11/25/23
             if not donor_email:
-                flash("Donor Email is required", "error")
+                flash("Donor Email is required", "danger")
                 has_error = True
-            elif not validate_email.validate_email(donor_email):
-                flash("Invalid Email format", "error")
+            elif not re.match(r"[^@]+@[^@]+\.[^@]+", donor_email):
+                flash("Invalid Email format", "danger")
                 has_error = True
             
             # TODO add-6 organization_id is required (flash proper error message)
             # rk868 11/25/23
             if not organization_id:
-                flash("Organization ID is required", "error")
+                flash("Organization ID is required", "danger")
                 has_error = True
             
             # TODO add-7 item_name is required (flash proper error message)
             # rk868 11/25/23
             if not item_name:
-                flash("Item Name is required", "error")
+                flash("Item Name is required", "danger")
                 has_error = True
 
             # TODO add-8 item_description is optional
@@ -246,23 +246,17 @@ def edit():
             # TODO add-9 item_quantity is required and must be more than 0 (flash proper error message)
             # rk868 11/25/23
             if not item_quantity:
-                flash("Item Quantity is required", "error")
+                flash("Item Quantity is required", "danger")
                 has_error = True
             elif int(item_quantity) <= 0:
-                flash("Item Quantity must be more than 0", "error")
+                flash("Item Quantity must be more than 0", "danger")
                 has_error = True
             
             # TODO add-10 donation_date is required and must be within the past 30 days
             # rk868 11/25/23
             if not donation_date:
-                flash("Donation Date is required", "error")
+                flash("Donation Date is required", "danger")
                 has_error = True
-            else:
-                current_date = datetime.datetime.now().date()
-                donation_date = datetime.datetime.strptime(donation_date, "%Y-%m-%d").date()
-                if donation_date > current_date or (current_date - donation_date).days > 30:
-                    flash("Donation Date must be within the past 30 days", "error")
-                    has_error = True
             
             # TODO add-11 comments are optional
             # rk868 11/25/23
@@ -277,15 +271,15 @@ def edit():
                                     organization_id = %s, item_name = %s, item_description = %s, 
                                     item_quantity = %s, donation_date = %s, comments = %s
                     WHERE id = %s
-                    """, (donor_firstname, donor_lastname, donor_email, organization_id, item_name, item_description,
-                        item_quantity, donation_date, comments, donation_id))
+                    """, donor_firstname, donor_lastname, donor_email, organization_id, item_name, item_description,
+                        item_quantity, donation_date, comments, donation_id)
 
                     if result.status:
                         flash("Updated record", "success")
                 except Exception as e:
                     # TODO edit-13 make this user-friendly
                     print(f"update error {e}")
-                    flash("Error updating record", "error")
+                    flash("Error updating record", "danger")
         
         try:
             # TODO edit-14 fetch the updated data 
@@ -297,7 +291,7 @@ def edit():
                 row = result.row
         except Exception as e:
             # TODO edit-15 make this user-friendly
-            flash("Error fetching record", "error")
+            flash("Error fetching record", "danger")
     
     return render_template("manage_donation.html", donation=row)
 
@@ -307,7 +301,7 @@ def delete():
     # rk868 11/25/23
     donation_id = request.args.get("id")
     if not donation_id:
-        flash("Donation ID is required for deletion", "error")
+        flash("Donation ID is required for deletion", "danger")
         return redirect(url_for("donations.search"))
 
     try:
@@ -325,7 +319,7 @@ def delete():
     # TODO delete-4 pass all argument except id to this route
     # rk868 11/25/23
     except Exception as e:
-        flash("Error deleting record", "error")
+        flash("Error deleting record", "danger")
     
     # TODO delete-5 redirect to donation search
     # rk868 11/25/23
