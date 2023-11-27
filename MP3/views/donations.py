@@ -110,6 +110,7 @@ def search():
 def add():
     if request.method == "POST":
         # TODO add-1 retrieve form data for donor_firstname, donor_lastname, donor_email, organization_id, item_name, item_description, item_quantity, donation_date, comments
+        # rk868 11/25/23
         donor_firstname = request.form.get("donor_firstname")
         donor_lastname = request.form.get("donor_lastname")
         donor_email = request.form.get("donor_email")
@@ -121,47 +122,71 @@ def add():
         comments = request.form.get("comments")
         
         # TODO add-2 donor_firstname is required (flash proper error message)
+        # rk868 11/25/23
         if not donor_firstname:
             flash("Donor First Name is required", "danger")
+            has_error = True
         
         # TODO add-3 donor_lastname is required (flash proper error message)
+        # rk868 11/25/23
         if not donor_lastname:
             flash("Donor Last Name is required", "danger")
-        
+            has_error = True
+
         # TODO add-4 donor_email is required (flash proper error message)
+        # rk868 11/25/23
         if not donor_email:
             flash("Donor Email is required", "danger")
-        
+            has_error = True
         # TODO add-4a email must be in proper format (flash proper message)
+        # rk868 11/25/23
         if donor_email and not re.match(r"[^@]+@[^@]+\.[^@]+", donor_email):
             flash("Invalid Email Format", "danger")
+            has_error = True
         
         # TODO add-5 organization_id is required (flash proper error message)
+        # rk868 11/25/23
         if not organization_id:
             flash("Organization ID is required", "danger")
+            has_error = True
         
         # TODO add-6 item_name is required (flash proper error message)
+        # rk868 11/25/23
         if not item_name:
             flash("Item Name is required", "danger")
+            has_error = True
         
         # TODO add-7 item_description is optional
+        # rk868 11/25/23
+        if not item_description:
+            flash("Item Description is absent", "warning")
                 
         # TODO add-8 item_quantity is required and must be more than 0 (flash proper error message)
+        # rk868 11/25/23
         if not item_quantity:
             flash("Item Quantity is required", "danger")
+            has_error = True
         elif int(item_quantity) <= 0:
             flash("Item Quantity must be more than 0", "danger")
+            has_error = True
         
         # TODO add-9 donation_date is required and must be within the past 30 days
+        # rk868 11/25/23
         if not donation_date:
             flash("Donation Date is required", "danger")
+            has_error = True
         else:
             donation_date = datetime.datetime.strptime(donation_date, "%Y-%m-%d")
             current_date = datetime.datetime.now()
             if (current_date - donation_date).days > 30:
                 flash("Donation Date must be within the past 30 days", "danger")
+                has_error = True
         
         # TODO add-10 comments are optional
+        # rk868 11/25/23
+        if not comments:
+            flash("Comments are absent", "warning")
+
         has_error = False # use this to control whether or not an insert occurs
         
         if not has_error:
@@ -242,7 +267,9 @@ def edit():
 
             # TODO add-8 item_description is optional
             # rk868 11/25/23
-            
+            if not item_description:
+                flash("Item Description is absent", "warning")
+
             # TODO add-9 item_quantity is required and must be more than 0 (flash proper error message)
             # rk868 11/25/23
             if not item_quantity:
@@ -260,6 +287,8 @@ def edit():
             
             # TODO add-11 comments are optional
             # rk868 11/25/23
+            if not comments:
+                flash("Comments are absent", "warning")
             
             has_error = False # use this to control whether or not an update occurs
             
