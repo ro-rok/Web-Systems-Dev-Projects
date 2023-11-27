@@ -23,7 +23,7 @@ def search():
     args = {} # <--- add values to replace %s/%(named)s placeholders
 
     
-    # TODO search-2 get name, country, state, column, order, limit request args
+    # TODO search-2 get name, country,S state, column, order, limit request args
     #rk868 11/26/23
     name = request.args.get("name")
     country = request.args.get("country")
@@ -85,9 +85,6 @@ def search():
     # hint2: convert allowed_columns into a list of tuples representing (value, label)
     allowed_columns = [(c, c.replace("_", " ").title()) for c in allowed_columns]
 
-    print(query)
-    print(args)
-    
     return render_template("list_organizations.html", rows=rows, allowed_columns=allowed_columns)
 
 
@@ -313,7 +310,10 @@ def delete():
     try:
         # TODO delete-2 delete organization by id (fetch the id from the request)
         # rk868 11/27/23
-        result = DB.delete("DELETE FROM IS601_MP3_Organizations WHERE id = %s", organization_id)
+        
+        intermediate_result = DB.delete("DELETE FROM IS601_MP3_Donations WHERE organization_id = %s", organization_id)
+        if intermediate_result.status:
+            result = DB.delete("DELETE FROM IS601_MP3_Organizations WHERE id = %s", organization_id)
 
         # TODO delete-3 ensure a flash message shows for successful delete
         # rk868 11/27/23
@@ -321,6 +321,7 @@ def delete():
             flash("Deleted organization", "success")
 
     except Exception as e:
+        print(f"{e}")
         flash("Error deleting organization", "danger")
 
     # TODO delete-4 pass all argument except id to this route
