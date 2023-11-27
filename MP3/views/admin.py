@@ -80,9 +80,10 @@ def importCSV():
                 # TODO importcsv-4: extract donation data and append to donation list
                 # as a dict only with donation data if all donation fields are present (refer to above SQL)
                 # RK868 11/23/23
+                # rk868 11/26/23 - ad3ded split() to donor_name to separate first and last name
                 donation = {
-                    'donor_firstname': row.get('donor_firstname'),
-                    'donor_lastname': row.get('donor_lastname'),
+                    'donor_firstname': row.get('donor_name').split()[0],
+                    'donor_lastname': row.get('donor_name').split()[1],
                     'donor_email': row.get('donor_email'),
                     'item_name': row.get('item_name'),
                     'item_description': row.get('item_description'),
