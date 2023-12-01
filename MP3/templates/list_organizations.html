@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block title %}Organization Directory{% endblock %}
+{% block content %}
+{% from "country_state_selector.html" import country_state_selector %}
+{% from "sort_filter.html" import sort_filter %}
+<div class="container-fluid">
+    <div class="h1 text-center">Organization Directory</div>
+    <form method="GET">
+        <div class="row">
+            {# TODO
+            build a horizontal filter/sort form with
+            name (show as organization name but name field should be name)
+            country/state (provided)
+            sort/order (using allowed_columns and provided partial template)
+            limit (default 10)
+            ensure all fields prefill with request arg data if provided
+            #}
+            <!--name filter-->
+            <!-- RK868 11/27/23 -->
+            <div class="row">
+                <div class="col">
+                    <input id="name" class="form-control" placeholder="Name" name="name" type="text"
+                        value="{{request.args.get('name') or ''}}">
+                </div>
+            <!-- country state filter-->
+            <!-- RK868 11/27/23 -->  
+            {{country_state_selector(layout="horizontal")}}
+            <!-- sort filter -->
+            <!-- RK868 11/27/23 -->
+            {{sort_filter(cols=allowed_columns)}}
+            <!--limit filter-->
+            <!-- RK868 11/27/23 -->
+            <div class="col">
+                <input id="limit" type="number" class="form-control" value="10" name="limit" />
+            </div>
+            {# TODO pass/set the columns that can be used for sort/filter (i.e. allowed_columns) #}
+
+            <div class="col">
+                <input type="submit" class="btn btn-primary" value="Filter" />
+            </div>
+            <div class="col">
+                <a href="?" class="btn btn-secondary">Reset</a>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr class="text-capitalize">
+                    {# generate th tags for each column to display #}
+                    {# don't show any id or organization_id columns #}
+                    {# IMPORTANT use table column names as the headings, replace _ with space via filter #}
+                    <!-- add th elements -->
+
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Zip</th>
+                    <th>Website</th>
+                    <th>Donations</th>
+                    <!-- keep this -->
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {# generate tr with td tags for each piece of data #}
+                {# don't show any id or organization_id columns #}
+                {# if the td is for website, display it as a link where the text is "website" and the url is the
+                website url #}
+                {# in the last column add the following
+                a view button that passes the organization id to donation search (this will be an organization's donation
+                list)
+                an edit button that passes the organization id to organization edit
+                a delete button that passes the organization id and the request args to the organization delete route
+                #}
+                {% if rows and rows|length > 0 %}
+                {% for row in rows %}
+                
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.address }}</td>
+                    <td>{{ row.city }}</td>
+                    <td>{{ row.state }}</td>
+                    <td>{{ row.country }}</td>
+                    <td>{{ row.zip }}</td>
+                    <td>{% if row.website %}<a href="{{ row.website }}" target="_blank">{{row.website}}</a>{% endif %}</td>
+                    <td>{{ row.donations}}</td>
+                    <td>
+                        <a href="{{ url_for('donations.search', organization_id=row['id']) }}">View</a>
+                        <a href="{{ url_for('organization.edit', id=row['id']) }}">Edit</a>
+                        <a href="{{ url_for('organization.delete', id=row['id'], **request.args.to_dict()) }}">Delete</a>
+                    </td>
+                    <!-- RK868 11/27/23 -->
+                </tr>
+                {% endfor %}
+                <!-- iterate over rows and generate proper tr and td elements with the data -->
+
+            </tbody>
+            {% else %}
+            <tbody>
+                <tr>
+                    <td colspan="100%">No results to show</td>
+                </tr>
+            </tbody>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock %}
