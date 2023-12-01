@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+{% block title %}{{ "Edit" if donation.get("id") else "Create" }} Donation{% endblock %}
+{% block content %}
+{% from "organization_dropdown.html" import organization_dropdown %}
+<div class="container-fluid">
+    <div class="h1">{{ "Edit" if donation.get("id") else "Create" }} Donation</div>
+    <div>
+        <form method="POST">
+            {#
+            generate fields with proper types for the following (keep the name/id attributes the same as the list)
+            donor_firstname (required)
+            donor_lastname (required)
+            donor_email (required)
+            item_name (required)
+            item_description (optional)
+            item_quantity (required) (>0)
+            donation_date (required) (mm/dd/yyyy)
+            comments (optional)
+            organization (provided) (required)
+            if a validation error occurs, the inserted form data should persist
+            #}
+            <!-- Donor First Name -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="donor_firstname" class="form-label">Donor First Name</label>
+                <input type="text" class="form-control" id="donor_firstname" name="donor_firstname"
+                    value="{{ donation.get('donor_firstname') or '' }}" required>
+            </div>
+            
+            <!-- Donor Last Name -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="donor_lastname" class="form-label">Donor Last Name</label>
+                <input type="text" class="form-control" id="donor_lastname" name="donor_lastname"
+                    value="{{ donation.get('donor_lastname') or '' }}" required>
+            </div>
+
+            <!-- Donor Email -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="donor_email" class="form-label">Donor Email</label>
+                <input type="email" class="form-control" id="donor_email" name="donor_email"
+                    value="{{ donation.get('donor_email') or '' }}" required>
+            </div>
+
+            <!-- Item Name -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="item_name" class="form-label">Item Name</label>
+                <input type="text" class="form-control" id="item_name" name="item_name"
+                    value="{{ donation.get('item_name') or '' }}" required>
+            </div>
+
+            <!-- Item Description -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="item_description" class="form-label">Item Description</label>
+                <textarea class="form-control" id="item_description" name="item_description"
+                    rows="3">{{ donation.get('item_description') or '' }}</textarea>
+            </div>
+
+            <!-- Item Quantity -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="item_quantity" class="form-label">Item Quantity</label>
+                <input type="number" class="form-control" id="item_quantity" name="item_quantity"
+                    value="{{ donation.get('item_quantity') or '' }}" required min="1">
+            </div>
+
+            <!-- Donation Date -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="donation_date" class="form-label">Donation Date (mm/dd/yyyy)</label>
+                <input type="date" class="form-control" id="donation_date" name="donation_date"
+                    value="{{ donation.get('donation_date') or '' }}" required>
+            </div>
+
+            <!-- Comments -->
+            <!-- RK868 11/24/23 -->
+            <div class="mb-3">
+                <label for="comments" class="form-label">Comments</label>
+                <textarea class="form-control" id="comments" name="comments"
+                    rows="2">{{ donation.get('comments') or '' }}</textarea>
+            </div>
+
+            <!-- Organization Selection -->
+            {# use the below for organization selection #}
+            {{ organization_dropdown(val=donation.get("organization_id")) }}
+
+            <input type="submit" class="btn btn-primary" value="Save Donation" />
+        </form>
+    </div>
+</div>
+{% endblock %}
