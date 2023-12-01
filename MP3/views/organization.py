@@ -13,12 +13,13 @@ def search():
     # don't do SELECT * and replace the below "..." portion
     allowed_columns = ["name", "city", "country", "state", "modified", "created"]
     
+    #rk 11/30/23, changed the query to include subquery
     query = """
-        SELECT o.id, o.name, o.address, o.city, o.country, o.state, o.zip, o.website, COUNT(d.id) AS donations, o.modified, o.created
+        SELECT o.id, o.name, o.address, o.city, o.country, o.state, o.zip, o.website, 
+        (SELECT COUNT(d.id) FROM IS601_MP3_Donations AS d WHERE d.organization_id = o.id) AS donations, 
+        o.modified, o.created
         FROM IS601_MP3_Organizations AS o
-        LEFT JOIN IS601_MP3_Donations AS d ON o.id = d.organization_id
-        WHERE 1=1
-        GROUP BY o.id, o.name, o.address, o.city, o.country, o.state, o.zip, o.website 
+        WHERE 1=1 
     """
     args = {} # <--- add values to replace %s/%(named)s placeholders
 
