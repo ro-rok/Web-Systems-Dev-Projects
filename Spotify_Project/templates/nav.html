@@ -1,10 +1,11 @@
 {% from "_dropdown_nav.html" import dropdown_nav %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-black">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Sample</a>
+        <a class="navbar-brand" href="#">Spotify</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -20,12 +21,6 @@
                 <li class="nav-item">
                     <a class="nav-link  text-white" href="{{url_for('auth.profile')}}">Profile</a>
                 </li>
-                <!-- samples nav -->
-                {% set samples = [
-                ("sample.add", "Add"),
-                ("sample.list", "List"),
-                ] %}
-                {{dropdown_nav("Samples", samples)}}
                 <!-- roles nav (requires admin )-->
                 {% if current_user.has_role("Admin") %}
                 {% set roles = [
@@ -34,6 +29,13 @@
                 ("roles.assign", "Assign")
                 ] %}
                 {{dropdown_nav("Roles", roles)}}
+                <!-- track nav (requires admin )-->
+                {% set track = [
+                ("tracks.search", "Search"),
+                ("tracks.add", "Add"),
+                ("tracks.list", "List"),
+                ] %}
+                {{dropdown_nav("Track", track)}}
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{{url_for('auth.logout')}}">Logout</a>
