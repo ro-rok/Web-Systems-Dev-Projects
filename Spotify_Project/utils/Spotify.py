@@ -8,7 +8,7 @@ class Spotify(API):
         query ={"ids": track_id}
         url = "/tracks/"
         results = API.get(url, query)
-        if results : return Spotify.search_track_formatter(results)
+        if results : return Spotify.track_formatter(results)
         return results
     
     @staticmethod
@@ -16,7 +16,7 @@ class Spotify(API):
         query ={"ids": artist_id}
         url = "/artists/"
         results = API.get(url, query)
-        if results : return Spotify.search_artist_formatter(results)
+        if results : return Spotify.artist_formatter(results)
         return results
     
     @staticmethod
@@ -24,7 +24,7 @@ class Spotify(API):
         query ={"id": album_id}
         url = "/albums/"
         results = API.get(url, query)
-        if results : return Spotify.search_album_formatter(results)
+        if results : return Spotify.album_formatter(results)
         return results
     
     @staticmethod
@@ -32,7 +32,7 @@ class Spotify(API):
         query = {"q": query, "type": q_type, "offset": offset, "limit": limit, "numberOfTopResults": numberOfTopResults}
         url = "/search/"
         results = API.get(url, query)
-        if results : return Spotify.search_multi_formatter(results)
+        if results : return Spotify.search_formatter(results)
         return results
 
     @staticmethod
@@ -54,7 +54,7 @@ class Spotify(API):
         return dt
 
     @staticmethod
-    def search_multi_formatter(results):
+    def search_formatter(results):
         tracks = []
         artists = []
         albums = []
@@ -151,7 +151,7 @@ class Spotify(API):
         return {"tracks": tracks, "artists": artists, "albums": albums, "top_results": top_results}
 
     @staticmethod
-    def search_album_formatter(results):
+    def album_formatter(results):
         album = {}
         if "albums" in results:
             album["album_id"] = results["albums"][0]["id"]
@@ -178,9 +178,9 @@ class Spotify(API):
                 album_track["track_name"] = track["name"]
                 album_track["track_number"] = track["track_number"]
                 album_track["track_uri"] = track["uri"]
-                album_track["track_duration_ms"] = track["duration_ms"]
-                album_track["track_explicit"] = track["explicit"]
-                album_track["track_preview_url"] = track["preview_url"]
+                album_track["duration_ms"] = track["duration_ms"]
+                album_track["is_explicit"] = track["explicit"]
+                album_track["preview_url"] = track["preview_url"]
                 album_track["track_popularity"] = track["popularity"]
                 album_track["track_img"] = Spotify.highest_height_cover(track["album"]["images"])
                 album_track["release_date"] = Spotify.convert_to_datetime(track["album"]["release_date"])
@@ -194,7 +194,7 @@ class Spotify(API):
         return album
     
     @staticmethod
-    def search_artist_formatter(results):
+    def artist_formatter(results):
         artists = []
         if "artists" in results:
             for artist in results["artists"]:
@@ -205,12 +205,12 @@ class Spotify(API):
                 artist["artist_img"] = Spotify.highest_height_cover(artist["visuals"]["avatarImage"]["sources"])
                 artist["genres"] = artist["genres"]
                 artist["followers_total"] = artist["followers"]["total"]
-                artist["popularity"] = artist["popularity"]
+                artist["artist_popularity"] = artist["artist_popularity"]
                 artists.append(artist)
         return artists
     
     @staticmethod
-    def search_track_formatter(results):
+    def track_formatter(results):
         tracks = []
         if "tracks" in results:
             for t in results["tracks"]:
