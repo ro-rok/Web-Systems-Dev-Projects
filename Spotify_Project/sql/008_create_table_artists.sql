@@ -4,7 +4,6 @@ CREATE TABLE
         artist_id VARCHAR(50) UNIQUE NOT NULL,
         artist_name VARCHAR(255) NOT NULL CHECK (artist_name <> ''),
         artist_popularity INT CHECK (artist_popularity >= 0 AND artist_popularity <= 100) DEFAULT 0,
-        preview_url VARCHAR(255) CHECK (preview_url <> ''),
         followers_total INT CHECK (followers_total >= 0),
         artist_uri VARCHAR(100) CHECK (artist_uri <> ''),
         artist_img VARCHAR(255) CHECK (artist_img <> ''),

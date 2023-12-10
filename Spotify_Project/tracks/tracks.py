@@ -2,12 +2,14 @@ from flask import Blueprint, flash, render_template, request, redirect, url_for
 from sql.db import DB 
 from roles.permissions import admin_permission
 from tracks.forms import TrackSearchForm, TrackForm
+from utils.Spotify import Spotify
 
 tracks = Blueprint('tracks', __name__, url_prefix='/tracks', template_folder='templates')
 
 @tracks.route("/add", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
 def add():
+    """Add a new tracks record to the database from the form"""
     form = TrackForm()
     if form.validate_on_submit():
         try:
@@ -23,7 +25,8 @@ def add():
 
 @tracks.route("/edit", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
-def edit(track_id):
+def edit():
+    """Edit an existing tracks record in the database from the form"""
     form = TrackForm()
     id = request.args.get("id")
     if id is None:
@@ -54,7 +57,8 @@ def edit(track_id):
 
 @tracks.route("/delete", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
-def delete(track_id):
+def delete():
+    """Delete an existing tracks record from the database"""
     id = request.args.get("id")
     args ={**request.args}
     if id:
@@ -72,6 +76,7 @@ def delete(track_id):
 @tracks.route("/list")
 @admin_permission.require(http_exception=403)
 def list():
+    """List tracks records from the database"""
     rows = []
     try:
         result = DB.selectAll("SELECT id, track_id, album_id, track_name, track_popularity, preview_url, track_number, track_uri, track_img, duration_ms, is_explicit, release_date FROM IS601_Tracks LIMIT 100")
@@ -86,6 +91,7 @@ def list():
 
 @tracks.route("/search", methods=["GET", "POST"])
 def search():
+    """Search tracks records from the database"""
     form = TrackSearchForm()
     if form.validate_on_submit():
         try:

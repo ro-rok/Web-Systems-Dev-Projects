@@ -1,9 +1,12 @@
 from common.utils import JsonSerializable
 
+class Artist(JsonSerializable):
+    def __init__(self, artist_id, artist_name, artist_popularity, followers_total, artist_uri, artist_img):
 
-class Role(JsonSerializable):
-    def __init__(self, name: str, description = '', is_active = 1):
-        self.name = name
-        self.description = description
-        self.is_active = 1 if is_active else 0
-    
+        self.artist_id = artist_id
+        self.artist_name = artist_name
+        self.artist_popularity = artist_popularity
+        self.followers_total = followers_total
+        self.artist_uri = artist_uri
+        self.artist_img = artist_img
+        
