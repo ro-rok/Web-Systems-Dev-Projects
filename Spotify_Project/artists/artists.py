@@ -1,8 +1,9 @@
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from sql.db import DB 
 from roles.permissions import admin_permission
-from artists.forms import ArtistSearchForm, ArtistForm
+from artists.forms import ArtistSearchForm, ArtistForm, ArtistFetchForm
 from utils.Spotify import Spotify
+from utils.SQLLoader import SQLLoader
 
 artists = Blueprint('artists', __name__, url_prefix='/artists', template_folder='templates')
 
@@ -97,12 +98,12 @@ def search():
             flash("Error fetching artist records", "danger")
     return render_template("artists_search.html", form=form)
 
-@artists.route("/view")
+@artists.route("/view/<id>")
 def view():
-    id = request.args.get("id")
+    id = request.args.get("artist_id")
     if id:
         try:
-            result = DB.selectOne("SELECT id, artist_id, artist_name, artist_popularity,  followers_total, artist_uri, artist_img FROM IS601_Artists WHERE id = %s", id )
+            result = DB.selectOne("SELECT id, artist_id, artist_name, artist_popularity, followers_total, artist_uri, artist_img FROM IS601_Artists WHERE artist_id = %s", id )
             if result.status and result.row:
                 return render_template("artists_view.html", artists=result.row)
             else:
@@ -113,3 +114,19 @@ def view():
     else:
         flash("Missing ID", "danger")
     return redirect(url_for("artists.list"))
+
+@artists.route("/fetch", methods=["GET", "POST"])
+def fetch():
+    form = ArtistFetchForm()
+    if form.validate_on_submit():
+        try:
+            spotify = Spotify()
+            artist = spotify.getArtist(form.artist_id.data)
+            if artist:
+                sql = SQLLoader.loadArtist(artist)
+                return url_for("artists.view", artist_id=artist["artist_id"])
+            else:
+                flash("Artist not found", "warning")
+        except Exception as e:
+            flash(f"Error fetching artist: {e}", "danger")
+    return render_template("artists_fetch.html", form=form)
