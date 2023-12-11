@@ -1,3 +1,22 @@
+import os
+# fix for testing just this file
+if __name__ == "__main__":
+    import sys
+    # Get the parent directory of the current script (api.py)
+    CURR_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    # Add the parent directory to the Python path
+    PARENT_DIR = os.path.join(CURR_DIR, "..")  # Go up one level from utils to project folder
+    sys.path.append(PARENT_DIR)
+
+
+
+from utils.api import API
+
+class RateLimitExceeded(Exception):
+    """Thrown when the rate limit is throttled (not related to the overall quota)"""
+    pass
+
 from utils.api import API
 from datetime import datetime
 
@@ -8,6 +27,10 @@ class Spotify(API):
         query ={"ids": track_id}
         url = "/tracks/"
         results = API.get(url, query)
+        print(results)
+        import json
+        with open("results.json", "w") as json_file:
+            json.dump(results, json_file)
         if results : return Spotify.track_formatter(results)
         return results
     
@@ -173,6 +196,7 @@ class Spotify(API):
             
             album["tracks"] = []
             for track in results["albums"][0]["tracks"]["items"]:
+                #print(track.keys())
                 album_track = {}
                 album_track["track_id"] = track["id"]
                 album_track["track_name"] = track["name"]
@@ -181,31 +205,35 @@ class Spotify(API):
                 album_track["duration_ms"] = track["duration_ms"]
                 album_track["is_explicit"] = track["explicit"]
                 album_track["preview_url"] = track["preview_url"]
-                album_track["track_popularity"] = track["popularity"]
-                album_track["track_img"] = Spotify.highest_height_cover(track["album"]["images"])
-                album_track["release_date"] = Spotify.convert_to_datetime(track["album"]["release_date"])
-                album["tracks"].append(album_track)
+                album_track["track_popularity"] = results["albums"][0]["popularity"]
+                album_track["track_img"] = Spotify.highest_height_cover(results["albums"][0]["images"])
+                album_track["release_date"] = Spotify.convert_to_datetime(results["albums"][0]["release_date"])
+                album_track["artists"] = []
                 for artist in track["artists"]:
                     album_track_artist = {}
                     album_track_artist["artist_id"] = artist["id"]
                     album_track_artist["artist_name"] = artist["name"]
                     album_track_artist["artist_uri"] = artist["uri"]
                     album_track["artists"].append(album_track_artist)
+                album["tracks"].append(album_track)
+        #print(album.keys())
         return album
     
     @staticmethod
     def artist_formatter(results):
         artists = []
         if "artists" in results:
-            for artist in results["artists"]:
+            #print(results["artists"][0].keys())
+            for a in results["artists"]:
                 artist = {}
-                artist["artist_id"] = artist["uri"].split(":")[2]
-                artist["artist_name"] = artist["profile"]["name"]
-                artist["artist_uri"] = artist["uri"]
-                artist["artist_img"] = Spotify.highest_height_cover(artist["visuals"]["avatarImage"]["sources"])
-                artist["genres"] = artist["genres"]
-                artist["followers_total"] = artist["followers"]["total"]
-                artist["artist_popularity"] = artist["artist_popularity"]
+                #print(artist.keys())
+                artist["artist_id"] = a["id"]
+                artist["artist_name"] = a["name"]
+                artist["artist_uri"] = a["uri"]
+                artist["artist_img"] = Spotify.highest_height_cover(a["images"])
+                artist["genres"] = a["genres"]
+                artist["followers_total"] = a["followers"]["total"]
+                artist["artist_popularity"] = a["popularity"]
                 artists.append(artist)
         return artists
     
@@ -216,10 +244,10 @@ class Spotify(API):
             for t in results["tracks"]:
                 track = {}
                 track["track_id"] = t["id"]
-                track["name"] = t["name"]
-                track["popularity"] = t["popularity"]
-                track["uri"] = t["uri"]
-                track["explicit"] = t["explicit"]
+                track["track_name"] = t["name"]
+                track["track_popularity"] = t["popularity"]
+                track["track_uri"] = t["uri"]
+                track["is_explicit"] = t["explicit"]
                 track["preview_url"] = t["preview_url"]
                 track["track_number"] = t["track_number"]
                 track["duration_ms"] = t["duration_ms"]
@@ -256,3 +284,24 @@ class Spotify(API):
                 tracks.append(track)
 
         return tracks
+
+
+if __name__ == "__main__":
+    dir = r"utils\track.json"
+    
+    import json
+    with open(dir, "r") as f:
+        results = json.load(f)
+    print(results.keys())
+    #print(results["artists"][0].keys())
+    r =Spotify.track_formatter(results)
+    print(type(r))
+    print(r[0].keys())
+
+    print(r[0]["album"].keys())
+    print(r[0]["album"])
+    print(r[0]["album"]["artists"][0].keys())
+    print(r[0]["album"]["artists"][0])
+    print(r[0]["artists"][0].keys())
+
+    print(r)

@@ -11,6 +11,7 @@ artists = Blueprint('artists', __name__, url_prefix='/artists', template_folder=
 @admin_permission.require(http_exception=403)
 def add():
     form = ArtistForm()
+    result = None  # Add this line to define the 'result' variable
     if form.validate_on_submit():
         try:
             result = DB.insert("""INSERT INTO IS601_Artists (artist_id, artist_name, artist_popularity,  followers_total, artist_uri, artist_img)""", 
@@ -19,7 +20,7 @@ def add():
                 flash(f"Created artist record for {form.artist_name.data}", "success")
         except Exception as e:
             flash(f"Error creating artist record: {e}", "danger")
-    return render_template("artists_form.html", form=form, type="Create")
+    return render_template("artists_form.html", form=form, result=result)  # Pass 'result' to the template context
 
 @artists.route("/edit", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
@@ -98,7 +99,7 @@ def search():
             flash("Error fetching artist records", "danger")
     return render_template("artists_search.html", form=form)
 
-@artists.route("/view/<id>")
+@artists.route("/view")
 def view():
     id = request.args.get("artist_id")
     if id:
@@ -119,14 +120,18 @@ def view():
 def fetch():
     form = ArtistFetchForm()
     if form.validate_on_submit():
+        flash(f"Fetching artist {form.artist_id.data}", "info")
         try:
-            spotify = Spotify()
-            artist = spotify.getArtist(form.artist_id.data)
+            print("fetching artist", form.artist_id.data)
+            artist = Spotify.get_artist(form.artist_id.data)
+            print(artist)
             if artist:
-                sql = SQLLoader.loadArtist(artist)
-                return url_for("artists.view", artist_id=artist["artist_id"])
+                print("loading artist")
+                SQLLoader.loadArtist(artist)
+
+                return url_for("artists.view", artist_id=form.artist_id.data)
             else:
                 flash("Artist not found", "warning")
         except Exception as e:
             flash(f"Error fetching artist: {e}", "danger")
-    return render_template("artists_fetch.html", form=form)
+    return render_template("artists_search.html", form=form)

@@ -1,5 +1,5 @@
 CREATE TABLE
-    IS601_ArtistTracks(
+    IS601_TrackFeatures(
         id int auto_increment PRIMARY KEY,
         artist_id VARCHAR(60) not null,
         track_id VARCHAR(60) not null,

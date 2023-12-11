@@ -1,0 +1,626 @@
+{
+  "albums": {
+    "totalCount": 2,
+    "items": [
+      {
+        "data": {
+          "uri": "spotify:album:3t3BbpFJiGcXl4jI5CRLLA",
+          "name": "Rocky IV",
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of",
+                "profile": {
+                  "name": "Various Artists"
+                }
+              }
+            ]
+          },
+          "coverArt": {
+            "sources": [
+              {
+                "url": "https://i.scdn.co/image/ab67616d00001e02f4a2ccbe20d6d52f16816812",
+                "width": 300,
+                "height": 300
+              },
+              {
+                "url": "https://i.scdn.co/image/ab67616d00004851f4a2ccbe20d6d52f16816812",
+                "width": 64,
+                "height": 64
+              },
+              {
+                "url": "https://i.scdn.co/image/ab67616d0000b273f4a2ccbe20d6d52f16816812",
+                "width": 640,
+                "height": 640
+              }
+            ]
+          },
+          "date": {
+            "year": 1985
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:album:5XpEKORZ4y6OrCZSKsi46A",
+          "name": "Norman Fucking Rockwell!",
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:00FQb4jTyendYWaN8pK0wa",
+                "profile": {
+                  "name": "Lana Del Rey"
+                }
+              }
+            ]
+          },
+          "coverArt": {
+            "sources": [
+              {
+                "url": "https://i.scdn.co/image/ab67616d00001e02879e9318cb9f4e05ee552ac9",
+                "width": 300,
+                "height": 300
+              },
+              {
+                "url": "https://i.scdn.co/image/ab67616d00004851879e9318cb9f4e05ee552ac9",
+                "width": 64,
+                "height": 64
+              },
+              {
+                "url": "https://i.scdn.co/image/ab67616d0000b273879e9318cb9f4e05ee552ac9",
+                "width": 640,
+                "height": 640
+              }
+            ]
+          },
+          "date": {
+            "year": 2019
+          }
+        }
+      }
+    ]
+  },
+  "artists": {
+    "totalCount": 2,
+    "items": [
+      {
+        "data": {
+          "uri": "spotify:artist:3xs0LEzcPXtgNfMNcHzLIP",
+          "profile": {
+            "name": "Rockwell"
+          },
+          "visuals": {
+            "avatarImage": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000b27357de8cb9bbbe22a9e71c8af7",
+                  "width": 640,
+                  "height": 640
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000485157de8cb9bbbe22a9e71c8af7",
+                  "width": 64,
+                  "height": 64
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:artist:13ubrt8QOOCPljQ2FL1Kca",
+          "profile": {
+            "name": "A$AP Rocky"
+          },
+          "visuals": {
+            "avatarImage": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab6761610000e5eb6d5529e3962a16bd267bfeb2",
+                  "width": 640,
+                  "height": 640
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab6761610000f1786d5529e3962a16bd267bfeb2",
+                  "width": 160,
+                  "height": 160
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "topResults": {
+    "items": [
+      {
+        "data": {
+          "uri": "spotify:artist:3xs0LEzcPXtgNfMNcHzLIP",
+          "profile": {
+            "name": "Rockwell"
+          },
+          "visuals": {
+            "avatarImage": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000b27357de8cb9bbbe22a9e71c8af7",
+                  "width": 640,
+                  "height": 640
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000485157de8cb9bbbe22a9e71c8af7",
+                  "width": 64,
+                  "height": 64
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:track:0e7ipj03S05BNilyu5bRzt",
+          "id": "0e7ipj03S05BNilyu5bRzt",
+          "name": "rockstar (feat. 21 Savage)",
+          "albumOfTrack": {
+            "uri": "spotify:album:6trNtQUgC8cgbWcqoMYkOR",
+            "name": "beerbongs & bentleys",
+            "coverArt": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00001e02b1c4b76e23414c9f20242268",
+                  "width": 300,
+                  "height": 300
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00004851b1c4b76e23414c9f20242268",
+                  "width": 64,
+                  "height": 64
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000b273b1c4b76e23414c9f20242268",
+                  "width": 640,
+                  "height": 640
+                }
+              ]
+            },
+            "id": "6trNtQUgC8cgbWcqoMYkOR",
+            "sharingInfo": {
+              "shareUrl": "https://open.spotify.com/album/6trNtQUgC8cgbWcqoMYkOR?si=yeu78nLfQHaxy4S3Xuh04w"
+            }
+          },
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:246dkjvS1zLTtiykXe5h60",
+                "profile": {
+                  "name": "Post Malone"
+                }
+              },
+              {
+                "uri": "spotify:artist:1URnnhqYAYcrqrcwql10ft",
+                "profile": {
+                  "name": "21 Savage"
+                }
+              }
+            ]
+          },
+          "contentRating": {
+            "label": "EXPLICIT"
+          },
+          "duration": {
+            "totalMilliseconds": 218146
+          },
+          "playability": {
+            "playable": true
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:playlist:37i9dQZF1EQpj7X7UK8OOF",
+          "name": "Rock Mix",
+          "description": "<a href=spotify:playlist:37i9dQZF1EIXZWpMEne2Nl>Dire Straits</a>, <a href=spotify:playlist:37i9dQZF1EIUsI68Cm2ojI>Eagles</a>, <a href=spotify:playlist:37i9dQZF1EIVJW7PzIkjtQ>Creedence Clearwater Revival</a> and more",
+          "images": {
+            "items": [
+              {
+                "sources": [
+                  {
+                    "url": "https://seed-mix-image.spotifycdn.com/v6/img/rock/0WwSkZ7LtFUFjGjMZBMt6T/en/default",
+                    "width": null,
+                    "height": null
+                  }
+                ]
+              }
+            ]
+          },
+          "owner": {
+            "name": "Spotify"
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:album:3t3BbpFJiGcXl4jI5CRLLA",
+          "name": "Rocky IV",
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of",
+                "profile": {
+                  "name": "Various Artists"
+                }
+              }
+            ]
+          },
+          "coverArt": {
+            "sources": [
+              {
+                "url": "https://i.scdn.co/image/ab67616d00001e02f4a2ccbe20d6d52f16816812",
+                "width": 300,
+                "height": 300
+              },
+              {
+                "url": "https://i.scdn.co/image/ab67616d00004851f4a2ccbe20d6d52f16816812",
+                "width": 64,
+                "height": 64
+              },
+              {
+                "url": "https://i.scdn.co/image/ab67616d0000b273f4a2ccbe20d6d52f16816812",
+                "width": 640,
+                "height": 640
+              }
+            ]
+          },
+          "date": {
+            "year": 1985
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:show:7exTzXcsvM9EH7uxhWbFFI",
+          "name": "Rockstars del Dinero",
+          "coverArt": {
+            "sources": [
+              {
+                "url": "https://i.scdn.co/image/ab6765630000f68decdf29703d33cbef9a4a913c",
+                "width": 64,
+                "height": 64
+              },
+              {
+                "url": "https://i.scdn.co/image/ab67656300005f1fecdf29703d33cbef9a4a913c",
+                "width": 300,
+                "height": 300
+              },
+              {
+                "url": "https://i.scdn.co/image/ab6765630000ba8aecdf29703d33cbef9a4a913c",
+                "width": 640,
+                "height": 640
+              }
+            ]
+          },
+          "type": "PODCAST",
+          "publisher": {
+            "name": "Sonoro"
+          },
+          "mediaType": "AUDIO"
+        }
+      }
+    ],
+    "featured": [
+      {
+        "data": {
+          "uri": "spotify:playlist:37i9dQZF1DWYGrDuvTW4S8",
+          "name": "Behind The Lyrics: HITS",
+          "description": "Watch your screen as you listen to see lyrics, fun facts, and artist stories from Genius!",
+          "images": {
+            "items": [
+              {
+                "sources": [
+                  {
+                    "url": "https://i.scdn.co/image/ab67706f0000000243af530ae7fb19fc104789dc",
+                    "width": null,
+                    "height": null
+                  }
+                ]
+              }
+            ]
+          },
+          "owner": {
+            "name": "Spotify"
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:playlist:37i9dQZF1E4EghP5SblUDr",
+          "name": "Rockwell Radio",
+          "description": "",
+          "images": {
+            "items": [
+              {
+                "sources": [
+                  {
+                    "url": "https://seeded-session-images.scdn.co/v1/img/artist/3xs0LEzcPXtgNfMNcHzLIP/en",
+                    "width": null,
+                    "height": null
+                  }
+                ]
+              }
+            ]
+          },
+          "owner": {
+            "name": "Spotify"
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:playlist:37i9dQZF1DZ06evO23zms8",
+          "name": "This Is Rockwell",
+          "description": "This is Rockwell. The essential tracks, all in one playlist.",
+          "images": {
+            "items": [
+              {
+                "sources": [
+                  {
+                    "url": "https://thisis-images.scdn.co/37i9dQZF1DZ06evO23zms8-default.jpg",
+                    "width": null,
+                    "height": null
+                  }
+                ]
+              }
+            ]
+          },
+          "owner": {
+            "name": "Spotify"
+          }
+        }
+      }
+    ]
+  },
+  "tracks": {
+    "totalCount": 2,
+    "items": [
+      {
+        "data": {
+          "uri": "spotify:track:0e7ipj03S05BNilyu5bRzt",
+          "id": "0e7ipj03S05BNilyu5bRzt",
+          "name": "rockstar (feat. 21 Savage)",
+          "albumOfTrack": {
+            "uri": "spotify:album:6trNtQUgC8cgbWcqoMYkOR",
+            "name": "beerbongs & bentleys",
+            "coverArt": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00001e02b1c4b76e23414c9f20242268",
+                  "width": 300,
+                  "height": 300
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00004851b1c4b76e23414c9f20242268",
+                  "width": 64,
+                  "height": 64
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000b273b1c4b76e23414c9f20242268",
+                  "width": 640,
+                  "height": 640
+                }
+              ]
+            },
+            "id": "6trNtQUgC8cgbWcqoMYkOR",
+            "sharingInfo": {
+              "shareUrl": "https://open.spotify.com/album/6trNtQUgC8cgbWcqoMYkOR?si=Bzl5ZJgUTyKSZB8jlvAC4g"
+            }
+          },
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:246dkjvS1zLTtiykXe5h60",
+                "profile": {
+                  "name": "Post Malone"
+                }
+              },
+              {
+                "uri": "spotify:artist:1URnnhqYAYcrqrcwql10ft",
+                "profile": {
+                  "name": "21 Savage"
+                }
+              }
+            ]
+          },
+          "contentRating": {
+            "label": "EXPLICIT"
+          },
+          "duration": {
+            "totalMilliseconds": 218146
+          },
+          "playability": {
+            "playable": true
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:track:0So2sgVa8aJiARPl2P29u2",
+          "id": "0So2sgVa8aJiARPl2P29u2",
+          "name": "Pope Is a Rockstar",
+          "albumOfTrack": {
+            "uri": "spotify:album:7ywSMs3G2OWOGVKMqc7KsE",
+            "name": "SALES LP",
+            "coverArt": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00001e021138eea74b6d7e06289bedaa",
+                  "width": 300,
+                  "height": 300
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d000048511138eea74b6d7e06289bedaa",
+                  "width": 64,
+                  "height": 64
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000b2731138eea74b6d7e06289bedaa",
+                  "width": 640,
+                  "height": 640
+                }
+              ]
+            },
+            "id": "7ywSMs3G2OWOGVKMqc7KsE",
+            "sharingInfo": {
+              "shareUrl": "https://open.spotify.com/album/7ywSMs3G2OWOGVKMqc7KsE?si=-oAUoGg6RU2sEXPLuzM8TA"
+            }
+          },
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:6vVztIuqdDHvYWxOEXCzjN",
+                "profile": {
+                  "name": "SALES"
+                }
+              }
+            ]
+          },
+          "contentRating": {
+            "label": "NONE"
+          },
+          "duration": {
+            "totalMilliseconds": 187333
+          },
+          "playability": {
+            "playable": true
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:track:4OgwXdylh75fHfwUzJTUqg",
+          "id": "4OgwXdylh75fHfwUzJTUqg",
+          "name": "Rockstar",
+          "albumOfTrack": {
+            "uri": "spotify:album:1US66auJ538TiXGeUf24yL",
+            "name": "Rockstar",
+            "coverArt": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00001e02a1d56525c3380e5cbda5f48f",
+                  "width": 300,
+                  "height": 300
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00004851a1d56525c3380e5cbda5f48f",
+                  "width": 64,
+                  "height": 64
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000b273a1d56525c3380e5cbda5f48f",
+                  "width": 640,
+                  "height": 640
+                }
+              ]
+            },
+            "id": "1US66auJ538TiXGeUf24yL",
+            "sharingInfo": {
+              "shareUrl": "https://open.spotify.com/album/1US66auJ538TiXGeUf24yL?si=OPhXrO-GQf-YuQRGTbwBBA"
+            }
+          },
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:5deLgmgAEgy8UHOfJ9Dj8w",
+                "profile": {
+                  "name": "Ilkay Sencan"
+                }
+              },
+              {
+                "uri": "spotify:artist:3v6Ji4uoWtKRkhuDUaxi9n",
+                "profile": {
+                  "name": "Dynoro"
+                }
+              }
+            ]
+          },
+          "contentRating": {
+            "label": "NONE"
+          },
+          "duration": {
+            "totalMilliseconds": 212280
+          },
+          "playability": {
+            "playable": true
+          }
+        }
+      },
+      {
+        "data": {
+          "uri": "spotify:track:5knuzwU65gJK7IF5yJsuaW",
+          "id": "5knuzwU65gJK7IF5yJsuaW",
+          "name": "Rockabye (feat. Sean Paul & Anne-Marie)",
+          "albumOfTrack": {
+            "uri": "spotify:album:3meZFplbMmji648oWUNEfQ",
+            "name": "Rockabye (feat. Sean Paul & Anne-Marie)",
+            "coverArt": {
+              "sources": [
+                {
+                  "url": "https://i.scdn.co/image/ab67616d00001e021431c3bdf16aa99f71799d95",
+                  "width": 300,
+                  "height": 300
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d000048511431c3bdf16aa99f71799d95",
+                  "width": 64,
+                  "height": 64
+                },
+                {
+                  "url": "https://i.scdn.co/image/ab67616d0000b2731431c3bdf16aa99f71799d95",
+                  "width": 640,
+                  "height": 640
+                }
+              ]
+            },
+            "id": "3meZFplbMmji648oWUNEfQ",
+            "sharingInfo": {
+              "shareUrl": "https://open.spotify.com/album/3meZFplbMmji648oWUNEfQ?si=kEcpyNGcTSKlhRySRMnDkA"
+            }
+          },
+          "artists": {
+            "items": [
+              {
+                "uri": "spotify:artist:6MDME20pz9RveH9rEXvrOM",
+                "profile": {
+                  "name": "Clean Bandit"
+                }
+              },
+              {
+                "uri": "spotify:artist:3Isy6kedDrgPYoTS1dazA9",
+                "profile": {
+                  "name": "Sean Paul"
+                }
+              },
+              {
+                "uri": "spotify:artist:1zNqDE7qDGCsyzJwohVaoX",
+                "profile": {
+                  "name": "Anne-Marie"
+                }
+              }
+            ]
+          },
+          "contentRating": {
+            "label": "NONE"
+          },
+          "duration": {
+            "totalMilliseconds": 251088
+          },
+          "playability": {
+            "playable": true
+          }
+        }
+      }
+    ]
+  }
+}
