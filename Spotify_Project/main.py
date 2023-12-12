@@ -41,6 +41,8 @@ def create_app(config_filename=''):
         app.register_blueprint(artists)
         from albums.albums import albums
         app.register_blueprint(albums)
+        from root.root import root
+        app.register_blueprint(root)
 
         # load the extension
         principals = Principal(app) # must be defined/initialized for identity to work (flask_principal)

@@ -26,7 +26,11 @@
                     </div>
                     <div class="mb-3">
                         <strong>Track URI</strong>
-                        <p><a href="{{ track.track_uri }}">{{ track.track_uri }}</a></p>
+                        <p><a href="{{ track.track_uri }}">On Desktop</a></p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track URL</strong>
+                        <p><a href="https://open.spotify.com/track/{{track.track_id}}">On Browser</a></p>
                     </div>
                     <div class="mb-3">
                         <strong>Track Explicit</strong>
@@ -38,11 +42,11 @@
                     </div>
                     <div class="mb-3">
                         <strong>Track Album</strong>
-                        <p>{{ track.album_name }}</p>
+                        <a href="{{ url_for('albums.view', id=track.album_id) }}"><p>{{ track.album_name }}</p></a>
                     </div>
                     <div class="mb-3">
                         <strong>Track Artist</strong>
-                        <p>{{ album_artist.artist_name }}</p>
+                        <a href="{{ url_for('artists.view', id=artist_id) }}"><p>{{ album_artist.artist_name }}</p></a>
                     </div>                
                 </div>
                 <div class="col-md-6">

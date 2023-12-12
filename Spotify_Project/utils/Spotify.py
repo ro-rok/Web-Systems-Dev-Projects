@@ -19,6 +19,7 @@ class RateLimitExceeded(Exception):
 
 from utils.api import API
 from datetime import datetime
+import json
 
 class Spotify(API):
 
@@ -29,10 +30,8 @@ class Spotify(API):
         url = "/tracks/"
         results = API.get(url, query)
         print(results)
-        import json
-        with open("results.json", "w") as json_file:
-            json.dump(results, json_file)
-        if results : return Spotify.track_formatter(results)
+        if results : 
+            return Spotify.track_formatter(results)
         return results
     
     @staticmethod
@@ -41,7 +40,8 @@ class Spotify(API):
         query ={"ids": artist_id}
         url = "/artists/"
         results = API.get(url, query)
-        if results : return Spotify.artist_formatter(results)
+        if results : 
+            return Spotify.artist_formatter(results)
         return results
     
     @staticmethod
@@ -50,17 +50,32 @@ class Spotify(API):
         query ={"id": album_id}
         url = "/albums/"
         results = API.get(url, query)
-        if results : return Spotify.album_formatter(results)
+        if results : 
+            return Spotify.album_formatter(results)
         return results
     
     @staticmethod
-    def search(query, q_type="multi", offset=0, limit=30, numberOfTopResults=10):
+    def search(query, q_type="multi", offset=0, limit=10, numberOfTopResults=30):
         #rk868 - 12/09/23 - This is the search function for Spotify.
+        #rk868 - 12/12/23 - Formatted the search function to return a dictionary of tracks, artists, albums, and top_results.
         query = {"q": query, "type": q_type, "offset": offset, "limit": limit, "numberOfTopResults": numberOfTopResults}
         url = "/search/"
         results = API.get(url, query)
-        if results : return Spotify.search_formatter(results)
-        return results
+        #json.dump(results, open("utils/sample/search.json", "w"))
+        if results: 
+            r = {}
+            if results["topResults"]:
+                print("topResults")
+                r["topResults"] = results["topResults"]
+            #print("r",r)
+            
+            a = Spotify.search_topformtter(results)
+            
+            print("a",a)
+            #json.dump(a, open("search.json", "w"))
+            return a
+        
+        return results["topResults"]
 
     @staticmethod
     def highest_height_cover(cover_url):
@@ -83,101 +98,188 @@ class Spotify(API):
         return dt
 
     @staticmethod
+    def search_topformtter(results):
+        top_results = []
+        print("------------------------------------------------------------------------")
+        if results["topResults"]["items"]:
+            print("topResults")
+            for items in results["topResults"]["items"]:
+                top_result = {}
+                try:
+                    if "album" in items["data"]["uri"]:
+                        # album
+                        top_result["id"] = items["data"]["uri"].split(":")[2]
+                        top_result["name"] = items["data"]["name"]
+                        top_result["uri"] = items["data"]["uri"]
+                        cover_art = items["data"]["coverArt"]
+                        if cover_art is not None:
+                            top_result["img"] = Spotify.highest_height_cover(cover_art["sources"])
+                        top_result["type"] = "album"
+
+                    if "artist" in items["data"]["uri"]:
+                        # artist
+                        top_result["id"] = items["data"]["uri"].split(":")[2]
+                        top_result["name"] = items["data"]["profile"]["name"]
+                        top_result["uri"] = items["data"]["uri"]
+                        visuals = items["data"]["visuals"]
+                        if visuals is not None:
+                            avatar_image = visuals["avatarImage"]
+                            if avatar_image is not None:
+                                top_result["img"] = Spotify.highest_height_cover(avatar_image["sources"])
+                        top_result["type"] = "artist"
+
+                    if "track" in items["data"]["uri"]:
+                        # track
+                        top_result["id"] = items["data"]["id"]
+                        top_result["name"] = items["data"]["name"]
+                        top_result["uri"] = items["data"]["uri"]
+                        album_of_track = items["data"]["albumOfTrack"]
+                        if album_of_track is not None:
+                            cover_art = album_of_track["coverArt"]
+                            if cover_art is not None:
+                                top_result["img"] = Spotify.highest_height_cover(cover_art["sources"])
+                        top_result["type"] = "track"
+
+                    if top_result:
+                        top_results.append(top_result)
+                except KeyError:
+                    continue
+
+        return top_results
+
+    @staticmethod
     def search_formatter(results):
         #rk868 - 12/09/23 - This is the search_formatter function for Spotify.
+        #rk868 - 12/12/23 - Added try/except blocks to handle KeyError exceptions.
         tracks = []
         artists = []
         albums = []
         top_results = []
+        print("------------------------------------formating------------------------------------")
+        try:
+            if "tracks" in results and results["tracks"]["totalCount"] > 0:
+                for items in results["tracks"]["items"]:
+                    track = {}
+                    try:
+                        track["track_id"] = items["data"]["id"]
+                        track["album_id"] = items["data"]["albumOfTrack"]["id"]
+                        track["track_name"] = items["data"]["name"]
+                        track["track_uri"] = items["data"]["uri"]
 
-        if "tracks" in results and results["tracks"]["totalCount"] > 0:
-            for items in results["tracks"]["items"]:
-                track = {}
-                track["track_id"] = items["data"]["id"]
-                track["album_id"] = items["data"]["albumOfTrack"]["id"]
-                track["track_name"] = items["data"]["name"]
-                track["track_popularity"] = items["data"]["popularity"]
-                track["track_number"] = items["data"]["trackNumber"]
-                track["track_uri"] = items["data"]["uri"]
-                track["track_img"] = Spotify.highest_height_cover(items["data"]["coverArt"]["sources"])
-                track["duration_ms"] = items["data"]["duration"]["totalMilliseconds"]
-                track["is_explicit"] = items["data"]["contentRating"]["label"] == "EXPLICIT"
-                release_date = "".join(items["data"]["albumOfTrack"]["date"].values())
-                track["release_date"] = Spotify.convert_to_datetime(release_date)
+                        x = items["data"]["albumOfTrack"]["coverArt"]["sources"]
+                        track["track_img"] = Spotify.highest_height_cover(x)
+                        track["duration_ms"] = items["data"]["duration"]["totalMilliseconds"]
+                        track["is_explicit"] = items["data"]["contentRating"]["label"] == "EXPLICIT"
 
-                album = {}
-                album["album_id"] = items["data"]["albumOfTrack"]["id"]
-                album["album_name"] = items["data"]["albumOfTrack"]["name"]
-                album["album_uri"] = items["data"]["albumOfTrack"]["uri"]
-                album["album_img"] =  Spotify.highest_height_cover(items["data"]["albumOfTrack"]["coverArt"]["sources"])
-                album["release_date"] = Spotify.convert_to_datetime(release_date)   
-                track["album"] = album
+                        album = {}
+                        album["album_id"] = items["data"]["albumOfTrack"]["id"]
+                        album["album_name"] = items["data"]["albumOfTrack"]["name"]
+                        album["album_uri"] = items["data"]["albumOfTrack"]["uri"]
+                        album["album_img"] = Spotify.highest_height_cover(x)
+                        track["album"] = album
 
-                track_artists = []
-                for artist in items["data"]["artists"]["items"]:
+                        track_artists = []
+                        for artist in items["data"]["artists"]["items"]:
+                            a = {}
+                            a["artist_id"] = artist["uri"].split(":")[2]
+                            a["artist_name"] = artist["profile"]["name"]
+                            a["artist_uri"] = artist["uri"]
+                            track_artists.append(a)
+                        track["artists"] = track_artists
+
+                        tracks.append(track)
+                    except KeyError:
+                        continue
+
+            #print(tracks)
+        except KeyError:
+            pass
+
+        try:
+            if "albums" in results and results["albums"]["totalCount"] > 0:
+                for items in results["albums"]["items"]:
+                    album = {}
+                    try:
+                        album["album_id"] = items["data"]["uri"].split(":")[2]
+                        album["album_name"] = items["data"]["name"]
+                        album["album_uri"] = items["data"]["uri"]
+                        album["album_img"] = Spotify.highest_height_cover(items["data"]["coverArt"]["sources"])
+                        release_date = "".join(str(value) for value in items["data"]["date"].values())
+                        album["release_date"] = Spotify.convert_to_datetime(release_date)
+
+                        album_artist = {}
+                        album_artist["artist_id"] = items["data"]["artists"]["items"][0]["uri"].split(":")[2]
+                        album_artist["artist_name"] = items["data"]["artists"]["items"][0]["profile"]["name"]
+                        album_artist["artist_uri"] = items["data"]["artists"]["items"][0]["uri"]
+                        if album_artist:
+                            album["artist"] = album_artist
+                        if album:
+                            albums.append(album)
+                    except KeyError:
+                        continue
+
+            #print(albums)
+        except KeyError:
+            pass
+
+        try:
+            if "artists" in results and results["artists"]["totalCount"] > 0:
+                for items in results["artists"]["items"]:
                     artist = {}
-                    artist["artist_id"] = artist["uri"].split(":")[2]
-                    artist["artist_name"] = artist["profile"]["name"]
-                    artist["artist_uri"] = artist["uri"]
-                    track_artists.append(artist)
-                track["artists"] = track_artists
-                tracks.append(track)
+                    try:
+                        artist["artist_id"] = items["data"]["uri"].split(":")[2]
+                        artist["artist_name"] = items["data"]["profile"]["name"]
+                        artist["artist_uri"] = items["data"]["uri"]
+                        if "visuals" in items["data"] and "avatarImage" in items["data"]["visuals"] and items["data"]["visuals"]["avatarImage"] is not None and "sources" in items["data"]["visuals"]["avatarImage"]:
+                            artist["artist_img"] = Spotify.highest_height_cover(items["data"]["visuals"]["avatarImage"]["sources"])
+                        else:
+                            artist["artist_img"] = None
+                        artists.append(artist)
+                    except KeyError:
+                        continue
 
-        if "albums" in results and results["albums"]["totalCount"] > 0:
-            for items in results["albums"]["items"]:
-                album = {}
-                album["album_id"] = items["data"]["id"]
-                album["album_name"] = items["data"]["name"]
-                album["album_uri"] = items["data"]["uri"]
-                album["album_img"] = Spotify.highest_height_cover(items["data"]["coverArt"]["sources"])
-                release_date = "".join(items["data"]["date"].values())
-                album["release_date"] = Spotify.convert_to_datetime(release_date)
+            #print(artists)
+        except KeyError:
+            pass
 
-                album_artist = {}
-                album_artist["artist_id"] = items["data"]["artists"]["items"][0]["uri"].split(":")[2]
-                album_artist["artist_name"] = items["data"]["artists"]["items"][0]["profile"]["name"]
-                album_artist["artist_uri"] = items["data"]["artists"]["items"][0]["uri"]
-                album["artist"] = album_artist
-                albums.append(album)
+        try:
+            if "topResults" in results and results["topResults"]["items"]:
+                for items in results["topResults"]["items"]:
+                    top_result = {}
+                    try:
+                        if "album" in items["data"]["uri"]:
+                            # album
+                            top_result["id"] = items["data"]["uri"].split(":")[2]
+                            top_result["name"] = items["data"]["name"]
+                            top_result["uri"] = items["data"]["uri"]
+                            top_result["img"] = Spotify.highest_height_cover(items["data"]["coverArt"]["sources"])
+                            top_result["type"] = "album"
 
-        if "artists" in results and results["artists"]["totalCount"] > 0:
-            for items in results["artists"]["items"]:
-                artist = {}
-                artist["artist_id"] = items["data"]["id"]
-                artist["artist_name"] = items["data"]["profile"]["name"]
-                artist["artist_uri"] = items["data"]["uri"]
-                artist["artist_img"] = Spotify.highest_height_cover(items["data"]["visuals"]["avatarImage"]["sources"])
-                artists.append(artist)
+                        if "artist" in items["data"]["uri"]:
+                            # artist
+                            top_result["id"] = items["data"]["uri"].split(":")[2]
+                            top_result["name"] = items["data"]["profile"]["name"]
+                            top_result["uri"] = items["data"]["uri"]
+                            top_result["img"] = Spotify.highest_height_cover(items["data"]["visuals"]["avatarImage"]["sources"])
+                            top_result["type"] = "artist"
 
-        if "topResults" in results and results["topResults"]["items"]:
-            for items in results["topResults"]["items"]:
-                top_result = {}
-                if "albumOfTrack" in items["data"]:
-                    top_result["album_id"] = items["data"]["albumOfTrack"]["id"]
-                    top_result["album_name"] = items["data"]["albumOfTrack"]["name"]
-                    top_result["album_uri"] = items["data"]["albumOfTrack"]["uri"]
-                    top_result["album_img"] = Spotify.highest_height_cover(items["data"]["albumOfTrack"]["coverArt"]["sources"])
-                    release_date = "".join(items["data"]["albumOfTrack"]["date"].values())
-                    top_result["release_date"] = Spotify.convert_to_datetime(release_date)
-                    
-                if "artists" in items["data"]:
-                    top_result["artist_id"] = items["data"]["artists"]["items"][0]["uri"].split(":")[2]
-                    top_result["artist_name"] = items["data"]["artists"]["items"][0]["profile"]["name"]
-                    top_result["artist_uri"] = items["data"]["artists"]["items"][0]["uri"]
-                    top_result["artist_img"] = Spotify.highest_height_cover(items["data"]["visuals"]["avatarImage"]["sources"])
-                if "name" in items["data"]:
-                    top_result["track_name"] = items["data"]["name"]
-                    top_result["track_id"] = items["data"]["id"]
-                    top_result["track_uri"] = items["data"]["uri"]
-                    top_result["track_img"] = Spotify.highest_height_cover(items["data"]["coverArt"]["sources"])
-                    top_result["track_popularity"] = items["data"]["popularity"]
-                    top_result["track_number"] = items["data"]["trackNumber"]
-                    top_result["duration_ms"] = items["data"]["duration"]["totalMilliseconds"]
-                    top_result["is_explicit"] = items["data"]["contentRating"]["label"] == "EXPLICIT"
-                    release_date = "".join(items["data"]["albumOfTrack"]["date"].values())
-                    top_result["release_date"] = Spotify.convert_to_datetime(release_date)
-                top_results.append(top_result)
-        
+                        if "track" in items["data"]["uri"]:
+                            # track
+                            top_result["id"] = items["data"]["id"]
+                            top_result["name"] = items["data"]["name"]
+                            top_result["uri"] = items["data"]["uri"]
+                            top_result["img"] = Spotify.highest_height_cover(items["data"]["albumOfTrack"]["coverArt"]["sources"])
+                            top_result["type"] = "track"
+
+                        if top_result:
+                            top_results.append(top_result)
+                    except KeyError:
+                        continue
+
+            #print(top_results)
+        except KeyError:
+            pass
+
         return {"tracks": tracks, "artists": artists, "albums": albums, "top_results": top_results}
 
     @staticmethod
@@ -299,21 +401,9 @@ class Spotify(API):
 
 
 if __name__ == "__main__":
-    dir = r"utils\sample\tracks.json"
+    dir = r"utils\sample\search1.json"
     
-    import json
-    with open(dir, "r") as f:
-        results = json.load(f)
-    print(results.keys())
-    print(results.keys())
-    r =Spotify.track_formatter(results)
-    print(type(r))
-    print(r[0].keys())
+    results = json.load(open(dir, "r"))
 
-    print(r[0]["album"].keys())
-    print(r[0]["album"])
-    print(r[0]["album"]["artists"][0].keys())
-    print(r[0]["album"]["artists"][0])
-    print(r[0]["artists"][0].keys())
-
-    print(r)
+    
+    

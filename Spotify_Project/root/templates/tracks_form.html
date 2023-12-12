@@ -1,8 +1,0 @@
-if result.status and result.row:
-            return render_template("tracks_view.html", tracks=result.row)
-        else:
-            flash("Tracks record not found", "danger")
-    except Exception as e:
-        print(f"Tracks error {e}")
-        flash("Error fetching tracks record", "danger")
-    return redirect(url_for("tracks.list"))
