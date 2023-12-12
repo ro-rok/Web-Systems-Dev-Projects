@@ -8,3 +8,4 @@ class SearchForm(FlaskForm):
     limit = IntegerField('Limit', validators=[Length(min=1, max=255)])
     offset = IntegerField('Offset', validators=[Length(min=1, max=255)])
     submit = SubmitField('Submit')
+
