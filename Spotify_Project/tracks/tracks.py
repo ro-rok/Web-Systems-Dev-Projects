@@ -31,28 +31,36 @@ def add():
     form = TrackForm()
     albums = [(r["album_id"], r["album_name"]) for r in get_albums()]
     form.album_id.choices = albums
-    artists =[("Select Featuring", None )]+ [(r["id"], r["artist_name"]) for r in get_artists()]
+    artists =[(None, "Select Featuring" )]+ [(r["id"], r["artist_name"]) for r in get_artists()]
     form.artist_id.choices = artists
     result = None
 
     if form.validate_on_submit():
         try:
-            uri = f"spotify:album:{form.album_id.data}"
-            #print(f"Track data: {form.track_id.data}, album: {form.album_id.data}, Name: {form.track_name.data}, {form.track_popularity.data}, {form.preview_url.data}, {form.track_number.data}, {uri}, {form.track_img.data}, {form.duration_ms.data}, {form.is_explicit.data}, {form.release_date.data}")
-            
-            result = DB.insertOne("""INSERT INTO IS601_Tracks (track_id, album_id, track_name, track_popularity, preview_url, track_number, track_uri, track_img, duration_ms, is_explicit, release_date)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                                ON DUPLICATE KEY UPDATE
-                                track_id = %s, album_id = %s, track_name = %s, track_popularity = %s, preview_url = %s, track_number = %s, track_uri = %s, track_img = %s, duration_ms = %s, is_explicit = %s, release_date = %s""",
-                                form.track_id.data, form.album_id.data, form.track_name.data, form.track_popularity.data, form.preview_url.data, form.track_number.data,
-                                uri, form.track_img.data, form.duration_ms.data, form.is_explicit.data, form.release_date.data
-                                )
-            id = DB.selectOne("""SELECT id FROM IS601_Tracks WHERE track_id = %s""", form.track_id.data)
-            result1 = DB.insertOne("""INSERT INTO IS601_TrackFeatures (track_id,artist_id) VALUES (%s, %s)
-                                    ON DUPLICATE KEY UPDATE
-                                    track_id = %s, artist_id = %s
-                                    """, id.row.get("id"), form.artist_id.data)
-            if result.status and result1.status:
+            try:
+                uri = f"spotify:album:{form.album_id.data}"
+                #print(f"Track data: {form.track_id.data}, album: {form.album_id.data}, Name: {form.track_name.data}, {form.track_popularity.data}, {form.preview_url.data}, {form.track_number.data}, {uri}, {form.track_img.data}, {form.duration_ms.data}, {form.is_explicit.data}, {form.release_date.data}")
+                albums_id = form.album_id.data
+                print("album id", albums_id)
+                result = DB.insertOne("""INSERT INTO IS601_Tracks (track_id, album_id, track_name, track_popularity, preview_url, track_number, track_uri, track_img, duration_ms, is_explicit, release_date)
+                                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                        ON DUPLICATE KEY UPDATE
+                                        track_id = values(track_id), album_id = values(album_id), track_name = values(track_name), track_popularity = values(track_popularity), preview_url = values(preview_url), 
+                                        track_number = values(track_number), track_uri = values(track_uri), track_img = values(track_img), duration_ms = values(duration_ms), is_explicit = values(is_explicit), release_date = values(release_date) """,
+                                        form.track_id.data, form.album_id.data, form.track_name.data, form.track_popularity.data, form.preview_url.data, form.track_number.data,
+                                        uri, form.track_img.data, form.duration_ms.data, form.is_explicit.data, form.release_date.data)
+            except Exception as e:
+                flash(f"Error creating track record: {e}", "danger")
+            try:
+                id = DB.selectOne("""SELECT id FROM IS601_Tracks WHERE track_id = %s""", form.track_id.data)
+                if id.status and id.row and form.artist_id.data is not None:
+                    result1 = DB.insertOne("""INSERT INTO IS601_TrackFeatures (track_id, artist_id) VALUES (%s, %s)
+                                            ON DUPLICATE KEY UPDATE
+                                            track_id = %s, artist_id = %s
+                                            """, id.row.get("id"), form.artist_id.data, id.row.get("id"), form.artist_id.data)
+            except Exception as e:
+                flash(f"Error creating track record: {e}", "danger")
+            if result and result.status:
                 flash(f"Created track record for {form.track_name.data}", "success")
         except Exception as e:
             flash(f"Error creating track record: {e}", "danger")

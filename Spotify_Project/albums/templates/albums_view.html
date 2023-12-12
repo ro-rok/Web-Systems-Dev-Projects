@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <strong>Album ID</strong>
+                        <strong>Spotify ID</strong>
                         <p>{{ data.album_id }}</p>
                     </div>
                     <div class="mb-3">
@@ -34,7 +34,7 @@
                     </div>
                     <div class="mb-3">
                         <strong>Album URI</strong>
-                        <p>{{ data.album_uri }}</p>
+                        <p><a href="{{ data.album_uri }}">{{ data.album_uri }}</a></p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -45,8 +45,8 @@
             </div>
             <a href="{{ url_for('albums.list') }}" class="btn btn-secondary">Back</a>
             {% if current_user.has_role("Admin") %}
-            <a href="{{ url_for('albums.edit', album_id=data.album_id) }}" class="btn btn-primary">Edit</a>
-            <a href="{{ url_for('albums.delete', album_id=data.album_id) }}" class="btn btn-danger">Delete</a>
+            <a href="{{ url_for('albums.edit', id=data.id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ url_for('albums.delete', id=data.id) }}" class="btn btn-danger">Delete</a>
             {% endif %}
         </div>
     </div>

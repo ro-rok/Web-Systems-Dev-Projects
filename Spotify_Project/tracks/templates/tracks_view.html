@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <strong>Track ID</strong>
+                        <strong>Spotify ID</strong>
                         <p>{{ track.track_id }}</p>
                     </div>
                     <div class="mb-3">
@@ -46,18 +46,19 @@
                     </div>                
                 </div>
                 <div class="col-md-6">
-                    <div class="image-container text-right"> <!-- Added 'text-right' class to align the image to the right -->
+                    <div class="image-container text-right"> 
                         <img src="{{ track.track_img }}" alt="Track Image" style="width: 25em; height: 30em;">
                     </div>
                     <audio controls="controls" style="width: 26em" >
                         <source src="{{ track.preview_url }}" type="audio/mpeg">
                     </audio>
+
                 </div>
             </div>
             <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary">Back</a>
             {% if current_user.has_role("Admin") %}
-            <a href="{{ url_for('tracks.edit', track_id=track.track_id) }}" class="btn btn-primary">Edit</a>
-            <a href="{{ url_for('tracks.delete', track_id=track.track_id) }}" class="btn btn-danger">Delete</a>
+            <a href="{{ url_for('tracks.edit', id=track.id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ url_for('tracks.delete', id=track.id) }}" class="btn btn-danger">Delete</a>
             {% endif %}
         </div>
     </div>
