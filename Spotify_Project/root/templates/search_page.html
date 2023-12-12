@@ -3,6 +3,7 @@
 
 <!-- content -->
 {% block content %}
+{% set redirect = '/redirect' %} 
 <div class="container-fluid">
     {% include '_search.html' %}
     <h1>Top Results</h1>
@@ -11,7 +12,7 @@
     {% else %}
     <div class="card-group">
         {% for result in top_results %}
-        <div class="card bg-dark text-white">
+        <div class="card bg-dark text-white" style="max-width: 20%;">
             <img src="{{ result.img }}" class="card-img-top" alt="{{ result.name }}">
             <div class="card-body">
                 <h5 class="card-title">{{ result.name }}</h5>
@@ -21,14 +22,15 @@
             </div>
             <div class="card-footer">
                 <small class="text-muted" style="text-transform: capitalize;">
-                    {% set root = '/redirect' %} 
-                    <a href="{{ root }}?uri={{ result.uri }}"> {{ result.type }} View </a>
+                    <a href="{{ redirect }}?uri={{ result.uri }}"> {{ result.type }} View </a>
                 </small>
             </div>
         </div>
+        {% if loop.index % 5 == 0 %}
+        <div class="w-100"></div>
+        {% endif %}
         {% endfor %}
     </div>
     {% endif %}
-
 </div>
 {% endblock %}

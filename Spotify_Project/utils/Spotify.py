@@ -55,29 +55,27 @@ class Spotify(API):
         return results
     
     @staticmethod
-    def search(query, q_type="multi", offset=0, limit=10, numberOfTopResults=20):
+    def search(query, q_type="multi", offset=0, limit=10, numberOfTopResults=30):
         #rk868 - 12/09/23 - This is the search function for Spotify.
         #rk868 - 12/12/23 - Formatted the search function to return a dictionary of tracks, artists, albums, and top_results.
         query = {"q": query, "type": q_type, "offset": offset, "limit": limit, "numberOfTopResults": numberOfTopResults}
         url = "/search/"
         results = API.get(url, query)
-        json.dump(results, open("\util\sample\search.json", "w"))
+        #json.dump(results, open("utils/sample/search.json", "w"))
         if results: 
             r = {}
-            if results["tracks"]: 
-                r["tracks"] = results["tracks"]
-            if results["artists"]: 
-                r["artists"] = results["artists"]
-            if results["albums"]: 
-                r["albums"] = results["albums"]
             if results["topResults"]:
+                print("topResults")
                 r["topResults"] = results["topResults"]
             #print("r",r)
-            a = Spotify.search_formatter(r)
-            #print("a",a)
+            
+            a = Spotify.search_topformtter(results)
+            
+            print("a",a)
             #json.dump(a, open("search.json", "w"))
             return a
-        return results
+        
+        return results["topResults"]
 
     @staticmethod
     def highest_height_cover(cover_url):
@@ -98,6 +96,56 @@ class Spotify(API):
                 except ValueError:
                     raise ValueError("Invalid date format")
         return dt
+
+    @staticmethod
+    def search_topformtter(results):
+        top_results = []
+        print("------------------------------------------------------------------------")
+        if results["topResults"]["items"]:
+            print("topResults")
+            for items in results["topResults"]["items"]:
+                top_result = {}
+                try:
+                    if "album" in items["data"]["uri"]:
+                        # album
+                        top_result["id"] = items["data"]["uri"].split(":")[2]
+                        top_result["name"] = items["data"]["name"]
+                        top_result["uri"] = items["data"]["uri"]
+                        cover_art = items["data"]["coverArt"]
+                        if cover_art is not None:
+                            top_result["img"] = Spotify.highest_height_cover(cover_art["sources"])
+                        top_result["type"] = "album"
+
+                    if "artist" in items["data"]["uri"]:
+                        # artist
+                        top_result["id"] = items["data"]["uri"].split(":")[2]
+                        top_result["name"] = items["data"]["profile"]["name"]
+                        top_result["uri"] = items["data"]["uri"]
+                        visuals = items["data"]["visuals"]
+                        if visuals is not None:
+                            avatar_image = visuals["avatarImage"]
+                            if avatar_image is not None:
+                                top_result["img"] = Spotify.highest_height_cover(avatar_image["sources"])
+                        top_result["type"] = "artist"
+
+                    if "track" in items["data"]["uri"]:
+                        # track
+                        top_result["id"] = items["data"]["id"]
+                        top_result["name"] = items["data"]["name"]
+                        top_result["uri"] = items["data"]["uri"]
+                        album_of_track = items["data"]["albumOfTrack"]
+                        if album_of_track is not None:
+                            cover_art = album_of_track["coverArt"]
+                            if cover_art is not None:
+                                top_result["img"] = Spotify.highest_height_cover(cover_art["sources"])
+                        top_result["type"] = "track"
+
+                    if top_result:
+                        top_results.append(top_result)
+                except KeyError:
+                    continue
+
+        return top_results
 
     @staticmethod
     def search_formatter(results):

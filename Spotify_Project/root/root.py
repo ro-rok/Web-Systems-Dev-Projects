@@ -65,44 +65,31 @@ def search():
     # rk868 12/12/23 - Added search form
     form = SearchForm()
     #print("searching")
-    if form.validate_on_submit():
-        print("searching")
-        try:
-            if not form.limit.data:
-                form.limit.data = 10
-            if not form.offset.data:
-                form.offset.data = 0
-            if not form.type.data:
-                form.type.data = "multi"
-            result = Spotify.search(form.query.data, form.type.data, form.offset.data, form.limit.data)
-            if result:
-                if form.type.data == "track":
-                    return render_template("tracks_search.html", form=form, tracks=result["tracks"])
-                elif form.type.data == "artist":
-                    return render_template("artists_search.html", form=form, artists=result["artists"])
-                elif form.type.data == "album":
-                    return render_template("albums_search.html", form=form, albums=result["albums"])
-                else:
-                    print(result)
-                    return render_template("search.html", form=form, albums=result["albums"], artists=result["artists"], tracks=result["tracks"], top_results=result["top_results"])           
-        except Exception as e:
-            flash(f"Error searching for tracks: {e}", "danger")
-    else:
-        query = request.args.get("query")
-        try:
-            import json
-            with open("search1.json", "r") as f:
-                result = json.load(f)
-            result = Spotify.search_formatter(result)
-            if result:
-                print((result["top_results"]))
-                #print(result)
+    try:
+        if form.validate_on_submit():
+            print("searching")
+            try:
+                if not form.limit.data:
+                    form.limit.data = 20
+                if form.query.data < 1 or form.query.data > 50:
+                    flash("Limit must be between 1 and 50", "warning")
+                    return render_template("search_page.html", form=form)
 
-                return render_template("search_page.html", form=form, albums=result["albums"], artists=result["artists"], tracks=result["tracks"], top_results=result["top_results"])
+                result = Spotify.search(form.query.data, numberOfTopResults=form.limit.data)
+                if result:
+                    return render_template("search_page.html", form=form, top_results=result)
+            except Exception as e:
+                flash(f"Error searching for tracks: {e}", "danger")
+        else:
+            query = request.args.get("query")
+            result = Spotify.search(query)
+            print("result", type(result), result)
+            if result:
+                return render_template("search_page.html", form=form, top_results=result)
             else:
                 flash(f"No results found for {query}", "warning")
-        except Exception as e:
-            flash(f"Error searching for {query}: {e}", "danger")
+    except Exception as e:
+        flash(f"Error performing search: {e}", "danger")
         
     return render_template("search_page.html", form=form)
 
