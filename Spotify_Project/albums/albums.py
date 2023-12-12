@@ -27,8 +27,11 @@ def add():
     if form.validate_on_submit():
         try:
             uri = f"spotify:album:{form.album_id.data}"
-            result = DB.insert("""INSERT INTO IS601_Albums (album_id, album_name, album_popularity, album_uri, 
-                                album_img, total_tracks, release_date, label_name) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", 
+            result = DB.insertOne("""INSERT INTO IS601_Albums (album_id, album_name, album_popularity, album_uri, 
+                                album_img, total_tracks, release_date, label_name) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                ON DUPLICATE KEY UPDATE
+                                album_id = %s, album_name = %s, album_popularity = %s, album_uri = %s, album_img = %s,
+                                total_tracks = %s, release_date = %s, label_name = %s""", 
                                 form.album_id.data, form.album_name.data, form.album_popularity.data, uri, form.album_img.data, 
                                 form.total_tracks.data, form.release_date.data, form.label_name.data)
             if result.status:
@@ -51,7 +54,7 @@ def edit():
         data = form.data
         try:
             uri = f"spotify:album:{form.album_id.data}"
-            result = DB.insertOne("""UPDATE IS601_Albums SET album_id = %s, album_name = %s, album_popularity = %s, album_uri = %s, 
+            result = DB.update("""UPDATE IS601_Albums SET album_id = %s, album_name = %s, album_popularity = %s, album_uri = %s, 
                                     album_img = %s, total_tracks = %s, release_date = %s, label_name = %s WHERE id = %s""",
                         form.album_id.data, form.album_name.data, form.album_popularity.data, uri, form.album_img.data, 
                         form.total_tracks.data, form.release_date.data, form.label_name.data, id)

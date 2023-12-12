@@ -265,8 +265,9 @@ class SQLLoader:
                     try:
                         artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
                         album_id = DB.selectOne(""" SELECT id FROM IS601_Albums WHERE album_id = %s """, track["album"]["album_id"])
-                        DB.insertOne("INSERT INTO IS601_ArtistAlbums (artist_id, album_id) VALUES (%s, %s)"
+                        result = DB.insertOne("INSERT INTO IS601_ArtistAlbums (artist_id, album_id) VALUES (%s, %s)"
                                     , artist_id.row.get("id"), album_id.row.get("id"))
+                        print("result", result, artist_id.row.get("id"), album_id.row.get("id"))
                     except Exception as e:
                         if "Duplicate entry" in str(e):
                             print(f"Error creating artist record: {e}", "danger")
@@ -334,4 +335,4 @@ if __name__ == "__main__":
     #SQLLoader.loadTrack(Spotify.track_formatter(results))
     #SQLLoader.loadAlbum(Spotify.album_formatter(results2))
     #SQLLoader.loadArtist(Spotify.artist_formatter(results3))
-    SQLLoader.loadTrack(Spotify.track_formatter(results5))
+    #SQLLoader.loadTrack(Spotify.track_formatter(results5))

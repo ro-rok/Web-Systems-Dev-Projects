@@ -30,7 +30,10 @@ def add():
         try:
             uri = f"spotify:artist:{form.artist_id.data}"
             print(form.artist_id.data, form.artist_name.data, form.artist_popularity.data,  form.followers_total.data, uri, form.artist_img.data)
-            result = DB.insert("""INSERT INTO IS601_Artists (artist_id, artist_name, artist_popularity,  followers_total, artist_uri, artist_img)""", 
+            result = DB.insertOne("""INSERT INTO IS601_Artists (artist_id, artist_name, artist_popularity,  followers_total, artist_uri, artist_img)
+                                    VALUES (%s, %s, %s, %s, %s, %s)
+                                    ON DUPLICATE KEY UPDATE
+                                    artist_id = %s, artist_name = %s, artist_popularity = %s,  followers_total = %s, artist_uri = %s, artist_img = %s""", 
                         form.artist_id.data, form.artist_name.data, form.artist_popularity.data,  form.followers_total.data, uri, form.artist_img.data)
             if result.status:
                 flash(f"Created artist record for {form.artist_name.data}", "success")
@@ -54,7 +57,7 @@ def edit():
         data = form.data
         try:
             uri = f"spotify:artist:{form.artist_id.data}"
-            result = DB.insertOne("""UPDATE IS601_Artists SET artist_id = %s, artist_name = %s, artist_popularity = %s,  followers_total = %s, artist_uri = %s, artist_img = %s WHERE id = %s""",
+            result = DB.update("""UPDATE IS601_Artists SET artist_id = %s, artist_name = %s, artist_popularity = %s,  followers_total = %s, artist_uri = %s, artist_img = %s WHERE id = %s""",
                         form.artist_id.data, form.artist_name.data, form.artist_popularity.data,  form.followers_total.data, uri, form.artist_img.data, id)
             if result.status:
                 flash(f"Updated artist record for {form.artist_name.data}", "success")
