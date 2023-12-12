@@ -198,10 +198,11 @@ def view():
                                 FROM IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE t.id = %s""", id)
         album_id = track.row.get("album_id")
         album_artist= DB.selectOne("""SELECT a.artist_name FROM IS601_ArtistAlbums aa LEFT JOIN IS601_Artists a ON aa.artist_id = a.id WHERE aa.album_id = %s""", album_id)
+        artist_id = DB.selectOne("""SELECT id FROM IS601_Artists WHERE artist_name = %s""", album_artist.row.get("artist_name"))
         if track.status and album_artist.status:
             print(album_artist.row)
             print(track.row)
-            return render_template("tracks_view.html", track=track.row, album_artist=album_artist.row )
+            return render_template("tracks_view.html", track=track.row, album_artist=album_artist.row , artist_id=artist_id.row.get("id"))
         else:
             flash("No track found", "danger")
     else:
