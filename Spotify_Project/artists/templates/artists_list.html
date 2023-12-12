@@ -5,9 +5,17 @@
 {% block content %}
 {% from "_table_helper.html" import render_table %}
 {% set view = "artists.view" %}
+{% if current_user.has_role("Admin") %}
 {% set edit = "artists.edit" %}
 {% set delete = "artists.delete" %}
+{% else %}
+{% set edit = None %}
+{% set delete = None %}
+{% endif %}
 <div class="container-fluid">
-    {{ render_table(rows, "Artists", [], view, edit, delete) }}
+    {% include '_artists_search.html' %}
+
+
+    {{ render_table(rows, "Artists", ["id"], view, edit, delete) }}
 </div>
 {% endblock %}

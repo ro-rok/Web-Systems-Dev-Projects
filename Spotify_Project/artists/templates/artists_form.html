@@ -1,5 +1,0 @@
-{% if result.status and result.row %}
-    <a href="{{ url_for('artists.list') }}">View Artists</a>
-{% else %}
-    <div class="alert alert-danger">Artists record not found</div>
-{% endif %}

@@ -31,19 +31,17 @@
                 {{dropdown_nav("Roles", roles)}}
                 <!-- track nav (requires admin )-->
                 {% set track = [
-                ("tracks.search", "Search"),
                 ("tracks.add", "Add"),
                 ("tracks.list", "List"),
                 ] %}
                 {{dropdown_nav("Track", track)}}
                 {% set albums = [
-                ("albums.search", "Search"),
                 ("albums.add", "Add"),
                 ("albums.list", "List"),
                 ] %}
                 {{dropdown_nav("Albums", albums)}}
                 {% set artist = [
-                ("artists.search", "Search"),
+                ("artists.fetch", "Fetch"),
                 ("artists.add", "Add"),
                 ("artists.list", "List"),
                 ] %}

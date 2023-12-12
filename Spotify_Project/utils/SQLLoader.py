@@ -13,6 +13,10 @@ from sql.db import DB
 from flask import flash
 from utils.Spotify import Spotify
 
+class DictToObject:
+    def __init__(self, dictionary):
+        for key in dictionary:
+            setattr(self, key, dictionary[key])
 class SQLLoader:
     @staticmethod
     def loadTracksSearch(result):
@@ -138,9 +142,8 @@ class SQLLoader:
                     print(f"Error creating genre record: {e}", "danger")
                 try:
                     genre_id = DB.selectOne(""" SELECT id FROM IS601_Genres WHERE genre_name = %s """, genre)
-                    print("genre_id", genre_id.row.get("id"))
-                    print("artist_id", result["artist_id"], result["artist_name"])
-                    DB.insertOne(""" INSERT INTO IS601_ArtistGenres (artist_id, genre_id) VALUES (%s, %s) """, result["artist_id"], genre_id.row.get("id"))
+                    artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, result["artist_id"])
+                    DB.insertOne(""" INSERT INTO IS601_ArtistGenres (artist_id, genre_id) VALUES (%s, %s) """, artist_id.row.get("id"), genre_id.row.get("id"))
                 except Exception as e:
                     if "Duplicate entry" in str(e):
                         print(f"Error creating artist genre record: {e}", "danger")
@@ -176,10 +179,12 @@ class SQLLoader:
                             flash(f"Error creating artist record: {e}", "danger")
 
                     try:
+                        artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
+                        album_id = DB.selectOne(""" SELECT id FROM IS601_Albums WHERE album_id = %s """, results["album_id"])
                         DB.insertOne("""
                                     INSERT INTO IS601_ArtistAlbums (artist_id, album_id)
                                     VALUES (%s, %s)
-                                    """, artist["artist_id"], results["album_id"])
+                                    """, artist_id.row.get("id"), album_id.row.get("id"))
                     except Exception as e:
                         if "Duplicate entry" in str(e):
                             print(f"Error creating artist record: {e}", "danger")
@@ -215,10 +220,12 @@ class SQLLoader:
                             else:
                                 flash(f"Error creating artist record: {e}", "danger")
                         try:
+                            artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
+                            track_id = DB.selectOne(""" SELECT id FROM IS601_Tracks WHERE track_id = %s """, track["track_id"])
                             DB.insertOne("""
                                         INSERT INTO IS601_TrackFeatures (track_id, artist_id)
                                         VALUES (%s, %s)
-                                        """, track["track_id"], artist["artist_id"])
+                                        """, track_id.row.get("id"), artist_id.row.get("id"))
                         except Exception as e:
                             if "Duplicate entry" in str(e):
                                 print(f"Error creating artist record: {e}", "danger")
@@ -250,8 +257,10 @@ class SQLLoader:
                         else:
                             flash(f"Error creating artist record: {e}", "danger")
                     try:
+                        artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
+                        album_id = DB.selectOne(""" SELECT id FROM IS601_Albums WHERE album_id = %s """, track["album"]["album_id"])
                         DB.insertOne("INSERT INTO IS601_ArtistAlbums (artist_id, album_id) VALUES (%s, %s)"
-                                    , artist["artist_id"], track["album"]["album_id"])
+                                    , artist_id.row.get("id"), album_id.row.get("id"))
                     except Exception as e:
                         if "Duplicate entry" in str(e):
                             print(f"Error creating artist record: {e}", "danger")
@@ -288,8 +297,10 @@ class SQLLoader:
                             else:
                                 flash(f"Error creating artist record: {e}", "danger")
                         try:
+                            artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
+                            track_id = DB.selectOne(""" SELECT id FROM IS601_Tracks WHERE track_id = %s """, track["track_id"])
                             DB.insertOne("INSERT INTO IS601_TrackFeatures (track_id, artist_id) VALUES (%s, %s)"
-                                        , track["track_id"], artist["artist_id"])
+                                        , track_id.row.get("id"), artist_id.row.get("id"))
                         except Exception as e:
                             if "Duplicate entry" in str(e):
                                 print(f"Error creating artist track record: {e}", "danger")
@@ -297,12 +308,24 @@ class SQLLoader:
                                 flash(f"Error creating artist track record: {e}", "danger")
 
 if __name__ == "__main__":
-    dir = r"utils\track.json"
-    
+    dir = r"utils\sample\track.json"
+    dir2 = r"utils\sample\album.json"
+    dir3 = r"utils\sample\artist.json"
+    dir4 = r"utils\sample\search.json"
+    dir5 = r"utils\sample\tracks.json"
 
     import json
     with open(dir, "r") as f:
         results = json.load(f)
-    r =Spotify.track_formatter(results)
-    r = SQLLoader.loadTrack(r)
-    print(r)
+    with open(dir2, "r") as f:
+        results2 = json.load(f)
+    with open(dir3, "r") as f:
+        results3 = json.load(f)
+    with open(dir4, "r") as f:
+        results4 = json.load(f)
+    with open(dir5, "r") as f:
+        results5 = json.load(f)
+    #SQLLoader.loadTrack(Spotify.track_formatter(results))
+    #SQLLoader.loadAlbum(Spotify.album_formatter(results2))
+    #SQLLoader.loadArtist(Spotify.artist_formatter(results3))
+    SQLLoader.loadTrack(Spotify.track_formatter(results5))

@@ -225,6 +225,7 @@ class Spotify(API):
         if "artists" in results:
             #print(results["artists"][0].keys())
             for a in results["artists"]:
+                if not a: continue
                 artist = {}
                 #print(artist.keys())
                 artist["artist_id"] = a["id"]
@@ -242,6 +243,7 @@ class Spotify(API):
         tracks = []
         if "tracks" in results:
             for t in results["tracks"]:
+                if not t: continue
                 track = {}
                 track["track_id"] = t["id"]
                 track["track_name"] = t["name"]
@@ -287,13 +289,13 @@ class Spotify(API):
 
 
 if __name__ == "__main__":
-    dir = r"utils\track.json"
+    dir = r"utils\sample\tracks.json"
     
     import json
     with open(dir, "r") as f:
         results = json.load(f)
     print(results.keys())
-    #print(results["artists"][0].keys())
+    print(results.keys())
     r =Spotify.track_formatter(results)
     print(type(r))
     print(r[0].keys())

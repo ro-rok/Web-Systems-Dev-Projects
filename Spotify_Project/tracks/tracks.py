@@ -124,4 +124,3 @@ def view():
     else:
         flash("Missing ID", "danger")
     return redirect(url_for("tracks.list"))
-

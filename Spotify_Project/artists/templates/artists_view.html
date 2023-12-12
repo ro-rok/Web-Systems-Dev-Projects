@@ -4,18 +4,38 @@
 {% block content %}
 <div class="container-fluid">
     <div class="h3">View Artist</div>
-    <div class="card">
+    <div class="card bg-black">
         <div class="card-body">
-            {% for field in form %}
-            {% if field.type != 'CSRFTokenField' and field.type != 'SubmitField' %}
-            <div class="mb-3">
-                <strong>{{ field.label }}</strong>
-                <p>{{ field.data }}</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <strong>Artist ID</strong>
+                        <p>{{ data.artist_id }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Artist Name</strong>
+                        <p>{{ data.artist_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Artist Popularity</strong>
+                        <p>{{ data.artist_popularity }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Followers Total</strong>
+                        <p>{{ data.followers_total }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Artist URI</strong>
+                        <p>{{ data.artist_uri }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="image-container">
+                        <img src="{{ data.artist_img }}" alt="Artist Image" style="width: 25em; height: 30em;">
+                    </div>
+                </div>
             </div>
-            {% endif %}
-            {% endfor %}
-            <a href="{{ url_for('artists.list') }}"
-                class="btn btn-secondary">Back</a>
+            <a href="{{ url_for('artists.list') }}" class="btn btn-secondary">Back</a>
         </div>
     </div>
 </div>
