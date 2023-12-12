@@ -57,10 +57,11 @@ class Spotify(API):
     @staticmethod
     def search(query, q_type="multi", offset=0, limit=10, numberOfTopResults=20):
         #rk868 - 12/09/23 - This is the search function for Spotify.
+        #rk868 - 12/12/23 - Formatted the search function to return a dictionary of tracks, artists, albums, and top_results.
         query = {"q": query, "type": q_type, "offset": offset, "limit": limit, "numberOfTopResults": numberOfTopResults}
         url = "/search/"
         results = API.get(url, query)
-        json.dump(results, open("search1.json", "w"))
+        json.dump(results, open("\util\sample\search.json", "w"))
         if results: 
             r = {}
             if results["tracks"]: 
@@ -71,10 +72,10 @@ class Spotify(API):
                 r["albums"] = results["albums"]
             if results["topResults"]:
                 r["topResults"] = results["topResults"]
-            print("r",r)
+            #print("r",r)
             a = Spotify.search_formatter(r)
-            print("a",a)
-            json.dump(a, open("search.json", "w"))
+            #print("a",a)
+            #json.dump(a, open("search.json", "w"))
             return a
         return results
 
@@ -101,6 +102,7 @@ class Spotify(API):
     @staticmethod
     def search_formatter(results):
         #rk868 - 12/09/23 - This is the search_formatter function for Spotify.
+        #rk868 - 12/12/23 - Added try/except blocks to handle KeyError exceptions.
         tracks = []
         artists = []
         albums = []
@@ -141,7 +143,7 @@ class Spotify(API):
                     except KeyError:
                         continue
 
-            print(tracks)
+            #print(tracks)
         except KeyError:
             pass
 
@@ -168,7 +170,7 @@ class Spotify(API):
                     except KeyError:
                         continue
 
-            print(albums)
+            #print(albums)
         except KeyError:
             pass
 
@@ -188,7 +190,7 @@ class Spotify(API):
                     except KeyError:
                         continue
 
-            print(artists)
+            #print(artists)
         except KeyError:
             pass
 
@@ -226,7 +228,7 @@ class Spotify(API):
                     except KeyError:
                         continue
 
-            print(top_results)
+            #print(top_results)
         except KeyError:
             pass
 
@@ -356,4 +358,4 @@ if __name__ == "__main__":
     results = json.load(open(dir, "r"))
 
     
-    Spotify.ge
+    
