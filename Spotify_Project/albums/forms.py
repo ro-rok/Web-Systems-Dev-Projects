@@ -21,6 +21,8 @@ class AlbumSearchForm(FlaskForm):
     sort = SelectField("Sort")
     order = SelectField("Order", choices=[("asc","+"), ("desc","-")])
     submit = SubmitField("Filter")
+class AlbumSearchSQLForm(FlaskForm):
+    album_name = StringField('Album Name')
     submit = SubmitField('Submit')
 
 class AlbumFetchForm(FlaskForm):

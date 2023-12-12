@@ -25,6 +25,8 @@ class TrackSearchForm(FlaskForm):
     sort = SelectField("Sort")
     order = SelectField("Order", choices=[("asc","+"), ("desc","-")])
     submit = SubmitField("Filter")
+class TrackSQLSearchForm(FlaskForm):
+    track_name = StringField('Track Name')
     submit = SubmitField('Submit')
 
 class TrackFetchForm(FlaskForm):

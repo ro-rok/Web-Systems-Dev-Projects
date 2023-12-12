@@ -55,6 +55,10 @@
                 </div>
             </div>
             <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary">Back</a>
+            {% if current_user.has_role("Admin") %}
+            <a href="{{ url_for('tracks.edit', track_id=track.track_id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ url_for('tracks.delete', track_id=track.track_id) }}" class="btn btn-danger">Delete</a>
+            {% endif %}
         </div>
     </div>
 </div>

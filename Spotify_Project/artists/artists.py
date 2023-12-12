@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from sql.db import DB 
 from roles.permissions import admin_permission
-from artists.forms import ArtistSearchForm, ArtistForm, ArtistFetchForm
+from artists.forms import ArtistSearchForm, ArtistForm, ArtistFetchForm, ArtistSQLSearchForm
 from utils.Spotify import Spotify
 from utils.SQLLoader import SQLLoader, DictToObject
 
@@ -108,7 +108,6 @@ def delete():
     return redirect(url_for("artists.list", **args))
 
 @artists.route("/list" , methods=["GET"])
-@admin_permission.require(http_exception=403)
 def list():
     #rk868 - 12/10/23 - This is the list function for artists.
     form = ArtistSearchForm(request.args)
@@ -153,10 +152,10 @@ def list():
 @artists.route("/search", methods=["GET", "POST"])
 def search():
     #rk868 - 12/10/23 - This is the search function for artists.
-    form = ArtistSearchForm()
+    form = ArtistFetchForm()
     if form.validate_on_submit():
         try:
-            result = DB.selectAll("SELECT id, artist_id, artist_name, artist_popularity,  followers_total FROM IS601_Artists WHERE artist_name LIKE %s LIMIT 100", f"%{form.artist_name.data}%")
+            result = DB.selectAll("SELECT id, artist_id, artist_name, artist_popularity, followers_total FROM IS601_Artists WHERE artist_name LIKE %s LIMIT 100", f"%{form.artist_id.data}%")
             if result.status and result.rows:
                 return render_template("artists_list.html", rows=result.rows)
             else:
@@ -164,7 +163,7 @@ def search():
         except Exception as e:
             print(f"Artists error {e}")
             flash("Error fetching artist records", "danger")
-    return render_template("_artists_search.html", form=form)
+    return render_template("artists_fetch.html", form=form)
 
 @artists.route("/view")
 def view():

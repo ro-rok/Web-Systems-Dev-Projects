@@ -18,6 +18,9 @@ class ArtistSearchForm(FlaskForm):
     sort = SelectField("Sort")
     order = SelectField("Order", choices=[("asc","+"), ("desc","-")])
     submit = SubmitField("Filter")
+
+class ArtistSQLSearchForm(FlaskForm):
+    artist_name = StringField('Artist Name')
     submit = SubmitField('Submit')
 
 class ArtistFetchForm(FlaskForm):

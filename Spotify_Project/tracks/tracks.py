@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from sql.db import DB 
 from roles.permissions import admin_permission
-from tracks.forms import TrackSearchForm, TrackForm, TrackFetchForm
+from tracks.forms import TrackSearchForm, TrackForm, TrackFetchForm, TrackSQLSearchForm
 from utils.Spotify import Spotify
 from utils.SQLLoader import SQLLoader, DictToObject
 
@@ -118,7 +118,6 @@ def delete():
 
 
 @tracks.route("/list", methods=["GET"])
-@admin_permission.require(http_exception=403)
 def list():
     #rk868 - 12/11/23 - This is the list function for tracks.
     form = TrackSearchForm(request.args)
@@ -167,7 +166,7 @@ def list():
 @tracks.route("/search", methods=["GET", "POST"])
 def search():
     #rk868 - 12/11/23 - This is the search function for tracks.
-    form = TrackSearchForm()
+    form = TrackSQLSearchForm()
     if form.validate_on_submit():
         try:
             result = DB.selectAll("SELECT id, track_id, track_name, track_popularity, preview_url, track_number, track_uri, track_img, duration_ms, is_explicit, release_date FROM IS601_Tracks WHERE track_name LIKE %s LIMIT 100", f"%{form.track_name.data}%")
@@ -178,7 +177,7 @@ def search():
         except Exception as e:
             print(f"Tracks error {e}")
             flash("Error fetching tracks records", "danger")
-    return render_template("_tracks_search.html", form=form)
+    return render_template("tracks_fetch.html", form=form)
 
 @tracks.route("/view")
 def view():

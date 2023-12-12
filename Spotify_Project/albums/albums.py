@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, render_template, request, redirect, url_for
 from sql.db import DB 
 from roles.permissions import admin_permission
-from albums.forms import AlbumSearchForm, AlbumForm, AlbumFetchForm
+from albums.forms import AlbumSearchForm, AlbumForm, AlbumFetchForm, AlbumSearchSQLForm
 from utils.Spotify import Spotify
 from utils.SQLLoader import SQLLoader, DictToObject
 
@@ -110,7 +110,6 @@ def delete():
 
 
 @albums.route("/list", methods=["GET"])
-@admin_permission.require(http_exception=403)
 def list():
     #rk868 - 12/11/23 - This is the list function for albums.
     form = AlbumSearchForm(request.args)
@@ -155,10 +154,15 @@ def list():
 @albums.route("/search", methods=["GET", "POST"])
 def search():
     #rk868 - 12/11/23 - This is the search function for albums.
-    form = AlbumSearchForm()
+    form = AlbumSearchSQLForm()
     if form.validate_on_submit():
+        #flash(f"Fetching albums with name like {form.album_name.data}", "info")
+        name = f"%{form.album_name.data}%"
+        print(name)
         try:
-            result = DB.selectAll("SELECT id, album_id, album_name, release_date, total_tracks, album_img FROM IS601_Albums WHERE album_name LIKE %s LIMIT 100", f"%{form.album_name.data}%")
+            where = "WHERE album_name LIKE %s"
+            result = DB.selectAll("SELECT id, album_id, album_name, release_date, total_tracks, album_img FROM IS601_Albums "+ where, name)
+            
             if result.status and result.rows:
                 return render_template("albums_list.html", rows=result.rows)
             else:
@@ -166,7 +170,7 @@ def search():
         except Exception as e:
             print(f"Albums error {e}")
             flash("Error fetching album records", "danger")
-    return render_template("_albums_search.html", form=form)
+    return render_template("albums_fetch.html", form=form)
 
 @albums.route("/view")
 def view():
