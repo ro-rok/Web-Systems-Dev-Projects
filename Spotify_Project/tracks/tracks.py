@@ -102,6 +102,9 @@ def edit():
         form.process(obj=data)
 
         print(f"Loaded form: {form.data}")
+    else:
+        flash("Track not found", "danger")
+        return redirect(url_for("tracks.list"))
     return render_template("tracks_manage.html", form=form, type="Edit")
 
 
