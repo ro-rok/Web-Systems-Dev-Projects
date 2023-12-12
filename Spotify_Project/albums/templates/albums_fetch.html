@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}{{ type }} Role{% endblock %}
+{% block title %}Album{% endblock %}
 {% block content %}
 {% from "_formhelpers.html" import render_field %}
 <div class="container-fluid">
-    <div class="h3">Album Search</div>
+    <div class="h3">Album</div>
     <form method="POST">
         {% for field in form %}
         {% if field.name != 'csrf_token' %}

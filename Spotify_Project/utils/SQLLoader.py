@@ -20,6 +20,7 @@ class DictToObject:
 class SQLLoader:
     @staticmethod
     def loadTracksSearch(result):
+        #rk868 - 12/09/23 - This is the load function for tracks search.
         for track in result["tracks"]:
             try:
                 DB.insertOne("""
@@ -64,6 +65,7 @@ class SQLLoader:
         
     @staticmethod
     def loadAlbumsSearch(result):
+        # rk868 - 12/09/23 - This is the load function for albums search.
         for album in result["albums"]:
             for album in result["albums"]:
                 try:
@@ -100,7 +102,7 @@ class SQLLoader:
 
     @staticmethod
     def loadAristsSearch(result):
-
+        # rk868 - 12/09/23 - This is the load function for artists search.
         for artist in result["artists"]:
             try:
                 DB.insertOne("""
@@ -115,6 +117,7 @@ class SQLLoader:
 
     @staticmethod
     def loadArtist(results: list[dict]):
+        # rk868 - 12/09/23 - This is the load function for artists.
         for result in results:
             try:
                 status = DB.insertOne("""
@@ -152,6 +155,7 @@ class SQLLoader:
     
     @staticmethod
     def loadAlbum(results: dict):
+        # rk868 - 12/09/23 - This is the load function for albums.
         try:
             DB.insertOne("""
                         INSERT INTO IS601_Albums (album_id, album_name, album_uri, album_img, release_date, label_name, album_popularity, total_tracks)
@@ -236,8 +240,10 @@ class SQLLoader:
                 print(f"Error creating/updating album record: {e}", "danger")
             else:
                 flash(f"Error creating/updating album record: {e}", "danger")
+
     @staticmethod
     def loadTrack(results : list[dict]):
+        # rk868 - 12/09/23 - This is the load function for tracks.
         for track in results:
             try:
                 DB.insertOne("INSERT INTO IS601_Albums (album_id, album_name, album_uri, album_img, release_date, total_tracks) VALUES (%s, %s, %s, %s, %s, %s)"

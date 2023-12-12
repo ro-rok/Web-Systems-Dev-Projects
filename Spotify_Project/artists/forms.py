@@ -21,5 +21,5 @@ class ArtistSearchForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ArtistFetchForm(FlaskForm):
-    artist_id = StringField('Artist ID', validators=[DataRequired(), Length(min=1, max=50)])
+    artist_id = StringField('Artist ID', validators=[DataRequired(), Length(min=1, max=500)])
     submit = SubmitField('Submit')

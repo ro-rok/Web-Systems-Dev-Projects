@@ -1,8 +1,0 @@
-if result.status and result.row:
-            return render_template("albums_view.html", albums=result.row)
-        else:
-            flash("Albums record not found", "danger")
-    except Exception as e:
-        print(f"Albums error {e}")
-        flash("Error fetching albums record", "danger")
-    return redirect(url_for("albums.list"))

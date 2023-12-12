@@ -24,6 +24,7 @@ class Spotify(API):
 
     @staticmethod
     def get_track(track_id):
+        #rk868 - 12/09/23 - This is the get function for tracks.
         query ={"ids": track_id}
         url = "/tracks/"
         results = API.get(url, query)
@@ -36,6 +37,7 @@ class Spotify(API):
     
     @staticmethod
     def get_artist(artist_id):
+        #rk868 - 12/09/23 - This is the get function for artists.
         query ={"ids": artist_id}
         url = "/artists/"
         results = API.get(url, query)
@@ -44,6 +46,7 @@ class Spotify(API):
     
     @staticmethod
     def get_album(album_id):
+        #rk868 - 12/09/23 - This is the get function for albums.
         query ={"id": album_id}
         url = "/albums/"
         results = API.get(url, query)
@@ -52,6 +55,7 @@ class Spotify(API):
     
     @staticmethod
     def search(query, q_type="multi", offset=0, limit=30, numberOfTopResults=10):
+        #rk868 - 12/09/23 - This is the search function for Spotify.
         query = {"q": query, "type": q_type, "offset": offset, "limit": limit, "numberOfTopResults": numberOfTopResults}
         url = "/search/"
         results = API.get(url, query)
@@ -60,10 +64,12 @@ class Spotify(API):
 
     @staticmethod
     def highest_height_cover(cover_url):
+        #rk868 - 12/09/23 - This is the highest_height_cover function for Spotify.
         return max(cover_url, key=lambda cover: cover["height"])["url"]
         
     @staticmethod
     def convert_to_datetime(input_str):
+        #rk868 - 12/09/23 - This is the convert_to_datetime function for Spotify.
         try:
             dt = datetime.strptime(input_str, '%Y-%m-%d')
         except ValueError:
@@ -78,6 +84,7 @@ class Spotify(API):
 
     @staticmethod
     def search_formatter(results):
+        #rk868 - 12/09/23 - This is the search_formatter function for Spotify.
         tracks = []
         artists = []
         albums = []
@@ -175,6 +182,7 @@ class Spotify(API):
 
     @staticmethod
     def album_formatter(results):
+        #rk868 - 12/09/23 - This is the album_formatter function for Spotify.
         album = {}
         if "albums" in results:
             album["album_id"] = results["albums"][0]["id"]
@@ -221,6 +229,7 @@ class Spotify(API):
     
     @staticmethod
     def artist_formatter(results):
+        #rk868 - 12/09/23 - This is the artist_formatter function for Spotify.
         artists = []
         if "artists" in results:
             #print(results["artists"][0].keys())
@@ -240,6 +249,7 @@ class Spotify(API):
     
     @staticmethod
     def track_formatter(results):
+        #rk868 - 12/09/23 - This is the track_formatter function for Spotify.
         tracks = []
         if "tracks" in results:
             for t in results["tracks"]:

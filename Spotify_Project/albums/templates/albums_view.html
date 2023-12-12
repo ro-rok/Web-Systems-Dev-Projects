@@ -4,18 +4,46 @@
 {% block content %}
 <div class="container-fluid">
     <div class="h3">View Album</div>
-    <div class="card">
+    <div class="card bg-black">
         <div class="card-body">
-            {% for field in form %}
-            {% if field.type != 'CSRFTokenField' and field.type != 'SubmitField' %}
-            <div class="mb-3">
-                <strong>{{ field.label }}</strong>
-                <p>{{ field.data }}</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <strong>Album ID</strong>
+                        <p>{{ data.album_id }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Name</strong>
+                        <p>{{ data.album_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Release Date</strong>
+                        <p>{{ data.release_date }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Popularity</strong>
+                        <p>{{ data.album_popularity }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Total Tracks</strong>
+                        <p>{{ data.total_tracks }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Label Name</strong>
+                        <p>{{ data.label_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album URI</strong>
+                        <p>{{ data.album_uri }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="image-container">
+                        <img src="{{ data.album_img }}" alt="Album Image" style="width: 25em; height: 30em;">
+                    </div>
+                </div>
             </div>
-            {% endif %}
-            {% endfor %}
-            <a href="{{ url_for('albums.list') }}"
-                class="btn btn-secondary">Back</a>
+            <a href="{{ url_for('albums.list') }}" class="btn btn-secondary">Back</a>
         </div>
     </div>
 </div>

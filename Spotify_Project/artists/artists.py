@@ -23,6 +23,7 @@ artists = Blueprint('artists', __name__, url_prefix='/artists', template_folder=
 @artists.route("/add", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
 def add():
+    #rk868 - 12/10/23 - This is the add function for artists.
     form = ArtistForm()
     result = None 
     if form.validate_on_submit():
@@ -43,6 +44,7 @@ def add():
 @artists.route("/edit", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
 def edit():
+    #rk868 - 12/10/23 - This is the edit function for artists.
     form = ArtistForm()
     id = request.args.get("id")
     if id is None:
@@ -72,9 +74,10 @@ def edit():
 @artists.route("/delete", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
 def delete():
+    #rk868 - 12/10/23 - This is the delete function for artists.
     id = request.args.get("id")
     args = {**request.args}
-    result = None  # Initialize the 'result' variable
+    result = None
     if id:
         try:
             DB.delete("DELETE FROM IS601_ArtistGenres WHERE artist_id = %s", id)
@@ -104,6 +107,7 @@ def delete():
 @artists.route("/list" , methods=["GET"])
 @admin_permission.require(http_exception=403)
 def list():
+    #rk868 - 12/10/23 - This is the list function for artists.
     form = ArtistSearchForm(request.args)
     allowed_columns = ["artist_name", "artist_popularity", "followers_total"]
     form.sort.choices = [(k, k) for k in allowed_columns]
@@ -145,6 +149,7 @@ def list():
 
 @artists.route("/search", methods=["GET", "POST"])
 def search():
+    #rk868 - 12/10/23 - This is the search function for artists.
     form = ArtistSearchForm()
     if form.validate_on_submit():
         try:
@@ -160,6 +165,7 @@ def search():
 
 @artists.route("/view")
 def view():
+    #rk868 - 12/10/23 - This is the view function for artists.
     id = request.args.get("id")
     if id:
             result = DB.selectOne("SELECT id, artist_id, artist_name, artist_popularity, followers_total, artist_uri, artist_img FROM IS601_Artists WHERE id = %s", id )
@@ -176,6 +182,7 @@ def view():
 
 @artists.route("/fetch", methods=["GET", "POST"])
 def fetch():
+    #rk868 - 12/10/23 - This is the fetch function for artists.
     form = ArtistFetchForm()
     if form.validate_on_submit():
         flash(f"Fetching artist {form.artist_id.data}", "info")
@@ -186,8 +193,8 @@ def fetch():
             if artist:
                 print("loading artist")
                 SQLLoader.loadArtist(artist)
-
-                return url_for("artists.view", aid=form.id.data)
+                id = DB.selectOne("SELECT id FROM IS601_Artists WHERE artist_id = %s", form.artist_id.data)
+                return redirect(url_for("artists.view", id=id.row.get("id")))
             else:
                 flash("Artist not found", "warning")
         except Exception as e:
