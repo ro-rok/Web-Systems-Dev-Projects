@@ -113,19 +113,29 @@ def edit():
 def delete():
     #rk868 - 12/11/23 - This is the delete function for tracks.
     id = request.args.get("id")
-    args ={**request.args}
+    args = {**request.args}
+    filter_criteria = {
+        "track_name": args.get("track_name"),
+        "track_popularity": args.get("track_popularity"),
+        "is_explicit": args.get("is_explicit"),
+        "album_name": args.get("album_name"),
+        "sort": args.get("sort"),
+        "order": args.get("order")
+    }
     if id:
         try:
             result = DB.delete("DELETE FROM IS601_TrackFeatures WHERE track_id = %s", id)
             result1 = DB.delete("DELETE FROM IS601_Tracks WHERE id = %s", id)
             if result.status and result1.status:
                 flash("Deleted tracks record", "success")
+            else:
+                flash("Error deleting tracks record", "danger")
         except Exception as e:
             flash(f"Error deleting tracks record: {e}", "danger")
         del args["id"]
     else:
         flash("Missing ID", "danger")
-    return redirect(url_for("tracks.list", **args))
+    return redirect(url_for("tracks.list", **args, **filter_criteria))
 
 
 @tracks.route("/list", methods=["GET"])
