@@ -159,10 +159,8 @@ def list():
     form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
     query = """
     SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity, t.track_number, t.duration_ms, t.is_explicit, t.release_date,
-    IFNULL((SELECT COUNT(1) FROM IS601_TrackPlaylist WHERE user_id = %(user_id)s AND track_id = t.id), 0) AS 'is_assoc'
-    FROM IS601_Tracks t
-    LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
-    WHERE 1=1
+    IFNULL((SELECT COUNT(1) FROM IS601_TrackPlaylist WHERE user_id = %(user_id)s AND track_id = t.id), 0) AS 'is_assoc'  FROM IS601_Tracks t
+    LEFT JOIN IS601_Albums a ON t.album_id = a.album_id  WHERE 1=1
     """
     args = {"user_id": current_user.id}
     where = ""
