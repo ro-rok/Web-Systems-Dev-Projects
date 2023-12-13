@@ -1,0 +1,827 @@
+{
+    "albums": [
+      {
+        "album_type": "album",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+            },
+            "id": "3TVXtAsR1Inumwj472S9r4",
+            "name": "Drake",
+            "type": "artist",
+            "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+          }
+        ],
+        "copyrights": [
+          {
+            "text": "© 2012 Cash Money Records Inc.",
+            "type": "C"
+          },
+          {
+            "text": "℗ 2012 Cash Money Records Inc.",
+            "type": "P"
+          }
+        ],
+        "external_ids": {
+          "upc": "00602547398758"
+        },
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/0NGwRz0semIXUCSxR0uffa"
+        },
+        "genres": [],
+        "id": "0NGwRz0semIXUCSxR0uffa",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273ac0c2daf1867b0d86cca74be",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02ac0c2daf1867b0d86cca74be",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851ac0c2daf1867b0d86cca74be",
+            "width": 64
+          }
+        ],
+        "is_playable": true,
+        "label": "Cash Money Records/Young Money Ent./Universal Rec.",
+        "name": "Take Care",
+        "popularity": 22,
+        "release_date": "2011-11-15",
+        "release_date_precision": "day",
+        "total_tracks": 19,
+        "tracks": {
+          "items": [
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 272573,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/2Gnsof1hvZzjE1xdLRpjtf"
+              },
+              "id": "2Gnsof1hvZzjE1xdLRpjtf",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/43yUYSkasHj7U9qFUhK6tf"
+                },
+                "id": "43yUYSkasHj7U9qFUhK6tf",
+                "type": "track",
+                "uri": "spotify:track:43yUYSkasHj7U9qFUhK6tf"
+              },
+              "name": "Over My Dead Body",
+              "preview_url": "https://p.scdn.co/mp3-preview/5f911c574d8e2da85115a163774e03715a4c9fe2?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 1,
+              "type": "track",
+              "uri": "spotify:track:2Gnsof1hvZzjE1xdLRpjtf"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 224720,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/6Z01gUquJsjJC67uNWm6P0"
+              },
+              "id": "6Z01gUquJsjJC67uNWm6P0",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/3lv1CWxTt7oNna7p9rSmHF"
+                },
+                "id": "3lv1CWxTt7oNna7p9rSmHF",
+                "type": "track",
+                "uri": "spotify:track:3lv1CWxTt7oNna7p9rSmHF"
+              },
+              "name": "Shot For Me",
+              "preview_url": "https://p.scdn.co/mp3-preview/51b94974d448719496250112b5bf1a8197881cb5?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 2,
+              "type": "track",
+              "uri": "spotify:track:6Z01gUquJsjJC67uNWm6P0"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 235986,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/6LxSe8YmdPxy095Ux6znaQ"
+              },
+              "id": "6LxSe8YmdPxy095Ux6znaQ",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/0OW0kEMSHHsMztOIJrYMVj"
+                },
+                "id": "0OW0kEMSHHsMztOIJrYMVj",
+                "type": "track",
+                "uri": "spotify:track:0OW0kEMSHHsMztOIJrYMVj"
+              },
+              "name": "Headlines",
+              "preview_url": "https://p.scdn.co/mp3-preview/570ddea0adb2c0bff50a1f0447a0e643c084fbe6?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 3,
+              "type": "track",
+              "uri": "spotify:track:6LxSe8YmdPxy095Ux6znaQ"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ"
+                  },
+                  "id": "1Xyo4u8uXC1ZmMpatF05PJ",
+                  "name": "The Weeknd",
+                  "type": "artist",
+                  "uri": "spotify:artist:1Xyo4u8uXC1ZmMpatF05PJ"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 208813,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/0V4l4GQhgnWQGtCWpvA7va"
+              },
+              "id": "0V4l4GQhgnWQGtCWpvA7va",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/0OVVOCs6vK5cNl0x9AEpHr"
+                },
+                "id": "0OVVOCs6vK5cNl0x9AEpHr",
+                "type": "track",
+                "uri": "spotify:track:0OVVOCs6vK5cNl0x9AEpHr"
+              },
+              "name": "Crew Love",
+              "preview_url": "https://p.scdn.co/mp3-preview/35c4632d4f1e9ed4ae5f048fcdf4022abe4079e8?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 4,
+              "type": "track",
+              "uri": "spotify:track:0V4l4GQhgnWQGtCWpvA7va"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/5pKCCKE2ajJHZ9KAiaK11H"
+                  },
+                  "id": "5pKCCKE2ajJHZ9KAiaK11H",
+                  "name": "Rihanna",
+                  "type": "artist",
+                  "uri": "spotify:artist:5pKCCKE2ajJHZ9KAiaK11H"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 277386,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/124NFj84ppZ5pAxTuVQYCQ"
+              },
+              "id": "124NFj84ppZ5pAxTuVQYCQ",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/3ccS39OjqAXc6rRQkrylxh"
+                },
+                "id": "3ccS39OjqAXc6rRQkrylxh",
+                "type": "track",
+                "uri": "spotify:track:3ccS39OjqAXc6rRQkrylxh"
+              },
+              "name": "Take Care",
+              "preview_url": "https://p.scdn.co/mp3-preview/576afa0b9a7724cac0378f64458d38cea6ee0524?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 5,
+              "type": "track",
+              "uri": "spotify:track:124NFj84ppZ5pAxTuVQYCQ"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 347226,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/047fCsbO4NdmwCBn8pcUXl"
+              },
+              "id": "047fCsbO4NdmwCBn8pcUXl",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/7bvoCZHNGrtGvWM9eYmesO"
+                },
+                "id": "7bvoCZHNGrtGvWM9eYmesO",
+                "type": "track",
+                "uri": "spotify:track:7bvoCZHNGrtGvWM9eYmesO"
+              },
+              "name": "Marvins Room",
+              "preview_url": "https://p.scdn.co/mp3-preview/162e35b99b14ee33752088767604fa229127c347?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 6,
+              "type": "track",
+              "uri": "spotify:track:047fCsbO4NdmwCBn8pcUXl"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg"
+                  },
+                  "id": "2YZyLoL8N0Wb9xBt1NhZWg",
+                  "name": "Kendrick Lamar",
+                  "type": "artist",
+                  "uri": "spotify:artist:2YZyLoL8N0Wb9xBt1NhZWg"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 150960,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/1ZyudLFv35SRvY5SvTZqJx"
+              },
+              "id": "1ZyudLFv35SRvY5SvTZqJx",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/06rU9u1kSkEbVVmBkFUKmd"
+                },
+                "id": "06rU9u1kSkEbVVmBkFUKmd",
+                "type": "track",
+                "uri": "spotify:track:06rU9u1kSkEbVVmBkFUKmd"
+              },
+              "name": "Buried Alive Interlude",
+              "preview_url": "https://p.scdn.co/mp3-preview/e126fbca2befb46d8b8510694be2e259d88fa742?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 7,
+              "type": "track",
+              "uri": "spotify:track:1ZyudLFv35SRvY5SvTZqJx"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 212613,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/1D9XLqQp2YYiOxrr5KLb8K"
+              },
+              "id": "1D9XLqQp2YYiOxrr5KLb8K",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/7iqn111dDzQHC4q0mfJYvn"
+                },
+                "id": "7iqn111dDzQHC4q0mfJYvn",
+                "type": "track",
+                "uri": "spotify:track:7iqn111dDzQHC4q0mfJYvn"
+              },
+              "name": "Under Ground Kings",
+              "preview_url": "https://p.scdn.co/mp3-preview/00eae8698394d307ecf2e3588fa6a7f040df2c02?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 8,
+              "type": "track",
+              "uri": "spotify:track:1D9XLqQp2YYiOxrr5KLb8K"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/35sCXuy5gN6Or69rZ9vqBs"
+                  },
+                  "id": "35sCXuy5gN6Or69rZ9vqBs",
+                  "name": "Birdman",
+                  "type": "artist",
+                  "uri": "spotify:artist:35sCXuy5gN6Or69rZ9vqBs"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 247946,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/7udsBKuqnJ5csWTAkR0vEI"
+              },
+              "id": "7udsBKuqnJ5csWTAkR0vEI",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/545hpixE5AsbCbcSM49ey6"
+                },
+                "id": "545hpixE5AsbCbcSM49ey6",
+                "type": "track",
+                "uri": "spotify:track:545hpixE5AsbCbcSM49ey6"
+              },
+              "name": "We'll Be Fine",
+              "preview_url": "https://p.scdn.co/mp3-preview/188077c990050ead79d3af81d883cf28bcfa52bf?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 9,
+              "type": "track",
+              "uri": "spotify:track:7udsBKuqnJ5csWTAkR0vEI"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/0hCNtLu0JehylgoiP8L4Gh"
+                  },
+                  "id": "0hCNtLu0JehylgoiP8L4Gh",
+                  "name": "Nicki Minaj",
+                  "type": "artist",
+                  "uri": "spotify:artist:0hCNtLu0JehylgoiP8L4Gh"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 219893,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/7yfg0Eer6UZZt5tZ1XdsWz"
+              },
+              "id": "7yfg0Eer6UZZt5tZ1XdsWz",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/3g1nmOuMjyYXeMprOdFE8L"
+                },
+                "id": "3g1nmOuMjyYXeMprOdFE8L",
+                "type": "track",
+                "uri": "spotify:track:3g1nmOuMjyYXeMprOdFE8L"
+              },
+              "name": "Make Me Proud",
+              "preview_url": "https://p.scdn.co/mp3-preview/206a9910606c7df94790eafe08ed35d34a1d6a76?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 10,
+              "type": "track",
+              "uri": "spotify:track:7yfg0Eer6UZZt5tZ1XdsWz"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/1sBkRIssrMs1AbVkOJbc7a"
+                  },
+                  "id": "1sBkRIssrMs1AbVkOJbc7a",
+                  "name": "Rick Ross",
+                  "type": "artist",
+                  "uri": "spotify:artist:1sBkRIssrMs1AbVkOJbc7a"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 307640,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/1QBwk6GTCxVdC2hoSw9tlM"
+              },
+              "id": "1QBwk6GTCxVdC2hoSw9tlM",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/1lPmhOHDqcIvciN2QUh6hR"
+                },
+                "id": "1lPmhOHDqcIvciN2QUh6hR",
+                "type": "track",
+                "uri": "spotify:track:1lPmhOHDqcIvciN2QUh6hR"
+              },
+              "name": "Lord Knows",
+              "preview_url": "https://p.scdn.co/mp3-preview/ec66c857f5ce44ce86fee9259706495bc71ec35b?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 11,
+              "type": "track",
+              "uri": "spotify:track:1QBwk6GTCxVdC2hoSw9tlM"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 434960,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/2FbGlEPAjNhWvrVvlentVq"
+              },
+              "id": "2FbGlEPAjNhWvrVvlentVq",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/68XnQ8fE6Lm8KMGLYifPph"
+                },
+                "id": "68XnQ8fE6Lm8KMGLYifPph",
+                "type": "track",
+                "uri": "spotify:track:68XnQ8fE6Lm8KMGLYifPph"
+              },
+              "name": "Cameras / Good Ones Go Interlude - Medley",
+              "preview_url": "https://p.scdn.co/mp3-preview/42f324752921b3b5e07fcdc5f3eff78838ab1aaf?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 12,
+              "type": "track",
+              "uri": "spotify:track:2FbGlEPAjNhWvrVvlentVq"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 265120,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/4eSGSqP2TZvvX0kadZZttM"
+              },
+              "id": "4eSGSqP2TZvvX0kadZZttM",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/6iXs2wDueCwp775UijmpuW"
+                },
+                "id": "6iXs2wDueCwp775UijmpuW",
+                "type": "track",
+                "uri": "spotify:track:6iXs2wDueCwp775UijmpuW"
+              },
+              "name": "Doing It Wrong",
+              "preview_url": "https://p.scdn.co/mp3-preview/e0808dd4053e15499ab20d667d53ac5d528ce0a5?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 13,
+              "type": "track",
+              "uri": "spotify:track:4eSGSqP2TZvvX0kadZZttM"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/55Aa2cqylxrFIXC767Z865"
+                  },
+                  "id": "55Aa2cqylxrFIXC767Z865",
+                  "name": "Lil Wayne",
+                  "type": "artist",
+                  "uri": "spotify:artist:55Aa2cqylxrFIXC767Z865"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/74V3dE1a51skRkdII8y2C6"
+                  },
+                  "id": "74V3dE1a51skRkdII8y2C6",
+                  "name": "André 3000",
+                  "type": "artist",
+                  "uri": "spotify:artist:74V3dE1a51skRkdII8y2C6"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 321080,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/74atKkOasLOVzvqB6mYgga"
+              },
+              "id": "74atKkOasLOVzvqB6mYgga",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/7csi0PZxAyKmaC19KWMFqR"
+                },
+                "id": "7csi0PZxAyKmaC19KWMFqR",
+                "type": "track",
+                "uri": "spotify:track:7csi0PZxAyKmaC19KWMFqR"
+              },
+              "name": "The Real Her",
+              "preview_url": "https://p.scdn.co/mp3-preview/eea279d884f0c8812a8ad6fb789a25f46aaebbf1?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 14,
+              "type": "track",
+              "uri": "spotify:track:74atKkOasLOVzvqB6mYgga"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 301960,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/7t1lBIr3WIEtqQEOdZFMUf"
+              },
+              "id": "7t1lBIr3WIEtqQEOdZFMUf",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/7J8t44NmvNzjyrUeayH0D9"
+                },
+                "id": "7J8t44NmvNzjyrUeayH0D9",
+                "type": "track",
+                "uri": "spotify:track:7J8t44NmvNzjyrUeayH0D9"
+              },
+              "name": "Look What You've Done",
+              "preview_url": "https://p.scdn.co/mp3-preview/b789c1b51d52b39f57d002a80b24058bb18481fe?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 15,
+              "type": "track",
+              "uri": "spotify:track:7t1lBIr3WIEtqQEOdZFMUf"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/55Aa2cqylxrFIXC767Z865"
+                  },
+                  "id": "55Aa2cqylxrFIXC767Z865",
+                  "name": "Lil Wayne",
+                  "type": "artist",
+                  "uri": "spotify:artist:55Aa2cqylxrFIXC767Z865"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 206626,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/0m1KYWlT6LhFRBDVq9UNx4"
+              },
+              "id": "0m1KYWlT6LhFRBDVq9UNx4",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/6YTMxYk3UayBWDgnKB4fLG"
+                },
+                "id": "6YTMxYk3UayBWDgnKB4fLG",
+                "type": "track",
+                "uri": "spotify:track:6YTMxYk3UayBWDgnKB4fLG"
+              },
+              "name": "HYFR (Hell Ya Fucking Right)",
+              "preview_url": "https://p.scdn.co/mp3-preview/fcb3ee64b86e52e1f971669bec4d784f68cb660d?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 16,
+              "type": "track",
+              "uri": "spotify:track:0m1KYWlT6LhFRBDVq9UNx4"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 237733,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/0jF2AdhsalO1L7KkhK4LE5"
+              },
+              "id": "0jF2AdhsalO1L7KkhK4LE5",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/6rB4idT6NoIw8Ywd2xazVm"
+                },
+                "id": "6rB4idT6NoIw8Ywd2xazVm",
+                "type": "track",
+                "uri": "spotify:track:6rB4idT6NoIw8Ywd2xazVm"
+              },
+              "name": "Practice",
+              "preview_url": "https://p.scdn.co/mp3-preview/ab284ccf3f1a6a39cda06e6eaf2b12bdc13f81a7?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 17,
+              "type": "track",
+              "uri": "spotify:track:0jF2AdhsalO1L7KkhK4LE5"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 351000,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/4xRxYWgAtL6pzRz94GlZlA"
+              },
+              "id": "4xRxYWgAtL6pzRz94GlZlA",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/7awgTYACpqYb96XHqRULCA"
+                },
+                "id": "7awgTYACpqYb96XHqRULCA",
+                "type": "track",
+                "uri": "spotify:track:7awgTYACpqYb96XHqRULCA"
+              },
+              "name": "The Ride",
+              "preview_url": "https://p.scdn.co/mp3-preview/88b939bebe6b2d164b75e52e7cd62213c458485d?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 18,
+              "type": "track",
+              "uri": "spotify:track:4xRxYWgAtL6pzRz94GlZlA"
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+                  },
+                  "id": "3TVXtAsR1Inumwj472S9r4",
+                  "name": "Drake",
+                  "type": "artist",
+                  "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+                },
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/55Aa2cqylxrFIXC767Z865"
+                  },
+                  "id": "55Aa2cqylxrFIXC767Z865",
+                  "name": "Lil Wayne",
+                  "type": "artist",
+                  "uri": "spotify:artist:55Aa2cqylxrFIXC767Z865"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 181573,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/4Kz4RdRCceaA9VgTqBhBfa"
+              },
+              "id": "4Kz4RdRCceaA9VgTqBhBfa",
+              "is_local": false,
+              "is_playable": true,
+              "linked_from": {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/track/2Sjm7A6JATOrnlybKFX4Vb"
+                },
+                "id": "2Sjm7A6JATOrnlybKFX4Vb",
+                "type": "track",
+                "uri": "spotify:track:2Sjm7A6JATOrnlybKFX4Vb"
+              },
+              "name": "The Motto",
+              "preview_url": "https://p.scdn.co/mp3-preview/d32fbe07ba7d7193c8ae8e53e225fa8d624e4fc4?cid=d8a5ed958d274c2e8ee717e6a4b0971d",
+              "track_number": 19,
+              "type": "track",
+              "uri": "spotify:track:4Kz4RdRCceaA9VgTqBhBfa"
+            }
+          ],
+          "limit": 50,
+          "next": null,
+          "offset": 0,
+          "previous": null,
+          "total": 19
+        },
+        "type": "album",
+        "uri": "spotify:album:0NGwRz0semIXUCSxR0uffa"
+      },
+      null
+    ]
+  }

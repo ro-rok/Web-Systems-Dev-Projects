@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}View Artist{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="h3">View Artist</div>
+    <div class="card bg-black">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <strong>Spotify ID</strong>
+                        <p>{{ data.artist_id }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Artist Name</strong>
+                        <p>{{ data.artist_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Artist Popularity</strong>
+                        <p>{{ data.artist_popularity }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Followers Total</strong>
+                        <p>{{ data.followers_total }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Artist URI</strong>
+                        <a href="{{ data.artist_uri }}">{{ data.artist_uri }}</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="image-container">
+                        <img src="{{ data.artist_img }}" alt="Artist Image" style="width: 25em; height: 30em;">
+                    </div>
+                </div>
+            </div>
+            <a href="{{ url_for('artists.list') }}" class="btn btn-secondary">Back</a>
+            {% if current_user.has_role("Admin") %}
+            <a href="{{ url_for('artists.edit', id=data.id) }}" class="btn btn-primary">Edit</a>]
+            <a href="{{ url_for('artists.delete', id=data.id) }}" class="btn btn-danger">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
