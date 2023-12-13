@@ -1,4 +1,4 @@
-{% macro render_table(data, title=None, ignored=[], view=None, edit=None, delete=None,assoc=None, table_class="") %}
+{% macro render_table(data, title=None, ignored=[], view=None, edit=None, delete=None, assoc=None, table_class="") %}
 
 <div class="container-fluid">
     {% if title %}
@@ -26,14 +26,17 @@
                 {% if k not in ignored %}
                 <td>
                     {% if v or v == 0 %}
-                    {% if k == "username" and "user_id" in r.keys() %}
-                    <a
-                        href="{{url_for('auth.profile', id=r['user_id'])}}">{{v}}</a>
+                        {% if k == "is_explicit" %}
+                            {% if v == 0 %} No {% else %} Yes {% endif %}
+                        {% else %}
+                            {% if k == "username" and "user_id" in r.keys() %}
+                                <a href="{{url_for('auth.profile', id=r['user_id'])}}">{{v}}</a>
+                            {% else %}
+                                {{v}}
+                            {% endif %}
+                        {% endif %}
                     {% else %}
-                    {{v}}
-                    {% endif %}
-                    {% else %}
-                    -
+                        -
                     {% endif %}
                 </td>
                 {% endif %}
@@ -45,8 +48,7 @@
                     {{ args.pop("id")}}
                     {% endif %}
                     {% if assoc and r["id"] and "is_assoc" in r.keys() %}
-                    <a
-                        href="{{ url_for(assoc, id=r['id'], **args) }}">{{"Track" if r["is_assoc"] == 0 else "Untrack"}}</a>
+                    <a href="{{ url_for(assoc, id=r['id'], **args) }}">{{"Track" if r["is_assoc"] == 0 else "Untrack"}}</a>
                     {% endif %}
                     {% if view and r["id"] %}
                     <a href="{{ url_for(view, id=r['id'], **args) }}">View</a>
@@ -55,8 +57,7 @@
                     <a href="{{ url_for(edit, id=r['id'], **args) }}">Edit</a>
                     {% endif %}
                     {% if delete and r["id"] %}
-                    <a
-                        href="{{ url_for(delete, id=r['id'], **args) }}">Delete</a>
+                    <a href="{{ url_for(delete, id=r['id'], **args) }}">Delete</a>
                     {% endif %}
                 </td>
                 {% endif %}
