@@ -219,9 +219,8 @@ def view():
     #rk868 - 12/11/23 - This is the view function for tracks.
     id = request.args.get("id")
     if id:
-        track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, 
-                                t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img, 
-                                t.duration_ms, t.is_explicit 
+        track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit
+                                t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img,
                                 FROM IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE t.id = %s""", id)
         print("track", track)
         if track.status and track.row:
