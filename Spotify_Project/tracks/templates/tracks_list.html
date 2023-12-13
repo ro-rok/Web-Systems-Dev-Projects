@@ -5,12 +5,12 @@
 {% block content %}
 {% from "_table_helper.html" import render_table %}
 {% set view = "tracks.view" %}
-{% if current_user.is_authenticated %}
+{% if current_user and current_user.is_authenticated %}
 {% set assoc = "tracks.record" %}
 {% else %}
 {% set assoc = None %}
 {% endif %}
-{% if current_user.has_role("Admin") %}
+{% if (current_user.has_role and current_user.has_role("Admin")) %}
 {% set edit = "tracks.edit" %}
 {% set delete = "tracks.delete" %}
 {% else %}
@@ -20,7 +20,7 @@
 <div class="container-fluid">
     {% include '_tracks_search.html' %}
 
-    {% if current_user.is_authenticated or current_user.has_role("Admin") %}
+    {% if current_user.is_authenticated or (current_user.has_role and current_user.has_role("Admin")) %}
 
     <form
         action="{{url_for('tracks.clear', id=request.args.get('id', current_user.id))}}"
