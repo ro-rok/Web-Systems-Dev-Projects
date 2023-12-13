@@ -220,8 +220,8 @@ def view():
     #rk868 - 12/11/23 - This is the view function for tracks.
     id = request.args.get("id")
     if id:
-        track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit
-                                t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img,
+        track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit,
+                                t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img
                                 FROM IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE t.id = %s""", id)
         print("track", track)
         if track.status and track.row:
@@ -365,7 +365,7 @@ def clear():
                     flash("Cleared playlist", "success")
             except Exception as e:
                 print(f"Error clearing playlist {e}")
-                flash("Error clearing playlist","danger");
+                flash("Error clearing playlist","danger")
     return redirect(url_for("tracks.playlist", **args))
 
 @tracks.route("/associate", methods=["GET"])

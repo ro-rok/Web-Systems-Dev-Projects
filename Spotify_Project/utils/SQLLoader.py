@@ -140,106 +140,110 @@ class SQLLoader:
             for genre in result["genres"]:
                 print("genre", genre)
                 try:
-                    pass
-                except Exception as e:
-                    print(f"Error creating genre record: {e}", "danger")
-                try:
+                    DB.insertOne(""" INSERT INTO IS601_Genres (genre_name) VALUES (%s) """, genre)
                     genre_id = DB.selectOne(""" SELECT id FROM IS601_Genres WHERE genre_name = %s """, genre)
+                except Exception as e:
+                    if "Duplicate entry" in str(e):
+                        print(f"Error creating artist genre record: {e}", "danger")
+                    else:
+                        print(f"Error creating artist genre record: {e}", "danger") 
+                try: 
                     artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, result["artist_id"])
                     DB.insertOne(""" INSERT INTO IS601_ArtistGenres (artist_id, genre_id) VALUES (%s, %s) """, artist_id.row.get("id"), genre_id.row.get("id"))
                 except Exception as e:
                     if "Duplicate entry" in str(e):
                         print(f"Error creating artist genre record: {e}", "danger")
                     else:
-                        flash(f"Error creating artist genre record: {e}", "danger")
+                        print(f"Error creating artist genre record: {e}", "danger")
     
     @staticmethod
-    def loadAlbum(results: dict):
+    def loadAlbum(results: list[dict]):
         # rk868 - 12/09/23 - This is the load function for albums.
-        try:
-            DB.insertOne("""
-                        INSERT INTO IS601_Albums (album_id, album_name, album_uri, album_img, release_date, label_name, album_popularity, total_tracks)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                        ON DUPLICATE KEY UPDATE
-                        album_name = VALUES(album_name),
-                        album_uri = VALUES(album_uri),
-                        album_img = VALUES(album_img),
-                        release_date = VALUES(release_date),
-                        label_name = VALUES(label_name),
-                        album_popularity = VALUES(album_popularity),
-                        total_tracks = VALUES(total_tracks)
-                        """, results["album_id"], results["album_name"], results["album_uri"], results["album_img"], results["release_date"], results["label_name"], results["album_popularity"], results["total_tracks"])
-            for artist in results["artists"]:
-                try:
+        for album in results:
+            try:
+                DB.insertOne("""
+                            INSERT INTO IS601_Albums (album_id, album_name, album_uri, album_img, release_date, label_name, album_popularity, total_tracks)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                            ON DUPLICATE KEY UPDATE
+                            album_name = VALUES(album_name),
+                            album_uri = VALUES(album_uri),
+                            album_img = VALUES(album_img),
+                            release_date = VALUES(release_date),
+                            label_name = VALUES(label_name),
+                            album_popularity = VALUES(album_popularity),
+                            total_tracks = VALUES(total_tracks)
+                            """, album["album_id"], album["album_name"], album["album_uri"], album["album_img"], album["release_date"], album["label_name"], album["album_popularity"], album["total_tracks"])
+                for artist in album["artists"]:
                     try:
-                        DB.insertOne("""
-                                    INSERT INTO IS601_Artists (artist_id, artist_name, artist_uri)
-                                    VALUES (%s, %s, %s) 
-                                    """, artist["artist_id"], artist["artist_name"], artist["artist_uri"])
-                    except Exception as e:
-                        if "Duplicate entry" in str(e):
-                            print(f"Error creating artist record: {e}", "danger")
-                        else:
-                            flash(f"Error creating artist record: {e}", "danger")
-
-                    try:
-                        artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
-                        album_id = DB.selectOne(""" SELECT id FROM IS601_Albums WHERE album_id = %s """, results["album_id"])
-                        DB.insertOne("""
-                                    INSERT INTO IS601_ArtistAlbums (artist_id, album_id)
-                                    VALUES (%s, %s)
-                                    """, artist_id.row.get("id"), album_id.row.get("id"))
-                    except Exception as e:
-                        if "Duplicate entry" in str(e):
-                            print(f"Error creating artist record: {e}", "danger")
-                        else:
-                            flash(f"Error creating artist record: {e}", "danger")
-                except Exception as e:
-                    if "Duplicate entry" in str(e):
-                        print(f"Error creating artist record: {e}", "danger")
-                    else:
-                        flash(f"Error creating artist record: {e}", "danger")
-            for track in results["tracks"]:
-                try:
-                    DB.insertOne("""
-                                INSERT INTO IS601_Tracks (track_id, album_id, track_name, track_popularity, track_number, track_uri, track_img, duration_ms, is_explicit, release_date, preview_url)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                                """, track["track_id"], results["album_id"], track["track_name"], track["track_popularity"], track["track_number"], 
-                                    track["track_uri"], track["track_img"], track["duration_ms"], track["is_explicit"], results["release_date"], track["preview_url"])
-                except Exception as e:
-                    if "Duplicate entry" in str(e):
-                        print(f"Error creating track record: {e}", "danger")
-                    else:
-                        flash(f"Error creating track record: {e}", "danger")
-                for artist in track["artists"]:
-                    if artist["artist_id"] not in [s["artist_id"] for s in results["artists"]]:
                         try:
                             DB.insertOne("""
                                         INSERT INTO IS601_Artists (artist_id, artist_name, artist_uri)
-                                        VALUES (%s, %s, %s)
+                                        VALUES (%s, %s, %s) 
                                         """, artist["artist_id"], artist["artist_name"], artist["artist_uri"])
                         except Exception as e:
                             if "Duplicate entry" in str(e):
                                 print(f"Error creating artist record: {e}", "danger")
                             else:
                                 flash(f"Error creating artist record: {e}", "danger")
+
                         try:
                             artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
-                            track_id = DB.selectOne(""" SELECT id FROM IS601_Tracks WHERE track_id = %s """, track["track_id"])
+                            album_id = DB.selectOne(""" SELECT id FROM IS601_Albums WHERE album_id = %s """, album["album_id"])
                             DB.insertOne("""
-                                        INSERT INTO IS601_TrackFeatures (track_id, artist_id)
+                                        INSERT INTO IS601_ArtistAlbums (artist_id, album_id)
                                         VALUES (%s, %s)
-                                        """, track_id.row.get("id"), artist_id.row.get("id"))
+                                        """, artist_id.row.get("id"), album_id.row.get("id"))
                         except Exception as e:
                             if "Duplicate entry" in str(e):
                                 print(f"Error creating artist record: {e}", "danger")
                             else:
                                 flash(f"Error creating artist record: {e}", "danger")
-        except Exception as e:
-            if "Duplicate entry" in str(e):
-                print(f"Error creating/updating album record: {e}", "danger")
-            else:
-                flash(f"Error creating/updating album record: {e}", "danger")
+                    except Exception as e:
+                        if "Duplicate entry" in str(e):
+                            print(f"Error creating artist record: {e}", "danger")
+                        else:
+                            flash(f"Error creating artist record: {e}", "danger")
+                for track in album["tracks"]:
+                    try:
+                        DB.insertOne("""
+                                    INSERT INTO IS601_Tracks (track_id, album_id, track_name, track_popularity, track_number, track_uri, track_img, duration_ms, is_explicit, release_date, preview_url)
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                    """, track["track_id"], album["album_id"], track["track_name"], track["track_popularity"], track["track_number"], 
+                                        track["track_uri"], track["track_img"], track["duration_ms"], track["is_explicit"], album["release_date"], track["preview_url"])
+                    except Exception as e:
+                        if "Duplicate entry" in str(e):
+                            print(f"Error creating track record: {e}", "danger")
+                        else:
+                            flash(f"Error creating track record: {e}", "danger")
+                    for artist in track["artists"]:
+                        if artist["artist_id"] not in [s["artist_id"] for s in album["artists"]]:
+                            try:
+                                DB.insertOne("""
+                                            INSERT INTO IS601_Artists (artist_id, artist_name, artist_uri)
+                                            VALUES (%s, %s, %s)
+                                            """, artist["artist_id"], artist["artist_name"], artist["artist_uri"])
+                            except Exception as e:
+                                if "Duplicate entry" in str(e):
+                                    print(f"Error creating artist record: {e}", "danger")
+                                else:
+                                    flash(f"Error creating artist record: {e}", "danger")
+                            try:
+                                artist_id = DB.selectOne(""" SELECT id FROM IS601_Artists WHERE artist_id = %s """, artist["artist_id"])
+                                track_id = DB.selectOne(""" SELECT id FROM IS601_Tracks WHERE track_id = %s """, track["track_id"])
+                                DB.insertOne("""
+                                            INSERT INTO IS601_TrackFeatures (track_id, artist_id)
+                                            VALUES (%s, %s)
+                                            """, track_id.row.get("id"), artist_id.row.get("id"))
+                            except Exception as e:
+                                if "Duplicate entry" in str(e):
+                                    print(f"Error creating artist record: {e}", "danger")
+                                else:
+                                    flash(f"Error creating artist record: {e}", "danger")
+            except Exception as e:
+                if "Duplicate entry" in str(e):
+                    print(f"Error creating/updating album record: {e}", "danger")
+                else:
+                    flash(f"Error creating/updating album record: {e}", "danger")
 
     @staticmethod
     def loadTrack(results : list[dict]):
@@ -313,6 +317,7 @@ class SQLLoader:
                                 print(f"Error creating artist track record: {e}", "danger")
                             else:
                                 flash(f"Error creating artist track record: {e}", "danger")
+                                
 
 if __name__ == "__main__":
     dir = r"utils\sample\track.json"
@@ -334,5 +339,6 @@ if __name__ == "__main__":
         results5 = json.load(f)
     #SQLLoader.loadTrack(Spotify.track_formatter(results))
     #SQLLoader.loadAlbum(Spotify.album_formatter(results2))
+    print(Spotify.artist_formatter(results3))
     #SQLLoader.loadArtist(Spotify.artist_formatter(results3))
     #SQLLoader.loadTrack(Spotify.track_formatter(results5))

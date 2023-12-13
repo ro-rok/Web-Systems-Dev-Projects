@@ -178,7 +178,7 @@ def logout():
 def profile():
     user_id = request.args.get("id", current_user.id)
     logged_in_user_id = current_user.id
-    is_my_profile = user_id == logged_in_user_id
+    is_my_profile = int(user_id) == int(logged_in_user_id)
     form = ProfileForm()
     if form.validate_on_submit():
         if is_my_profile:

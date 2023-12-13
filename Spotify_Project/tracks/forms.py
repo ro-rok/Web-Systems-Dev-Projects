@@ -26,6 +26,7 @@ class TrackSearchForm(FlaskForm):
     album_name = StringField('Album Name')
     limit = IntegerField("Limit", default=10)
     sort = SelectField("Sort")
+    page = IntegerField("page")
     order = SelectField("Order", choices=[("asc","+"), ("desc","-")])
     submit = SubmitField("Filter")
 class TrackSQLSearchForm(FlaskForm):

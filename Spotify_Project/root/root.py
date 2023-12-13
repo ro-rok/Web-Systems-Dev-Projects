@@ -99,7 +99,7 @@ def redirecter():
     if uri:
         id = checker(uri)
         if id:
-            return redirect(url_for(f"{uri.split(':')[-2]}.view", id=id))
+            return redirect(url_for(f"{uri.split(':')[-2]}s.view", id=id))
         else: 
             return api_call(uri)
     return redirect(url_for("root.index"))    

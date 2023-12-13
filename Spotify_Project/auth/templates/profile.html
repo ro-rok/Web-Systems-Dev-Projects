@@ -16,9 +16,8 @@
     </form>
     {% else %}
     <p>You're visiting {{form.username.data}}'s profile.</p>
-    <p>Checkout their Playlist <a
-            href="{{url_for('tracks.playlist', id=request.args.get('id'))}}"
-            class="btn btn-primary">here</a></p>
+    <p>Checkout their Playlist <a href="{{url_for('tracks.playlist', id=request.args.get('id'))}}" class="btn btn-primary">here</a>
+    </p>
 
     {% endif %}
 </div>

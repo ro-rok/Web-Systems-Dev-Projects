@@ -44,7 +44,7 @@
                 </div>
             </div>
             <a href="{{ url_for('albums.list') }}" class="btn btn-secondary">Back</a>
-            {% (current_user.has_role and current_user.has_role("Admin")) %}
+            {% if (current_user.has_role and current_user.has_role("Admin")) %}
             <a href="{{ url_for('albums.edit', id=data.id) }}" class="btn btn-primary">Edit</a>
             <a href="{{ url_for('albums.delete', id=data.id) }}" class="btn btn-danger">Delete</a>
             {% endif %}

@@ -285,49 +285,52 @@ class Spotify(API):
     @staticmethod
     def album_formatter(results):
         #rk868 - 12/09/23 - This is the album_formatter function for Spotify.
-        album = {}
-        if "albums" in results:
-            album["album_id"] = results["albums"][0]["id"]
-            album["album_name"] = results["albums"][0]["name"]
-            album["album_popularity"] = results["albums"][0]["popularity"]
-            album["album_uri"] = results["albums"][0]["uri"]
-            album["album_img"] = Spotify.highest_height_cover(results["albums"][0]["images"])
-            album["total_tracks"] = results["albums"][0]["total_tracks"]
-            album["release_date"] = Spotify.convert_to_datetime(results["albums"][0]["release_date"])
-            album["label_name"] = results["albums"][0]["label"]
-            
-            album["artists"] = []
-            for artist in results["albums"][0]["artists"]:
-                album_artist = {}
-                album_artist["artist_id"] = artist["id"]
-                album_artist["artist_name"] = artist["name"]
-                album_artist["artist_uri"] = artist["uri"]
-                album["artists"].append(album_artist)
-            
-            album["tracks"] = []
-            for track in results["albums"][0]["tracks"]["items"]:
-                #print(track.keys())
-                album_track = {}
-                album_track["track_id"] = track["id"]
-                album_track["track_name"] = track["name"]
-                album_track["track_number"] = track["track_number"]
-                album_track["track_uri"] = track["uri"]
-                album_track["duration_ms"] = track["duration_ms"]
-                album_track["is_explicit"] = track["explicit"]
-                album_track["preview_url"] = track["preview_url"]
-                album_track["track_popularity"] = results["albums"][0]["popularity"]
-                album_track["track_img"] = Spotify.highest_height_cover(results["albums"][0]["images"])
-                album_track["release_date"] = Spotify.convert_to_datetime(results["albums"][0]["release_date"])
-                album_track["artists"] = []
-                for artist in track["artists"]:
-                    album_track_artist = {}
-                    album_track_artist["artist_id"] = artist["id"]
-                    album_track_artist["artist_name"] = artist["name"]
-                    album_track_artist["artist_uri"] = artist["uri"]
-                    album_track["artists"].append(album_track_artist)
-                album["tracks"].append(album_track)
-        #print(album.keys())
-        return album
+        albums = []
+        for album in results["albums"]:
+            album = {}
+            if "albums" in results:
+                album["album_id"] = results["albums"][0]["id"]
+                album["album_name"] = results["albums"][0]["name"]
+                album["album_popularity"] = results["albums"][0]["popularity"]
+                album["album_uri"] = results["albums"][0]["uri"]
+                album["album_img"] = Spotify.highest_height_cover(results["albums"][0]["images"]) if results["albums"][0]["images"] else "/static/album_img.png"
+                album["total_tracks"] = results["albums"][0]["total_tracks"]
+                album["release_date"] = Spotify.convert_to_datetime(results["albums"][0]["release_date"])
+                album["label_name"] = results["albums"][0]["label"]
+                
+                album["artists"] = []
+                for artist in results["albums"][0]["artists"]:
+                    album_artist = {}
+                    album_artist["artist_id"] = artist["id"]
+                    album_artist["artist_name"] = artist["name"]
+                    album_artist["artist_uri"] = artist["uri"]
+                    album["artists"].append(album_artist)
+                
+                album["tracks"] = []
+                for track in results["albums"][0]["tracks"]["items"]:
+                    #print(track.keys())
+                    album_track = {}
+                    album_track["track_id"] = track["id"]
+                    album_track["track_name"] = track["name"]
+                    album_track["track_number"] = track["track_number"]
+                    album_track["track_uri"] = track["uri"]
+                    album_track["duration_ms"] = track["duration_ms"]
+                    album_track["is_explicit"] = track["explicit"]
+                    album_track["preview_url"] = track["preview_url"]
+                    album_track["track_popularity"] = results["albums"][0]["popularity"]
+                    album_track["track_img"] = Spotify.highest_height_cover(results["albums"][0]["images"]) if results["albums"][0]["images"] else "/static/track_img.png"
+                    album_track["release_date"] = Spotify.convert_to_datetime(results["albums"][0]["release_date"])
+                    album_track["artists"] = []
+                    for artist in track["artists"]:
+                        album_track_artist = {}
+                        album_track_artist["artist_id"] = artist["id"]
+                        album_track_artist["artist_name"] = artist["name"]
+                        album_track_artist["artist_uri"] = artist["uri"]
+                        album_track["artists"].append(album_track_artist)
+                    album["tracks"].append(album_track)
+            #print(album.keys())
+            albums.append(album)
+        return albums
     
     @staticmethod
     def artist_formatter(results):
@@ -342,7 +345,7 @@ class Spotify(API):
                 artist["artist_id"] = a["id"]
                 artist["artist_name"] = a["name"]
                 artist["artist_uri"] = a["uri"]
-                artist["artist_img"] = Spotify.highest_height_cover(a["images"])
+                artist["artist_img"] = Spotify.highest_height_cover(a["images"]) if a["images"] else "/static/artist_img.png"
                 artist["genres"] = a["genres"]
                 artist["followers_total"] = a["followers"]["total"]
                 artist["artist_popularity"] = a["popularity"]
@@ -365,14 +368,14 @@ class Spotify(API):
                 track["preview_url"] = t["preview_url"]
                 track["track_number"] = t["track_number"]
                 track["duration_ms"] = t["duration_ms"]
-                track["track_img"] = Spotify.highest_height_cover(t["album"]["images"])
+                track["track_img"] = Spotify.highest_height_cover(t["album"]["images"]) if t["album"]["images"] else "/static/track_img.png"
                 track["release_date"] = Spotify.convert_to_datetime(t["album"]["release_date"])
 
                 album = {}
                 album["album_id"] = t["album"]["id"]
                 album["album_name"] = t["album"]["name"]
                 album["album_uri"] = t["album"]["uri"]
-                album["album_img"] = Spotify.highest_height_cover(t["album"]["images"])
+                album["album_img"] = Spotify.highest_height_cover(t["album"]["images"]) if t["album"]["images"] else "/static/album_img.png"
                 album["release_date"] = Spotify.convert_to_datetime(t["album"]["release_date"])
                 album["total_tracks"] = t["album"]["total_tracks"]
                 album_artists = []
@@ -401,9 +404,13 @@ class Spotify(API):
 
 
 if __name__ == "__main__":
-    dir = r"utils\sample\search1.json"
+    dir = r"utils\sample\album.json"
     
-    results = json.load(open(dir, "r"))
+    with open(dir, "r") as f:
+        results = json.load(f)
+    
+    results = Spotify.album_formatter(results)
+    print(results)
 
     
     

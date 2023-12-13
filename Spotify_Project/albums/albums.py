@@ -114,7 +114,7 @@ def list():
     #rk868 - 12/11/23 - This is the list function for albums.
     form = AlbumSearchForm(request.args)
     allowed_columns = ["album_name", "release_date", "total_tracks", "album_popularity", "label_name"]
-    form.sort.choices = [(k, k) for k in allowed_columns]
+    form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
     query = """
     SELECT id, album_id, album_name, release_date, total_tracks, album_popularity, label_name
     FROM IS601_Albums
@@ -177,11 +177,16 @@ def view():
     #rk868 - 12/11/23 - This is the view function for albums.
     id = request.args.get("id")
     if id:
-        result = DB.selectOne("SELECT id, album_id, album_name, release_date, total_tracks, label_name, album_uri, album_img FROM IS601_Albums WHERE id = %s", id)
+        result = DB.selectOne("SELECT id, album_id, album_name, album_popularity, release_date, total_tracks, label_name, album_uri, album_img FROM IS601_Albums WHERE id = %s", id)
         if result.status and result.row:
             print(result.row)
-            for key, value in result.row.items():
-                print(key, value)
+            if result.row.get("label_name") is None:
+                album = Spotify.get_album(result.row.get("album_id"))
+                if album:
+                    print("loading album")
+                    SQLLoader.loadAlbum(album)
+                    result = DB.selectOne("SELECT id, album_id, album_name, album_popularity, release_date, total_tracks, label_name, album_uri, album_img FROM IS601_Albums WHERE id = %s", id)
+                
             return render_template("albums_view.html", data=result.row)
         else:
             flash("Album record not found", "danger")
