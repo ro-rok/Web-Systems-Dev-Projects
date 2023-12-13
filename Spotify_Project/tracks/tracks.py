@@ -4,6 +4,7 @@ from roles.permissions import admin_permission
 from tracks.forms import TrackSearchForm, TrackForm, TrackFetchForm, TrackSQLSearchForm
 from utils.Spotify import Spotify
 from utils.SQLLoader import SQLLoader, DictToObject
+from datetime import date
 
 
 tracks = Blueprint('tracks', __name__, url_prefix='/tracks', template_folder='templates')
@@ -207,7 +208,7 @@ def view():
     if id:
         track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, 
                                 t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img, 
-                                t.duration_ms, t.is_explicit, t.release_date 
+                                t.duration_ms, t.is_explicit 
                                 FROM IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE t.id = %s""", id)
         print("track", track)
         if track.status and track.row:
