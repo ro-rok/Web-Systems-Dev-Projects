@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block title %}View Track{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="h3">View Track</div>
+    <div class="card bg-black">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <strong>Spotify ID</strong>
+                        <p>{{ track.track_id }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track Name</strong>
+                        <p>{{ track.track_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track Duration</strong>
+                        <p>{{ (track.duration_ms // 60000) }} minutes {{ ((track.duration_ms % 60000) // 1000) }} seconds</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track Popularity</strong>
+                        <p>{{ track.track_popularity }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track URI</strong>
+                        <p><a href="{{ track.track_uri }}">On Desktop</a></p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track URL</strong>
+                        <p><a href="https://open.spotify.com/track/{{track.track_id}}">On Browser</a></p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track Explicit</strong>
+                        {% if track.is_explicit %}
+                            <p>True</p>
+                        {% else %}
+                            <p>False</p>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track Album</strong>
+                        <a href="{{ url_for('albums.view', id=track.album_id) }}"><p>{{ track.album_name }}</p></a>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Track Artist</strong>
+                        <a href="{{ url_for('artists.view', id=artist_id) }}"><p>{{ album_artist.artist_name }}</p></a>
+                    </div>                
+                </div>
+                <div class="col-md-6">
+                    <div class="image-container text-right"> 
+                        <img src="{{ track.track_img }}" alt="Track Image" style="width: 25em; height: 30em;">
+                    </div>
+                    <audio controls="controls" style="width: 26em" >
+                        <source src="{{ track.preview_url }}" type="audio/mpeg">
+                    </audio>
+
+                </div>
+            </div>
+            <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary">Back</a>
+            {% if current_user.has_role("Admin") %}
+            <a href="{{ url_for('tracks.edit', id=track.id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ url_for('tracks.delete', id=track.id) }}" class="btn btn-danger">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

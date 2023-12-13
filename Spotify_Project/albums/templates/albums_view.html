@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block title %}View Album{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="h3">View Album</div>
+    <div class="card bg-black">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <strong>Spotify ID</strong>
+                        <p>{{ data.album_id }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Name</strong>
+                        <p>{{ data.album_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Release Date</strong>
+                        <p>{{ data.release_date }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Popularity</strong>
+                        <p>{{ data.album_popularity }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album Total Tracks</strong>
+                        <p>{{ data.total_tracks }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Label Name</strong>
+                        <p>{{ data.label_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Album URI</strong>
+                        <p><a href="{{ data.album_uri }}">{{ data.album_uri }}</a></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="image-container">
+                        <img src="{{ data.album_img }}" alt="Album Image" style="width: 25em; height: 30em;">
+                    </div>
+                </div>
+            </div>
+            <a href="{{ url_for('albums.list') }}" class="btn btn-secondary">Back</a>
+            {% if current_user.has_role("Admin") %}
+            <a href="{{ url_for('albums.edit', id=data.id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ url_for('albums.delete', id=data.id) }}" class="btn btn-danger">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
