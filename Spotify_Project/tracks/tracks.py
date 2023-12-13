@@ -2,7 +2,7 @@ from flask import Blueprint, flash, render_template, request, redirect, url_for
 from flask_login import current_user, login_required
 from sql.db import DB 
 from roles.permissions import admin_permission
-from tracks.forms import TrackSearchForm, TrackForm, TrackFetchForm, TrackSQLSearchForm, AdminTrackSearchForm
+from tracks.forms import AssocForm, TrackSearchForm, TrackForm, TrackFetchForm, TrackSQLSearchForm, AdminTrackSearchForm
 from utils.Spotify import Spotify
 from utils.SQLLoader import SQLLoader, DictToObject
 from datetime import date
@@ -164,7 +164,8 @@ def list():
     LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
     WHERE 1=1
     """
-    args = {"user_id": current_user.id}
+    user_id = current_user.id if current_user.is_authenticated else 0
+    args = {"user_id": user_id}
     where = ""
     if form.track_name.data:
         args["track_name"] = f"%{form.track_name.data}%"
@@ -369,3 +370,154 @@ def clear():
                 print(f"Error clearing playlist {e}")
                 flash("Error clearing playlist","danger");
     return redirect(url_for("tracks.playlist", **args))
+
+@tracks.route("/associate", methods=["GET"])
+@admin_permission.require(http_exception=403)
+def associations():
+
+    form = AdminTrackSearchForm(request.args)
+    allowed_columns = ["track_name","album_name", "track_popularity", "duration_ms", "release_date", "is_explicit" , "track_number"]
+    form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
+    query = """
+    SELECT u.id as user_id, username, t.id, t.track_id, a.album_name, t.track_name, t.track_popularity, t.track_number, t.duration_ms, t.is_explicit, t.release_date
+    FROM IS601_Tracks t JOIN IS601_TrackPlaylist tp ON t.id = tp.track_id 
+    LEFT JOIN IS601_Users u ON u.id = tp.user_id
+    LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+    WHERE 1=1
+    """
+    args = {}
+    where = ""
+    if form.username.data:
+        args["username"] = f"%{form.username.data}%"
+        where += " AND username LIKE %(username)s"
+    if form.track_name.data:
+        args["track_name"] = f"%{form.track_name.data}%"
+        where += " AND t.track_name LIKE %(track_name)s"
+    if form.track_popularity.data:
+        args["track_popularity"] = form.track_popularity.data
+        where += " AND t.track_popularity = %(track_popularity)s"
+    if form.is_explicit.data:
+        args["is_explicit"] = form.is_explicit.data
+        where += " AND t.is_explicit = %(is_explicit)s"
+    if form.album_name.data:
+        args["album_name"] = f"%{form.album_name.data}%"
+        where += " AND a.album_name LIKE %(album_name)s"
+    
+    if form.sort.data in allowed_columns and form.order.data in ["asc", "desc"]:
+        where += f" ORDER BY {form.sort.data} {form.order.data}"
+    
+    limit = 10
+    if form.limit.data:
+        limit = form.limit.data
+        if limit < 1:
+            limit = 1
+        if limit > 100:
+            limit = 100
+        args["limit"] = limit
+        where += " LIMIT %(limit)s"
+    
+    result = DB.selectAll(query+where, args)
+    rows = []
+    if result.status and result.rows:
+        rows = result.rows
+    total_records = get_total("IS601_Tracks t JOIN IS601_TrackPlaylist tp ON t.id = tp.track_id WHERE 1=1")
+    return render_template("tracks_list.html", rows=rows, form=form, title="Associations", total_records=total_records)
+
+@tracks.route("/unwatched", methods=["GET"])
+@login_required
+def unwatched():
+    form = TrackSearchForm(request.args)
+    allowed_columns = ["track_name","album_name", "track_popularity", "duration_ms", "release_date", "is_explicit" , "track_number"]
+    form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
+    query = """
+    SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity, t.track_number, t.duration_ms, t.is_explicit, t.release_date,
+    IFNULL((SELECT COUNT(1) FROM IS601_TrackPlaylist WHERE user_id = %(user_id)s AND track_id = t.id), 0) AS 'is_assoc'
+    FROM IS601_Tracks t
+    LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+    WHERE t.id NOT IN (SELECT track_id FROM IS601_TrackPlaylist)
+    """
+    args = {"user_id": current_user.id}
+    where = ""
+    if form.track_name.data:
+        args["track_name"] = f"%{form.track_name.data}%"
+        where += " AND t.track_name LIKE %(track_name)s"
+    if form.track_popularity.data:
+        args["track_popularity"] = form.track_popularity.data
+        where += " AND t.track_popularity = %(track_popularity)s"
+    if form.is_explicit.data:
+        args["is_explicit"] = form.is_explicit.data
+        where += " AND t.is_explicit = %(is_explicit)s"
+    if form.album_name.data:
+        args["album_name"] = f"%{form.album_name.data}%"
+        where += " AND a.album_name LIKE %(album_name)s"
+    
+    if form.sort.data in allowed_columns and form.order.data in ["asc", "desc"]:
+        where += f" ORDER BY {form.sort.data} {form.order.data}"
+    
+    limit = 10
+    if form.limit.data:
+        limit = form.limit.data
+        if limit < 1:
+            limit = 1
+        if limit > 100:
+            limit = 100
+        args["limit"] = limit
+        where += " LIMIT %(limit)s"
+    
+    result = DB.selectAll(query+where, args)
+    rows = []
+    if result.status and result.rows:
+        rows = result.rows
+    total_records = get_total("IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE t.id NOT IN (SELECT DISTINCT track_id FROM IS601_TrackPlaylist)") 
+    return render_template("tracks_list.html", rows=rows, form=form, title="Unwatched Items", total_records=total_records)
+
+@tracks.route("/manage", methods=["GET"])
+def manage():
+    form = AssocForm(request.args)
+    users = []
+    tracks = []
+    username = form.username.data
+    track_name = form.track_name.data
+    if username and track_name:
+        result = DB.selectAll("SELECT id, username FROM IS601_Users WHERE username LIKE %(username)s LIMIT 25", {"username": f"%{username}%"})
+        if result.status and result.rows:
+            users = result.rows
+        result = DB.selectAll("SELECT id, track_name FROM IS601_Tracks WHERE track_name LIKE %(track)s LIMIT 25", {"track": f"%{track_name}%"})
+        if result.status and result.rows:
+            tracks = result.rows
+    print(f"Users: {users}")
+    print(f"Tracks: {tracks}")
+    return render_template("track_association.html", users=users, tracks=tracks, form=form)
+
+
+@tracks.route("/manage_assoc", methods=["POST"])
+def manage_assoc():
+    users = request.form.getlist("users[]")
+    tracks = request.form.getlist("tracks[]")
+    print(users, tracks)
+    args = {**request.args}
+    if users and tracks: # we need both for this to work
+        mappings = []
+        for user in users:
+            for track in tracks:
+                mappings.append({"user_id":user, "track_id":track})
+        if len(mappings) > 0:
+            for mapping in mappings:
+                print(f"mapping {mapping}")
+                try:
+                    result = DB.insertOne("INSERT INTO IS601_TrackPlaylist (user_id, track_id) VALUES(%(user_id)s, %(track_id)s)", mapping)
+                    if result.status:
+                        pass
+                        #flash(f"Successfully enabled/disabled roles for the user/role {len(mappings)} mappings", "success")
+                except Exception as e:
+                    print(f"Insert error {e}")
+                    result = DB.delete("DELETE FROM IS601_TrackPlaylist WHERE user_id = %(user_id)s and track_id = %(track_id)s",mapping)
+            flash("Successfully applied mappings", "success")
+        else:
+            flash("No user/track mappings", "danger")
+
+    if "users" in args:
+        del args["users"]
+    if "tracks" in args:
+        del args["tracks"]
+    return redirect(url_for("tracks.manage", **args))

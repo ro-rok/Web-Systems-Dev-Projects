@@ -5,7 +5,7 @@
 {% block content %}
 {% from "_table_helper.html" import render_table %}
 {% set view = "albums.view" %}
-{% if current_user.has_role("Admin") %}
+{% if (current_user.has_role and current_user.has_role("Admin")) %}
 {% set edit = "albums.edit" %}
 {% set delete = "albums.delete" %}
 {% else %}
