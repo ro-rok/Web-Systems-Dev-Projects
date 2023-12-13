@@ -1,9 +1,11 @@
 from flask import Blueprint, flash, render_template, request, redirect, url_for
+from flask_login import current_user, login_required
 from sql.db import DB 
 from roles.permissions import admin_permission
-from tracks.forms import TrackSearchForm, TrackForm, TrackFetchForm, TrackSQLSearchForm
+from tracks.forms import TrackSearchForm, TrackForm, TrackFetchForm, TrackSQLSearchForm, AdminTrackSearchForm
 from utils.Spotify import Spotify
 from utils.SQLLoader import SQLLoader, DictToObject
+from datetime import date
 
 
 tracks = Blueprint('tracks', __name__, url_prefix='/tracks', template_folder='templates')
@@ -23,6 +25,17 @@ def get_artists():
     if results.status and results.rows:
         r = results.rows
     return r
+
+def get_total(partial_query, args={}):
+    total = 0
+    try:
+        result = DB.selectOne("SELECT count(1) as total FROM "+partial_query, args)
+        if result.status and result.row:
+            total = int(result.row["total"])
+    except Exception as e:
+        print(f"Error getting total {e}")
+        total = 0
+    return total
 
 @tracks.route("/add", methods=["GET", "POST"])
 @admin_permission.require(http_exception=403)
@@ -143,13 +156,15 @@ def list():
     #rk868 - 12/11/23 - This is the list function for tracks.
     form = TrackSearchForm(request.args)
     allowed_columns = ["track_name","album_name", "track_popularity", "duration_ms", "release_date", "is_explicit" , "track_number"]
-    form.sort.choices = [(k, k) for k in allowed_columns]
+    form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
     query = """
-    SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity, t.track_number, t.duration_ms, t.is_explicit, t.release_date FROM IS601_Tracks t
+    SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity, t.track_number, t.duration_ms, t.is_explicit, t.release_date,
+    IFNULL((SELECT COUNT(1) FROM IS601_TrackPlaylist WHERE user_id = %(user_id)s AND track_id = t.id), 0) AS 'is_assoc'
+    FROM IS601_Tracks t
     LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
     WHERE 1=1
     """
-    args = {}
+    args = {"user_id": current_user.id}
     where = ""
     if form.track_name.data:
         args["track_name"] = f"%{form.track_name.data}%"
@@ -181,7 +196,8 @@ def list():
     rows = []
     if result.status and result.rows:
         rows = result.rows
-    return render_template("tracks_list.html", rows=rows, form=form)
+    total_records = get_total("IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE 1=1")
+    return render_template("tracks_list.html", rows=rows, form=form, total_records=total_records)
 
 
 @tracks.route("/search", methods=["GET", "POST"])
@@ -207,7 +223,7 @@ def view():
     if id:
         track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, 
                                 t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img, 
-                                t.duration_ms, t.is_explicit, t.release_date 
+                                t.duration_ms, t.is_explicit 
                                 FROM IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE t.id = %s""", id)
         print("track", track)
         if track.status and track.row:
@@ -243,3 +259,113 @@ def fetch():
         except Exception as e:
             flash(f"Error fetching track: {e}", "danger")
     return render_template("tracks_fetch.html", form=form)
+
+@tracks.route("/record", methods=["GET"])
+@login_required
+def record():
+    #rk868 - 12/12/23 - This is the function to record the tracks in the playlist.
+    id = request.args.get("id")
+    args = {**request.args}
+    del args["id"]
+    if not id:
+        flash("Missing id parameter", "danger")
+    else:
+        params = {"user_id": current_user.id, "track_id": id}
+        try:
+            try:
+                result = DB.insertOne("INSERT INTO IS601_TrackPlaylist (track_id, user_id) VALUES (%(track_id)s, %(user_id)s)", params)
+                if result.status:
+                    flash("Added track to your Playlist", "success")
+            except Exception as e:
+                print(f"Should just be a duplicate exception and can be ignored {e}")
+                result = DB.delete("DELETE FROM IS601_TrackPlaylist WHERE track_id = %(track_id)s AND user_id = %(user_id)s", params)
+                if result.status:
+                    flash("Removed track from your Playlist", "success")
+        except Exception as e:
+            print(f"Error doing something with track/untrack {e}")
+            flash("An unhandled error occurred please try again" ,"danger")
+
+    url = request.referrer
+    if url:
+        from urllib.parse import urlparse
+        url_stuff = urlparse(url)
+        playlist_url = url_for("tracks.playlist")
+        print(f"Parsed url {url_stuff} {playlist_url}")
+        if url_stuff.path == url_for("tracks.playlist"):
+            return redirect(url_for("tracks.playlist", **args))
+        elif url_stuff.path == url_for("tracks.view"):
+            args["id"] = id
+            return redirect(url_for("tracks.view", **args))
+    return redirect(url_for("tracks.list", **args))
+
+
+@tracks.route("/playlist", methods=["GET"])
+def playlist():
+    #rk868 - 12/12/23 - This is the function to display the tracks in the playlist.
+    id = request.args.get("id", current_user.id)
+
+    form = TrackSearchForm(request.args)
+    allowed_columns = ["track_name","album_name", "track_popularity", "duration_ms", "release_date", "is_explicit" , "track_number"]
+    form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
+    query = """
+    SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity, t.track_number, t.duration_ms, t.is_explicit, t.release_date,
+    1 AS 'is_assoc'
+    FROM IS601_Tracks t JOIN IS601_TrackPlaylist tp ON t.id = tp.track_id
+    LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+    WHERE tp.user_id = %(user_id)s
+    """
+    args = {"user_id": id}
+    where = ""
+    if form.track_name.data:
+        args["track_name"] = f"%{form.track_name.data}%"
+        where += " AND t.track_name LIKE %(track_name)s"
+    if form.track_popularity.data:
+        args["track_popularity"] = form.track_popularity.data
+        where += " AND t.track_popularity = %(track_popularity)s"
+    if form.is_explicit.data:
+        args["is_explicit"] = form.is_explicit.data
+        where += " AND t.is_explicit = %(is_explicit)s"
+    if form.album_name.data:
+        args["album_name"] = f"%{form.album_name.data}%"
+        where += " AND a.album_name LIKE %(album_name)s"
+    
+    if form.sort.data in allowed_columns and form.order.data in ["asc", "desc"]:
+        where += f" ORDER BY {form.sort.data} {form.order.data}"
+    
+    limit = 10
+    if form.limit.data:
+        limit = form.limit.data
+        if limit < 1:
+            limit = 1
+        if limit > 100:
+            limit = 100
+        args["limit"] = limit
+        where += " LIMIT %(limit)s"
+    
+    result = DB.selectAll(query+where, args)
+    rows = []
+    if result.status and result.rows:
+        rows = result.rows
+    total_records = get_total(""" IS601_Tracks t JOIN IS601_TrackPlaylist tp ON t.id = tp.track_id
+                                    WHERE tp.user_id = %(user_id)s""", {"user_id": id})
+    return render_template("tracks_list.html", rows=rows, form=form, title="Playlist", total_records=total_records)
+
+@tracks.route("/clear", methods=["GET"])
+def clear():
+    #rk868 - 12/12/23 - This is the function to clear the tracks in the playlist.
+    id = request.args.get("id")
+    args = {**request.args}
+    if "id" in args:
+        del args["id"]
+    if not id:
+        flash("Missing id", "danger")
+    else:
+        if id == current_user.id or current_user.has_role("Admin"):
+            try:
+                result = DB.delete("DELETE FROM IS601_TrackPlaylist WHERE user_id = %(user_id)s", {"user_id":id})
+                if result.status:
+                    flash("Cleared playlist", "success")
+            except Exception as e:
+                print(f"Error clearing playlist {e}")
+                flash("Error clearing playlist","danger");
+    return redirect(url_for("tracks.playlist", **args))
