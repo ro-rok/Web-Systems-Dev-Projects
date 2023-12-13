@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Search{% endblock %}
+
+<!-- content -->
+{% block content %}
+{% set redirect = '/redirect' %} 
+<div class="container-fluid">
+    {% include '_search.html' %}
+    <h1>Top Results</h1>
+    {% if top_results == []  %}
+    <p>No results found.</p>
+    {% else %}
+    <div class="card-group">
+        {% for result in top_results %}
+        <div class="card bg-dark text-white" style="max-width: 20%;">
+            <img src="{{ result.img }}" class="card-img-top" alt="{{ result.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ result.name }}</h5>
+                <p class="card-text" style="color: green;">Listen to it on Spotify :</p>
+                <a href="{{ result.uri }}" class="card-text">Desktop</a>
+                <a href="https://open.spotify.com/{{result.type}}/{{result.id}}" class="card-text">Browser</a>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted" style="text-transform: capitalize;">
+                    <a href="{{ redirect }}?uri={{ result.uri }}"> {{ result.type }} View </a>
+                </small>
+            </div>
+        </div>
+        {% if loop.index % 5 == 0 %}
+        <div class="w-100"></div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

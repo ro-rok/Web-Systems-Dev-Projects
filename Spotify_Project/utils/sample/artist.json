@@ -1,0 +1,78 @@
+{
+    "artists": [
+        {
+            "external_urls": {
+            "spotify": "https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02"
+            },
+            "followers": {
+            "href": null,
+            "total": 95751115
+            },
+            "genres": [
+            "pop"
+            ],
+            "id": "06HL4z0CvFAxyc27GXpf02",
+            "images": [
+            {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab6761610000e5eb859e4c14fa59296c8649e0e4",
+                "width": 640
+            },
+            {
+                "height": 320,
+                "url": "https://i.scdn.co/image/ab67616100005174859e4c14fa59296c8649e0e4",
+                
+                "width": 320
+            },
+            {
+                "height": 160,
+                "url": "https://i.scdn.co/image/ab6761610000f178859e4c14fa59296c8649e0e4",
+                "width": 160
+            }
+            ],
+            "name": "Taylor Swift",
+            "popularity": 100,
+            "type": "artist",
+            "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02"
+        }
+        ,
+        {
+            "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6XyY86QOPPrYVGvF9ch6wz"
+            },
+            "followers": {
+                "href": null,
+                "total": 24965799
+            },
+            "genres": [
+                "alternative metal",
+                "nu metal",
+                "post-grunge",
+                "rap metal",
+                "rock"
+            ],
+            "id": "6XyY86QOPPrYVGvF9ch6wz",
+            "images": [
+                {
+                    "height": 640,
+                    "url": "https://i.scdn.co/image/ab6761610000e5eb811da3b2e7c9e5a9c1a6c4f7",
+                    "width": 640
+                },
+                {
+                    "height": 320,
+                    "url": "https://i.scdn.co/image/ab67616100005174811da3b2e7c9e5a9c1a6c4f7",
+                    "width": 320
+                },
+                {
+                    "height": 160,
+                    "url": "https://i.scdn.co/image/ab6761610000f178811da3b2e7c9e5a9c1a6c4f7",
+                    "width": 160
+                }
+            ],
+            "name": "Linkin Park",
+            "popularity": 83,
+            "type": "artist",
+            "uri": "spotify:artist:6XyY86QOPPrYVGvF9ch6wz"
+        }
+    ]
+}
