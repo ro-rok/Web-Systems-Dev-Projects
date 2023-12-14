@@ -194,7 +194,12 @@ def view():
                     print("loading artist")
                     SQLLoader.loadArtist(artist)
                     result = DB.selectOne("SELECT id, artist_id, artist_name, artist_popularity, followers_total, artist_uri, artist_img FROM IS601_Artists WHERE id = %s", id )
-
+            if result.status and result.row:
+                genre = DB.selectAll("SELECT genre_name FROM IS601_Genres g JOIN IS601_ArtistGenres ag ON ag.genre_id = g.id WHERE ag.artist_id = %s", id)
+                album = DB.selectAll("SELECT a.id as album_id, a.album_name FROM IS601_Albums a JOIN IS601_ArtistAlbums aa ON aa.album_id = a.id WHERE aa.artist_id = %s", id)
+                print(genre.rows)
+                print(album.rows)
+                return render_template("artists_view.html", data=result.row, genres=genre.rows, albums=album.rows)
             return render_template("artists_view.html", data=result.row)
         else:
             flash("Artist record not found", "danger")

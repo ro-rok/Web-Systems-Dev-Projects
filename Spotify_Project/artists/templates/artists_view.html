@@ -4,43 +4,108 @@
 {% block content %}
 <div class="container-fluid">
     <div class="h3">View Artist</div>
+    <div id="accordion">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Collapsible Group Item #1
+              </button>
+            </h5>
+          </div>
+      
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Collapsible Group Item #2
+              </button>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Collapsible Group Item #3
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     <div class="card bg-black">
         <div class="card-body">
-            <div class="row">
+            <div class="row animate__animated animate__slideInLeft">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <strong>Spotify ID</strong>
+                        <strong><i class="fas fa-id-card" style="color: #FF69B4;"></i> Spotify ID</strong>
                         <p>{{ data.artist_id }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Artist Name</strong>
+                        <strong><i class="fas fa-microphone" style="color: #FFD700;"></i> Artist Name</strong>
                         <p>{{ data.artist_name }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Artist Popularity</strong>
-                        <p>{{ data.artist_popularity }}</p>
+                        <strong><i class="fas fa-chart-line" style="color: red;"></i> Artist Popularity</strong>
+                        <p> <i class="fas fa-fire" style="color: red;"></i> {{ data.artist_popularity }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Followers Total</strong>
+                        <strong><i class="fas fa-users" style="color: #00FF00;"></i> Followers Total</strong>
                         <p>{{ data.followers_total }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Artist URI</strong>
-                        <a href="{{ data.artist_uri }}">{{ data.artist_uri }}</a>
+                        <strong><i class="fas fa-music" style="color: #00BFFF;"></i> Genres</strong>
+                        <p>
+                            {% for genre in genres %}
+                            {{ genre.genre_name }}
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <strong><i class="fas fa-compact-disc" style="color: #FF1493;"></i> Albums</strong>
+                        <p>
+                            {% for album in albums %}
+                            <a href="{{ url_for('albums.view', id=album.album_id) }}">{{ album.album_name }}</a><br>
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <strong><i class="fab fa-spotify" style="color: #1DB954;"></i> View the Artist on Spotify</strong>
+                        <ul style="list-style-type: none;">
+                            <li><a href="{{ data.artist_uri }}"><i class="fas fa-desktop" style="color: #FF69B4;"></i> On Desktop</a></li>
+                            <li><a href="https://open.spotify.com/artist/{{ data.artist_id }}"><i class="fas fa-globe" style="color: #00BFFF;"></i> On Browser</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="image-container text-right"> 
                         <img class="img-fluid img-thumbnail card-img-top" src="{{ data.artist_img }}" alt="Artist Image" style="width: 25em; height: 30em;">
                     </div>
+                    <a href="{{ url_for('artists.list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                    {% if (current_user.has_role and current_user.has_role("Admin")) %}
+                    <a href="{{ url_for('artists.edit', id=artist.id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="{{ url_for('artists.delete', id=artist.id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+                    {% endif %}
                 </div>
             </div>
-            <a href="{{ url_for('artists.list') }}" class="btn btn-secondary">Back</a>
-            {% if (current_user.has_role and current_user.has_role("Admin")) %}
-            <a href="{{ url_for('artists.edit', id=data.id) }}" class="btn btn-primary">Edit</a>
-            <a href="{{ url_for('artists.delete', id=data.id) }}" class="btn btn-danger">Delete</a>
-            {% endif %}
-            
         </div>
     </div>
 </div>

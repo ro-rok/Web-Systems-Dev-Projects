@@ -7,8 +7,8 @@
     <h1 class="animate__animated animate__backInLeft">Welcome To MusiC</h1>
     <div class="card-group animate__animated animate__fadeInUp">
         {% for result in tracks %}
-        <div class="card bg-dark text-white" style="max-width: 20%;">
-            <img src="{{ result.track_img }}" class="card-img-top" alt="{{ result.track_name }}">
+        <div class="card bg-dark text-white" style="max-width: 20%;  margin: 0.5em; border-radius: 2em;">
+            <img src="{{ result.track_img }}" class="card-img-top" alt="{{ result.track_name }}" style="border-radius: 2em 2em 0 0;">
             <div class="card-body">
                 <h5 class="card-title">{{ result.track_name }}</h5>
                 <p class="card-text"> {{result.album_name}}<br>

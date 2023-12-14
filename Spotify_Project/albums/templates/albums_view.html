@@ -6,60 +6,60 @@
     <div class="h3">View Album</div>
     <div class="card bg-black">
         <div class="card-body">
-            <div class="row">
+            <div class="row animate__animated animate__slideInLeft">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <strong>Spotify ID</strong>
+                        <strong><i class="fas fa-id-card" style="color: #FF69B4;"></i> Spotify ID</strong>
                         <p>{{ data.album_id }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Album Name</strong>
+                        <strong><i class="fas fa-music" style="color: #FFD700;"></i> Name</strong>
                         <p>{{ data.album_name }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Album Release Date</strong>
+                        <strong><i class="fas fa-calendar-alt" style="color: #00FFFF;"></i> Release Date</strong>
                         <p>{{ data.release_date }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Album Popularity</strong>
-                        <p>{{ data.album_popularity }}</p>
+                        <strong><i class="fas fa-chart-line" style="color: red;"></i> Popularity</strong>
+                        <p><i class="fas fa-fire" style="color: red;"></i> {{ data.album_popularity }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Album Total Tracks</strong>
+                        <strong><i class="fas fa-list" style="color: #ADFF2F;"></i> Total Tracks</strong>
                         <p>
                         <a href="{{ url_for('tracks.list', album_name=data.album_name) }}">View {{data.total_tracks}} Tracks</a>
                         </p>
                     </div>
                     <div class="mb-3">
-                        <strong>Artist</strong>
+                        <strong><i class="fas fa-user" style="color: #FF1493;"></i> Artist</strong>
                         <p>
                             {% for artist in artists %}
                             <a href="{{ url_for('artists.view', id=artist.artist_id) }}">{{artist.artist_name}}</a>
                             {% endfor %}
                         </p>
                     <div class="mb-3">
-                        <strong>Label Name</strong>
+                        <strong><i class="fas fa-compact-disc" style="color: #00BFFF;"></i> Label Name</strong>
                         <p>{{ data.label_name }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>View on Spotify</strong>
-                        <p><a href="https://open.spotify.com/album/{{ data.album_id }}">On Browser</a> <br>
-                        <a href="{{ data.album_uri }}">On Desktop</a></p>
+                        <strong><i class="fab fa-spotify" style="color: #1DB954;"></i> Play the Album on Spotify</strong>
+                        <ul style="list-style-type: none;">
+                            <li><a href="{{ data.album_uri }}"><i class="fas fa-desktop" style="color: #FF69B4;"></i> On Desktop</a></li>
+                            <li><a href="https://open.spotify.com/album/{{ data.album_id }}"><i class="fas fa-globe" style="color: #00BFFF;"></i> On Browser</a></li>
+                        </ul>
                     </div>
                 </div>
                 </div>
                 <div class="col-md-6">
                     <div class="image-container text-right"> 
                         <img class="img-fluid img-thumbnail card-img-top" src="{{ data.album_img }}" alt="Album Image" style="width: 25em; height: 30em;">
-                    </div>
+                    </div>                                                                                                                                       
+                    <a href="{{ url_for('albums.list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                    {% if (current_user.has_role and current_user.has_role("Admin")) %}
+                    <a href="{{ url_for('albums.edit', id=album.id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="{{ url_for('albums.delete', id=album.id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+                    {% endif %}
                 </div>
-            </div>
-            <a href="{{ url_for('albums.list') }}" class="btn btn-secondary">Back</a>
-            {% if (current_user.has_role and current_user.has_role("Admin")) %}
-            <a href="{{ url_for('albums.edit', id=data.id) }}" class="btn btn-primary">Edit</a>
-            <a href="{{ url_for('albums.delete', id=data.id) }}" class="btn btn-danger">Delete</a>
-            {% endif %}
-        </div>
     </div>
 </div>
 {% endblock %}

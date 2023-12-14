@@ -7,21 +7,21 @@
     <div class="card bg-black">
         <div class="card-body">
             <div class="row animate__animated animate__slideInLeft">
-                <div class="col-md-4" style="width: 24%;">
+                <div class="col-md-4" style="width: 27%;">
                     <div class="mb-3">
-                        <strong><i class="fas fa-id-badge"></i> Spotify ID</strong>
+                        <strong><i class="fas fa-id-badge" style="color: #FF69B4;"></i> Spotify ID</strong>
                         <p>{{ track.track_id }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong><i class="fas fa-music"></i> Name</strong>
+                        <strong><i class="fas fa-music" style="color: #FFD700;"></i> Name</strong>
                         <p>{{ track.track_name }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong><i class="fas fa-compact-disc"></i> Album</strong>
+                        <strong><i class="fas fa-compact-disc" style="color: #00BFFF;"></i> Album</strong>
                         <a href="{{ url_for('albums.view', id=track.album_id) }}"><p>{{ track.album_name }}</p></a>
                     </div>
                     <div class="mb-3">
-                        <strong><i class="fas fa-user"></i> Artist</strong>
+                        <strong><i class="fas fa-user" style="color: #FF1493;"></i> Artist</strong>
                         <p>
                             {% for artist in album_artists %}
                                 <a href="{{ url_for('artists.view', id=artist.artist_id) }}">{{ artist.artist_name }}</a><br>
@@ -30,7 +30,7 @@
                     </div>
                     <div class="mb-3">
                         {% if featuring %}
-                            <strong><i class="fas fa-user-friends"></i> Featuring</strong>
+                            <strong><i class="fas fa-user-friends" style="color: #FF8C00;"></i> Featuring</strong>
                             <p>
                                 {% for artist in featuring %}
                                     <a href="{{ url_for('artists.view', id=artist.artist_id) }}">{{ artist.artist_name }}</a><br>
@@ -38,19 +38,23 @@
                             </p>
                         {% endif %}
                     </div> 
+                    <div class="mb-3">
+                        <strong><i class="fas fa-chart-line" style="color: red;"></i> Popularity</strong>
+                        <p><i class="fas fa-fire" style="color: red;"></i> {{ track.track_popularity }}</p>
+                    </div>  
                 </div>
                 <div class="col-md-4" style="width: 42%;" >
                     <div class="image-container text-right"> 
-                        <img class="img-fluid img-thumbnail" src="{{ track.track_img }}" alt="Image" style="height: 27em; width: 27em">
+                        <img class="img-fluid img-thumbnail" src="{{ track.track_img }}" alt="Image" style="width: 25em; height: 30em;">
                     </div>
                     {% if current_user.is_authenticated %}
                         {% if in_playlist %}
-                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-danger"><i class="fas fa-minus-circle"></i> Remove it from your Playlist</a>
+                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-danger"><i class="fas fa-minus-circle" style="color: #FF0000;"></i> Remove it from your Playlist</a>
                         {% else %}
-                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add it to your Playlist</a>
+                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-success"><i class="fas fa-plus-circle" style="color: #00FF00;"></i> Add it to your Playlist</a>
                         {% endif %}
                     {% endif %}
-                    <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                    <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left" ></i> Back</a>
                     {% if (current_user.has_role and current_user.has_role("Admin")) %}
                         <a href="{{ url_for('tracks.edit', id=track.id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
                         <a href="{{ url_for('tracks.delete', id=track.id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
@@ -58,31 +62,29 @@
                 </div>
                 <div class="col-md-4" style="width: 25%;">
                     <div class="mb-3">
-                        <strong><i class="fas fa-chart-line"></i> Popularity</strong>
-                        <p>{{ track.track_popularity }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <strong><i class="fas fa-clock"></i> Duration</strong>
+                        <strong><i class="fas fa-clock" style="color: #808080;"></i> Duration</strong>
                         <p>{{ (track.duration_ms // 60000) }} minutes {{ ((track.duration_ms % 60000) // 1000) }} seconds</p>
                     </div> 
                     <div class="mb-3">
-                        <strong><i class="fas fa-calendar-alt"></i> Release Date</strong>
+                        <strong><i class="fas fa-calendar-alt" style="color: #00FFFF;"></i> Release Date</strong>
                         <p>{{ track.release_date }}</p>
                     <div class="mb-3">
-                        <strong><i class="fas fa-play"></i> Play it on</strong>
-                        <p><a href="{{ track.track_uri }}"><i class="fas fa-desktop"></i> On Desktop</a><br>
-                        <a href="https://open.spotify.com/track/{{track.track_id}}"><i class="fas fa-globe"></i> On Browser</a></p>
+                        <strong><i class="fab fa-spotify" style="color: #1DB954;"></i> Play the Track on Spoitfy</strong>
+                        <ul style="list-style-type: none;">
+                            <li><a href="{{ track.track_uri }}"><i class="fas fa-desktop" style="color: #FF69B4;"></i> On Desktop</a></li>
+                            <li><a href="https://open.spotify.com/track/{{track.track_id}}"><i class="fas fa-globe" style="color: #00BFFF;"></i> On Browser</a></li>
+                        </ul>
                     </div>
                     <div class="mb-3">
-                        <strong><i class="fas fa-exclamation-triangle"></i> Explicit</strong>
+                        <strong><i class="fas fa-exclamation-triangle" style="color: #fff700;"></i> Explicit</strong>
                         {% if track.is_explicit %}
-                            <p>Yes <i class="fas fa-exclamation-circle"></i></p>
+                            <p>Yes <i class="fas fa-exclamation-circle" style="color: #FF0000;"></i></p>
                         {% else %}
-                            <p>No <i class="fas fa-check-circle"></i></p>
+                            <p>No <i class="fas fa-check-circle" style="color: #00ff0d;"></i></p>
                         {% endif %}
                     </div>
                     <div class="mb-3">
-                        <strong><i class="fas fa-headphones"></i> Preview</strong>
+                        <strong><i class="fas fa-headphones" style="color: #555555;"></i> Preview</strong>
                         <div class="embed-responsive embed-responsive-21by9">
                             <iframe class="embed-responsive-item" src="https://open.spotify.com/embed/track/{{track.track_id}}" 
                             frameborder="0" allowtransparency="true" allow="encrypted-media" style="width: 25em;"></iframe>
