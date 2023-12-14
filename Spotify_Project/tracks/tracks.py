@@ -214,19 +214,21 @@ def view():
     id = request.args.get("id")
     in_playlist = 0
     if id:
-        track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit,
+        track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit, t.release_date,
                                 t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img
                                 FROM IS601_Tracks t LEFT JOIN IS601_Albums a ON t.album_id = a.album_id WHERE t.id = %s""", id)
-        print("track", track)
+        #print("track", track)
         if track.status and track.row:
             album_id = track.row.get("album_id")
             album_artist= DB.selectAll("""SELECT a.artist_name, aa.artist_id FROM IS601_ArtistAlbums aa LEFT JOIN IS601_Artists a ON aa.artist_id = a.id WHERE aa.album_id = %s""", album_id)
             print("album_artist", album_artist)
+            featuring = DB.selectAll("""SELECT a.artist_name, aa.artist_id FROM IS601_TrackFeatures aa LEFT JOIN IS601_Artists a ON aa.artist_id = a.id WHERE aa.track_id = %s""", id)
+            print("featuring", featuring)
             if album_artist.status:
                 if current_user.is_authenticated:
                     in_playlist = DB.selectOne("""SELECT COUNT(1) as total FROM IS601_TrackPlaylist WHERE track_id = %s AND user_id = %s""", track.row.get("id"), current_user.id)
                     print("in_playlist", in_playlist)
-                return render_template("tracks_view.html", track=track.row, album_artists=album_artist.rows , in_playlist=in_playlist.row.get("total") if in_playlist and in_playlist.status else 0)
+                return render_template("tracks_view.html", track=track.row, album_artists=album_artist.rows , in_playlist=in_playlist.row.get("total") if in_playlist and in_playlist.status else 0, featuring=featuring.rows if featuring and featuring.status else [])
             flash("No track found", "danger")
     else:
         flash("Missing ID", "danger")

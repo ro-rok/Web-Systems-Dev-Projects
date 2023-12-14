@@ -7,19 +7,22 @@
     <div class="card-group">
         {% for result in tracks %}
         <div class="card bg-dark text-white" style="max-width: 20%;">
-            <img src="{{ result.track_img }}" class="card-img-top" alt="{{ result.name }}">
+            <img src="{{ result.track_img }}" class="card-img-top" alt="{{ result.track_name }}">
             <div class="card-body">
-                <h5 class="card-title">{{ result.artist_name }}</h5>
-                <p class="card-text">{{ result.album_name }}</p>
-                <p class="card-text" style="color: green;">Listen to it on Spotify :</p>
-                <a href="{{ result.uri }}" class="card-text">Desktop</a>
-                <a href="https://open.spotify.com/track/{{result.track_id}}" class="card-text">Browser</a>
+                <h5 class="card-title">{{ result.track_name }}</h5>
+                <p class="card-text"> {{result.album_name}}<br>
+                    <i class="fas fa-fire" style="color: red;"></i>{{result.track_popularity}}<br>
+                <a href="{{ result.uri }}" class="card-text" style="color: rgb(0, 168, 0);"><i class="fab fa-spotify"></i> Desktop</a> &nbsp;
+                                <a href="https://open.spotify.com/track/{{result.track_id}}" class="card-text" style="color: rgb(6, 177, 6);"><i class="fab fa-spotify"></i> Browser</a>
                 
             </div>
             <div class="card-footer">
-                <small class="text-muted" style="text-transform: capitalize;">
-                    <a href="{{url_for('tracks.view', id=result.id)}}">View </a>
+                <small class="text-muted" style="text-transform: capitalize; float: left;">
+                    <a href="{{url_for('tracks.view', id=result.id)}}" style="text-decoration: none; color:rgb(101, 101, 101)"><i class="fas fa-eye" style="color: aqua;"></i> View</a>
                 </small>
+                <small class="text-muted" style="text-transform: capitalize; float: right; color:yellow"><i class="fas fa-clock" style="color: yellow;"></i>
+                    {{ (result.duration_ms // 60000) }} minutes {{ ((result.duration_ms % 60000) // 1000) }} seconds
+                </small> 
             </div>
         </div>
         {% if loop.index % 5 == 0 %}
