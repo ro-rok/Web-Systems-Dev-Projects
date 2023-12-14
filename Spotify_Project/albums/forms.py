@@ -13,6 +13,9 @@ class AlbumForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class AlbumSearchForm(FlaskForm):
+    class Meta:
+        # This overrides the value from the base form.
+        csrf = False    
     album_name = StringField('Album Name')
     album_popularity = IntegerField('Album Popularity')
     album_total_tracks = IntegerField('Total Tracks')
@@ -22,6 +25,9 @@ class AlbumSearchForm(FlaskForm):
     order = SelectField("Order", choices=[("asc","+"), ("desc","-")])
     submit = SubmitField("Filter")
 class AlbumSearchSQLForm(FlaskForm):
+    class Meta:
+        # This overrides the value from the base form.
+        csrf = False
     album_name = StringField('Album Name')
     submit = SubmitField('Submit')
 

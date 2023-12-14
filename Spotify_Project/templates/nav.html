@@ -1,7 +1,9 @@
 {% from "_dropdown_nav.html" import dropdown_nav %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-black">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-black animate__animated animate__zoomIn">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">MusiC</a>
+        <img src="\static\favicon.png" alt="logo" style="width: 2em; height: 2em;">  &nbsp;
+        <a class="navbar-brand" style="color: rgb(0, 255, 0);" href="/">MusiC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -12,23 +14,23 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if not current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('auth.login')}}">Login</a>
+                    <a class="nav-link text-white" href="{{url_for('auth.login')}}"><i class="fas fa-sign-in-alt"></i> Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('auth.register')}}">Register</a>
+                    <a class="nav-link text-white" href="{{url_for('auth.register')}}"><i class="fas fa-user-plus"></i> Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('tracks.list')}}">Tracks</a>
+                    <a class="nav-link text-white" href="{{url_for('tracks.list')}}"><i class="fas fa-music"></i> Tracks</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('albums.list')}}">Albums</a>
+                    <a class="nav-link text-white" href="{{url_for('albums.list')}}"><i class="fas fa-compact-disc"></i> Albums</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('artists.list')}}">Artists</a>
+                    <a class="nav-link text-white" href="{{url_for('artists.list')}}"><i class="fas fa-microphone"></i> Artists</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link  text-white" href="{{url_for('auth.profile')}}">Profile</a>
+                    <a class="nav-link  text-white" href="{{url_for('auth.profile')}}"><i class="fas fa-user"></i> Profile</a>
                 </li>
                 <!-- roles nav (requires admin )-->
                     {% if current_user.has_role("Admin") %}
@@ -37,55 +39,53 @@
                         ("roles.list", "List"),
                         ("roles.assign", "Assign")
                         ] %}
-                        {{dropdown_nav("Roles", roles)}}
+                        {{dropdown_nav("Roles","fas fa-user", roles)}}
                         <!-- track nav (requires admin )-->
                         {% set track = [
                         ("tracks.fetch", "Fetch"),
                         ("tracks.add", "Add"),
                         ("tracks.list", "List"),
-                        ("tracks.associations", "Associations")
+                        ("tracks.associations", "Associations"),
+                        ("tracks.manage", "Manage Associations")
                         ] %}
-                        {{dropdown_nav("Track", track)}}
+                        {{dropdown_nav("Track","fas fa-music", track)}}
                         {% set albums = [
                         ("albums.fetch", "Fetch"),
                         ("albums.add", "Add"),
                         ("albums.list", "List"),
                         ] %}
-                        {{dropdown_nav("Albums", albums)}}
+                        {{dropdown_nav("Albums","fas fa-compact-disc", albums)}}
                         {% set artist = [
                         ("artists.fetch", "Fetch"),
                         ("artists.add", "Add"),
                         ("artists.list", "List"),
                         ] %}
-                        {{dropdown_nav("Artist", artist)}}
+                        {{dropdown_nav("Artist", "fas fa-microphone", artist)}}
                     {%else%}
-                        {% set track = [
-                        ("tracks.list", "List"),
-                        ] %}
-                        {{dropdown_nav("Track", track)}}
-                        {% set albums = [
-                        ("albums.list", "List"),
-                        ] %}
-                        {{dropdown_nav("Albums", albums)}}
-                        {% set artist = [
-                        ("artists.list", "List"),
-                        ] %}
-                        {{dropdown_nav("Artist", artist)}}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{url_for('tracks.list')}}"><i class="fas fa-music"></i> Tracks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{url_for('albums.list')}}"><i class="fas fa-compact-disc"></i> Albums</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{url_for('artists.list')}}"><i class="fas fa-microphone"></i> Artists</a>
+                    </li>
                     {%endif%}
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('tracks.playlist', id=current_user.id)}}">My Playlist</a>
+                    <a class="nav-link text-white" href="{{url_for('tracks.playlist', id=current_user.id)}}"><i class="fas fa-list"></i> My Playlist</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('tracks.unwatched')}}">Unwatched</a>
+                    <a class="nav-link text-white" href="{{url_for('tracks.unwatched')}}"><i class="fas fa-eye-slash"></i> Unwatched</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{url_for('auth.logout')}}">Logout</a>
+                    <a class="nav-link text-white" href="{{url_for('auth.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </li>
                 {% endif %}
             </ul>
             <form class="d-flex" action="/search" method="GET">
                 <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
             </form>
         </div>
     </div>

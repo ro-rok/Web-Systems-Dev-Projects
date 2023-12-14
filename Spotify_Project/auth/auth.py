@@ -155,10 +155,30 @@ def login_register():
     return render_template("login_register.html", login_form=login_form, register_form=register_form)
 
 
-@auth.route("/landing-page", methods=["GET"])
+@auth.route("/home", methods=["GET"])
 @login_required
 def landing_page():
-    return render_template("landing_page.html")
+    tracks = None
+    try:
+        print("getting tracks")
+        tracks = DB.selectAll("""
+            SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity,
+            t.duration_ms, t.is_explicit,  t.track_img, t.track_uri
+            FROM IS601_Tracks t 
+            JOIN IS601_TrackPlaylist tp ON t.id = tp.track_id
+            LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+            WHERE tp.user_id = %(user_id)s 
+            AND t.id IN (
+                SELECT track_id
+                FROM IS601_TrackPlaylist
+                WHERE user_id = %(user_id)s
+            )
+            ORDER BY RAND() LIMIT 15
+        """, {'user_id': current_user.id})
+        print(tracks)
+    except Exception as e:
+        flash(f"Error fetching tracks: {e}", "danger")
+    return render_template("landing_page.html", tracks=tracks.rows if tracks else [])
 
 @auth.route("/logout", methods=["GET"])
 def logout():
@@ -178,7 +198,7 @@ def logout():
 def profile():
     user_id = request.args.get("id", current_user.id)
     logged_in_user_id = current_user.id
-    is_my_profile = user_id == logged_in_user_id
+    is_my_profile = int(user_id) == int(logged_in_user_id)
     form = ProfileForm()
     if form.validate_on_submit():
         if is_my_profile:

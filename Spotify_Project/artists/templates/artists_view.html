@@ -6,40 +6,99 @@
     <div class="h3">View Artist</div>
     <div class="card bg-black">
         <div class="card-body">
-            <div class="row">
+            <div class="row animate__animated animate__slideInLeft">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <strong>Spotify ID</strong>
+                        <strong><i class="fas fa-id-card" style="color: #FF69B4;"></i> &nbsp; Spotify ID</strong>
                         <p>{{ data.artist_id }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Artist Name</strong>
+                        <strong><i class="fas fa-microphone" style="color: #FFD700;"></i> &nbsp; Artist Name</strong>
                         <p>{{ data.artist_name }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Artist Popularity</strong>
-                        <p>{{ data.artist_popularity }}</p>
+                        <strong><i class="fas fa-chart-line" style="color: red;"></i> &nbsp; Artist Popularity</strong>
+                        <p> <i class="fas fa-fire" style="color: red;"></i> &nbsp; {{ data.artist_popularity }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Followers Total</strong>
+                        <strong><i class="fas fa-users" style="color: #00FF00;"></i> &nbsp; Followers Total</strong>
                         <p>{{ data.followers_total }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Artist URI</strong>
-                        <a href="{{ data.artist_uri }}">{{ data.artist_uri }}</a>
+                        <strong><i class="fab fa-spotify" style="color: #1DB954;"></i> &nbsp; View the Artist on Spotify</strong>
+                        <ul style="list-style-type: none;">
+                            <li><i class="fas fa-desktop" style="color: #FF69B4;"></i>&nbsp;<a href="{{ data.artist_uri }}">On Desktop</a></li>
+                            <li><i class="fas fa-globe" style="color: #00BFFF;"></i> &nbsp;<a href="https://open.spotify.com/artist/{{ data.artist_id }}">On Browser</a></li>
+                        </ul>
                     </div>
+                    <style>
+                        .accordion-item {
+                            width: 50%; 
+                            background-color: black;
+                            color: white;
+                        }
+                        .accordion{
+                            --bs-accordion-color: white;
+                            --bs-accordion-btn-color: white;
+                            --bs-accordion-bg: black;
+                            --bs-accordion-active-color: white;
+                            --bs-accordion-active-bg: black;
+                            --bs-accordion-btn-icon: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e";
+                            --bs-accordion-border-width: 0px;
+                            --bs-accordion-btn-padding-x: 0.2px;
+                            --bs-accordion-btn-padding-x: 1rem;
+                            margin-left: -0.9em;
+                        }
+                        
+                    </style>
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion-item float-left">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseGenres" aria-expanded="false" aria-controls="flush-collapseGenres">
+                            <i class="fas fa-music" style="color: #00BFFF;"></i> &nbsp; Genres
+                            </button>
+                        </h2>
+                        <div id="flush-collapseGenres" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                            <p>
+                                {% for genre in genres %}
+                                {{ genre.genre_name|title }}
+                                {% endfor %}
+                            </p>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseAlbums" aria-expanded="false" aria-controls="flush-collapseAlbums">
+                            <i class="fas fa-compact-disc" style="color: #FF1493;"></i> &nbsp;  Albums
+                            </button>
+                        </h2>
+                        <div id="flush-collapseAlbums" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                            <p>
+                                {% for album in albums %}
+                                <a href="{{ url_for('albums.view', id=album.album_id) }}">{{ album.album_name }}</a><br>
+                                {% endfor %}
+                            </p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
                 <div class="col-md-6">
-                    <div class="image-container">
-                        <img src="{{ data.artist_img }}" alt="Artist Image" style="width: 25em; height: 30em;">
+                    <div class="image-container text-right"> 
+                        <img class="img-fluid img-thumbnail card-img-top" src="{{ data.artist_img }}" alt="Artist Image" style="width: 25em; height: 30em;">
                     </div>
+                    <a href="{{ url_for('artists.list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> &nbsp; Back</a>
+                    {% if (current_user.has_role and current_user.has_role("Admin")) %}
+                    <a href="{{ url_for('artists.edit', id=data.artist_id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> &nbsp; Edit</a>
+                    <a href="{{ url_for('artists.delete', id=data.artist_id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> &nbsp; Delete</a>
+                    {% endif %}
                 </div>
             </div>
-            <a href="{{ url_for('artists.list') }}" class="btn btn-secondary">Back</a>
-            {% (current_user.has_role and current_user.has_role("Admin")) %}
-            <a href="{{ url_for('artists.edit', id=data.id) }}" class="btn btn-primary">Edit</a>]
-            <a href="{{ url_for('artists.delete', id=data.id) }}" class="btn btn-danger">Delete</a>
-            {% endif %}
         </div>
     </div>
 </div>
