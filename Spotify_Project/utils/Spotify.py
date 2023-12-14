@@ -20,6 +20,7 @@ class RateLimitExceeded(Exception):
 from utils.api import API
 from datetime import datetime
 import json
+import os
 
 class Spotify(API):
 
@@ -402,6 +403,18 @@ class Spotify(API):
 
         return tracks
 
+def sql_to_txt():
+    sql_folder = r"sql/"
+    sql_files = [file for file in os.listdir(sql_folder) if file.endswith(".sql")]
+    output_file = os.path.join(sql_folder, "sql_files.txt")
+
+    with open(output_file, "w") as file:
+        for sql_file in sql_files:
+            file_path = os.path.join(sql_folder, sql_file)
+            with open(file_path, "r") as sql:
+                sql_content = sql.read()
+                file.write(sql_content)
+                file.write("\n\n") 
 
 if __name__ == "__main__":
     dir = r"utils\sample\album.json"

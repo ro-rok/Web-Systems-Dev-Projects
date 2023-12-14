@@ -219,11 +219,12 @@ def view():
         print("track", track)
         if track.status and track.row:
             album_id = track.row.get("album_id")
-            album_artist= DB.selectOne("""SELECT a.artist_name FROM IS601_ArtistAlbums aa LEFT JOIN IS601_Artists a ON aa.artist_id = a.id WHERE aa.album_id = %s""", album_id)
+            album_artist= DB.selectAll("""SELECT a.artist_name, aa.artist_id FROM IS601_ArtistAlbums aa LEFT JOIN IS601_Artists a ON aa.artist_id = a.id WHERE aa.album_id = %s""", album_id)
+            print("album_artist", album_artist)
             if album_artist.status:
-                artist_id = DB.selectOne("""SELECT id FROM IS601_Artists WHERE artist_name = %s""", album_artist.row.get("artist_name"))
-                return render_template("tracks_view.html", track=track.row, album_artist=album_artist.row , artist_id=artist_id.row.get("id"))
-        else:
+                in_playlist = DB.selectOne("""SELECT COUNT(1) as total FROM IS601_TrackPlaylist WHERE track_id = %s AND user_id = %s""", track.row.get("id"), current_user.id)
+                print("in_playlist", in_playlist)
+                return render_template("tracks_view.html", track=track.row, album_artists=album_artist.rows , in_playlist=in_playlist.row.get("total"))
             flash("No track found", "danger")
     else:
         flash("Missing ID", "danger")
@@ -364,7 +365,7 @@ def clear():
 @tracks.route("/associate", methods=["GET"])
 @admin_permission.require(http_exception=403)
 def associations():
-
+    #rk868 - 12/13/23 - This is the function to display the associations in the playlist.
     form = AdminTrackSearchForm(request.args)
     allowed_columns = ["track_name","album_name", "track_popularity", "duration_ms", "release_date", "is_explicit" , "track_number"]
     form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
@@ -416,6 +417,7 @@ def associations():
 @tracks.route("/unwatched", methods=["GET"])
 @login_required
 def unwatched():
+    #rk868 - 12/13/23 - This is the function to display the not selected tracks in the playlist.
     form = TrackSearchForm(request.args)
     allowed_columns = ["track_name","album_name", "track_popularity", "duration_ms", "release_date", "is_explicit" , "track_number"]
     form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
@@ -463,16 +465,24 @@ def unwatched():
 
 @tracks.route("/manage", methods=["GET"])
 def manage():
+    #rk868 - 12/13/23 - This is the manage function for tracks.
     form = AssocForm(request.args)
     users = []
     tracks = []
     username = form.username.data
     track_name = form.track_name.data
     if username and track_name:
-        result = DB.selectAll("SELECT id, username FROM IS601_Users WHERE username LIKE %(username)s LIMIT 25", {"username": f"%{username}%"})
+        result = DB.selectAll("SELECT id, username FROM IS601_Users WHERE username LIKE %(username)s ORDER BY RAND() LIMIT 25", {"username": f"%{username}%"})
         if result.status and result.rows:
             users = result.rows
-        result = DB.selectAll("SELECT id, track_name FROM IS601_Tracks WHERE track_name LIKE %(track)s LIMIT 25", {"track": f"%{track_name}%"})
+        result = DB.selectAll("SELECT id, track_name FROM IS601_Tracks WHERE track_name LIKE %(track)s ORDER BY RAND() LIMIT 25", {"track": f"%{track_name}%"})
+        if result.status and result.rows:
+            tracks = result.rows
+    else:
+        result = DB.selectAll("SELECT id, username FROM IS601_Users ORDER BY RAND() LIMIT 25")
+        if result.status and result.rows:
+            users = result.rows
+        result = DB.selectAll("SELECT id, track_name, preview_url, track_id FROM IS601_Tracks ORDER BY RAND() LIMIT 25")
         if result.status and result.rows:
             tracks = result.rows
     print(f"Users: {users}")
@@ -482,11 +492,12 @@ def manage():
 
 @tracks.route("/manage_assoc", methods=["POST"])
 def manage_assoc():
+    #rk868 - 12/13/23 - This is the manage_assoc function for tracks.
     users = request.form.getlist("users[]")
     tracks = request.form.getlist("tracks[]")
     print(users, tracks)
     args = {**request.args}
-    if users and tracks: # we need both for this to work
+    if users and tracks: 
         mappings = []
         for user in users:
             for track in tracks:
