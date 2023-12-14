@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block title %}Landing Page{% endblock %}
 {% block content %}
-<div class="container-fluid">
-    <h1>Welcome {{current_user.username}}</h1>
-    <h2>Here are some of the tracks you have in your playlist</h2>
-    <div class="card-group">
+<div class="container-fluid animate__animated animate__backInLeft">
+    <h1 class="animate__animated animate__backInLeft">Welcome {{current_user.username}}</h1>
+    <h2 class="animate__animated animate__backInLeft">Here are some of the tracks you have in your playlist</h2>
+    <div class="card-group animate__animated animate__fadeInUp">
         {% for result in tracks %}
         <div class="card bg-dark text-white" style="max-width: 20%;">
             <img src="{{ result.track_img }}" class="card-img-top" alt="{{ result.track_name }}">

@@ -55,7 +55,9 @@ def index():
                             t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img
                             FROM IS601_Tracks t
                             LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
-                            WHERE t.track_popularity > 70 LIMIT 20""")
+                            WHERE t.track_popularity > 70
+                            ORDER BY RAND()  
+                            LIMIT 15""")
         print(tracks)
     except Exception as e:
         flash(f"Error fetching tracks: {e}", "danger")

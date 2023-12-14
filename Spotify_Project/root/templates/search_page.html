@@ -6,11 +6,11 @@
 {% set redirect = '/redirect' %} 
 <div class="container-fluid">
     {% include '_search.html' %}
-    <h1>Top Results</h1>
+    <h1 class="animate__animated animate__backInLeft">Top Results</h1>
     {% if top_results == []  %}
-    <p>No results found.</p>
+    <p class="animate__animated animate__backInLeft">No results found.</p>
     {% else %}
-    <div class="card-group">
+    <div class="card-group animate__animated animate__fadeInUp">
         {% for result in top_results %}
         <div class="card bg-dark text-white" style="max-width: 20%;">
             <div class="image-container text-right"> 
