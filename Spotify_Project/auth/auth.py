@@ -155,10 +155,21 @@ def login_register():
     return render_template("login_register.html", login_form=login_form, register_form=register_form)
 
 
-@auth.route("/landing-page", methods=["GET"])
+@auth.route("/", methods=["GET"])
 @login_required
 def landing_page():
-    return render_template("landing_page.html")
+    tracks = None
+    try:
+        print("getting tracks")
+        tracks = DB.selectAll("""SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity, t.track_number, 
+                                t.duration_ms, t.is_explicit,  t.track_img, t.track_uri, t.preview_url
+                                FROM IS601_Tracks t JOIN IS601_TrackPlaylist tp ON t.id = tp.track_id
+                                LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+                                WHERE tp.user_id = %(user_id)s LIMIT 20""", {'user_id': current_user.id})
+        print(tracks)
+    except Exception as e:
+        flash(f"Error fetching tracks: {e}", "danger")
+    return render_template("landing_page.html", tracks=tracks.rows if tracks else [])
 
 @auth.route("/logout", methods=["GET"])
 def logout():

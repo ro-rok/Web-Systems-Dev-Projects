@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}Landing Page{% endblock %}
+{% block title %}Home{% endblock %}
+
+<!-- content -->
 {% block content %}
 <div class="container-fluid">
-    <h1>Welcome {{current_user.username}}</h1>
-    <h2>Here are some of the tracks you have in your playlist</h2>
+    <h1>Welcome To MusiC</h1>
     <div class="card-group">
         {% for result in tracks %}
         <div class="card bg-dark text-white" style="max-width: 20%;">

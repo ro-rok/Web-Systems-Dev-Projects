@@ -14,19 +14,12 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="color: white;">Tracks</th>
                 <th style="color: white;">Users</th>
+                <th style="color: white;">Tracks</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>
-                    {% for track in tracks %}
-                    <span style="color: white;">{{track.track_name}}</span>
-                    <input form="apply" type="checkbox" class="form-check"
-                        name="tracks[]" value="{{track.get('id')}}" />
-                    {% endfor %}
-                </td>
                 <td>
                     {% for user in users %}
                     <span style="color: white;">{{user.username}}</span>
@@ -34,6 +27,14 @@
                         name="users[]" value="{{user.get('id')}}" />
                     {% endfor %}
                 </td>
+                <td>
+                    {% for track in tracks %}
+                    <span style="color: white;">{{track.track_name}}</span>
+                    <input form="apply" type="checkbox" class="form-check"
+                        name="tracks[]" value="{{track.get('id')}}" />
+                    {% endfor %}
+                </td>
+                
             </tr>
         </tbody>
     </table>

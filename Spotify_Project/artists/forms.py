@@ -11,6 +11,9 @@ class ArtistForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ArtistSearchForm(FlaskForm):
+    class Meta:
+        # This overrides the value from the base form.
+        csrf = False
     artist_name = StringField('Artist Name')
     artist_popularity = IntegerField('Artist Popularity')
     followers_total = IntegerField('Followers Total')
@@ -20,6 +23,9 @@ class ArtistSearchForm(FlaskForm):
     submit = SubmitField("Filter")
 
 class ArtistSQLSearchForm(FlaskForm):
+    class Meta:
+        # This overrides the value from the base form.
+        csrf = False
     artist_name = StringField('Artist Name')
     submit = SubmitField('Submit')
 

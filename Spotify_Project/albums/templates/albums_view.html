@@ -26,16 +26,27 @@
                     </div>
                     <div class="mb-3">
                         <strong>Album Total Tracks</strong>
-                        <p>{{ data.total_tracks }}</p>
+                        <p>
+                        <a href="{{ url_for('tracks.list', album_name=data.album_name) }}">View {{data.total_tracks}} Tracks</a>
+                        </p>
                     </div>
+                    <div class="mb-3">
+                        <strong>Artist</strong>
+                        <p>
+                            {% for artist in artists %}
+                            <a href="{{ url_for('artists.view', id=artist.artist_id) }}">{{artist.artist_name}}</a>
+                            {% endfor %}
+                        </p>
                     <div class="mb-3">
                         <strong>Label Name</strong>
                         <p>{{ data.label_name }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Album URI</strong>
-                        <p><a href="{{ data.album_uri }}">{{ data.album_uri }}</a></p>
+                        <strong>View on Spotify</strong>
+                        <p><a href="https://open.spotify.com/album/{{ data.album_id }}">On Browser</a> <br>
+                        <a href="{{ data.album_uri }}">On Desktop</a></p>
                     </div>
+                </div>
                 </div>
                 <div class="col-md-6">
                     <div class="image-container">

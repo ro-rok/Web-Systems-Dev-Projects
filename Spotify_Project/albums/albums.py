@@ -179,15 +179,25 @@ def view():
     if id:
         result = DB.selectOne("SELECT id, album_id, album_name, album_popularity, release_date, total_tracks, label_name, album_uri, album_img FROM IS601_Albums WHERE id = %s", id)
         if result.status and result.row:
-            print(result.row)
+            #print(result.row)
             if result.row.get("label_name") is None:
                 album = Spotify.get_album(result.row.get("album_id"))
                 if album:
                     print("loading album")
                     SQLLoader.loadAlbum(album)
-                    result = DB.selectOne("SELECT id, album_id, album_name, album_popularity, release_date, total_tracks, label_name, album_uri, album_img FROM IS601_Albums WHERE id = %s", id)
-                
-            return render_template("albums_view.html", data=result.row)
+                    result = DB.selectOne(""" SELECT a.id, a.album_id, a.album_name, a.album_popularity, a.release_date, 
+                                            a.total_tracks, a.label_name, a.album_uri, a.album_img
+                                            FROM IS601_Albums a
+                                            WHERE a.id = %s""", id)
+            try:
+                artist_result = DB.selectAll(""" SELECT ar.artist_name, aa.artist_id as artist_id
+                                        FROM IS601_ArtistAlbums aa 
+                                        JOIN IS601_Artists ar ON aa.artist_id = ar.id
+                                        WHERE aa.album_id = %s""", id)
+            except Exception as e:
+                print(f"Error getting artists for album: {e}")
+            print(artist_result)
+            return render_template("albums_view.html", data=result.row, artists=artist_result.rows if artist_result.rows else [])
         else:
             flash("Album record not found", "danger")
     else:

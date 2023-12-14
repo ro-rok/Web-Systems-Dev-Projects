@@ -48,17 +48,19 @@ def api_call(uri):
 
 @root.route("/")
 def index():
-    tracks_info = []
+    tracks = None
     try:
-        tracks_info = DB.select("""
-            SELECT * 
-            FROM IS601_Tracks 
-            ORDER BY RAND()
-            LIMIT 10
-            """)
+        print("getting tracks")
+        tracks = DB.selectAll("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit,
+                            t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img
+                            FROM IS601_Tracks t
+                            LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+                            WHERE t.track_popularity > 70 LIMIT 20""")
+        print(tracks)
     except Exception as e:
         flash(f"Error fetching tracks: {e}", "danger")
-    return render_template("index.html", tracks_info=tracks_info.rows)
+    
+    return render_template("index.html", tracks=tracks.rows if tracks else [])
 
 @root.route("/search", methods=["GET"])
 def search():
