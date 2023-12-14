@@ -84,7 +84,7 @@ def index():
 @root.route("/search", methods=["GET"])
 def search():
     # rk868 12/12/23 - Added search form
-    form = SearchForm()
+    form = SearchForm(request.args)
     #print("searching")
     try:
         if form.validate_on_submit():

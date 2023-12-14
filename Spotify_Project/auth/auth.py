@@ -191,7 +191,7 @@ def logout():
     identity_changed.send(current_app._get_current_object(),
                           identity=AnonymousIdentity())
     flash("Successfully logged out", "success")
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("root.index"))
 
 @auth.route("/profile", methods=["GET", "POST"])
 @login_required

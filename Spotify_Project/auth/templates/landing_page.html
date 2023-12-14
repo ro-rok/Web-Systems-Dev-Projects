@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Landing Page{% endblock %}
+{% block title %}{{current_user.username}} : Landing Page{% endblock %}
 {% block content %}
 <div class="container-fluid animate__animated animate__backInLeft">
     <h1 class="animate__animated animate__backInLeft">Welcome {{current_user.username}}</h1>

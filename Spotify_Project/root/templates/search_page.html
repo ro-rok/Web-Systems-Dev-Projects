@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}Search {{form.query.data |title}} {% endblock %}
 
 <!-- content -->
 {% block content %}
 {% set redirect = '/redirect' %} 
 <div class="container-fluid">
     {% include '_search.html' %}
-    <h1 class="animate__animated animate__backInLeft">Top Results</h1>
+    <h1 class="animate__animated animate__backInLeft">Top Results : {{form.query.data |title}}</h1>
     {% if top_results == []  %}
     <p class="animate__animated animate__backInLeft">No results found.</p>
     {% else %}
