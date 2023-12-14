@@ -112,11 +112,11 @@ def list():
     #rk868 - 12/10/23 - This is the list function for artists.
     form = ArtistSearchForm(request.args)
     allowed_columns = ["artist_name", "artist_popularity", "followers_total"]
-    form.sort.choices = [(k, k) for k in allowed_columns]
+    form.sort.choices = [(k, k.replace("_"," ").title()) for k in allowed_columns]
     query = """
     SELECT id, artist_id, artist_name, artist_popularity, followers_total
     FROM IS601_Artists
-    WHERE 1=1 AND followers_total IS NOT NULL
+    WHERE 1=1
     """
     args = {}
     where = ""
@@ -146,6 +146,20 @@ def list():
     rows = []
     if result.status and result.rows:
         rows = result.rows
+    """
+    
+        a_id= [r["artist_id"] for r in rows if (r.get("artist_popularity") == 0 or r.get("followers_total") is None or r.get("artist_img") is None)]
+        a_id = ",".join(a_id[:limit])
+        print(a_id)
+        if a_id:
+            artists = Spotify.get_artist(a_id)
+            print(artists)
+            if artists:
+                SQLLoader.loadArtist(artists)
+                result = DB.selectAll(query+where, args)
+                rows = result.rows
+                """
+
     total_records = get_total(""" IS601_Artists""")
     return render_template("artists_list.html", rows=rows, form=form, total_records=total_records)
 
@@ -170,14 +184,25 @@ def view():
     #rk868 - 12/10/23 - This is the view function for artists.
     id = request.args.get("id")
     if id:
-            result = DB.selectOne("SELECT id, artist_id, artist_name, artist_popularity, followers_total, artist_uri, artist_img FROM IS601_Artists WHERE id = %s", id )
+        result = DB.selectOne("SELECT id, artist_id, artist_name, artist_popularity, followers_total, artist_uri, artist_img FROM IS601_Artists WHERE id = %s", id )
+        if result.status and result.row:
+            print(result.row)
+            print(result.row.get("artist_popularity"))
+            if result.row.get("artist_popularity") == 0 or result.row.get("followers_total") is None or result.row.get("artist_img") is None:
+                artist = Spotify.get_artist(result.row.get("artist_id"))
+                if artist:
+                    print("loading artist")
+                    SQLLoader.loadArtist(artist)
+                    result = DB.selectOne("SELECT id, artist_id, artist_name, artist_popularity, followers_total, artist_uri, artist_img FROM IS601_Artists WHERE id = %s", id )
             if result.status and result.row:
-                print(result.row)  
-                for key, value in result.row.items():
-                    print(key, value)
-                return render_template("artists_view.html", data=result.row)
-            else:
-                flash("Artist record not found", "danger")
+                genre = DB.selectAll("SELECT genre_name FROM IS601_Genres g JOIN IS601_ArtistGenres ag ON ag.genre_id = g.id WHERE ag.artist_id = %s", id)
+                album = DB.selectAll("SELECT a.id as album_id, a.album_name FROM IS601_Albums a JOIN IS601_ArtistAlbums aa ON aa.album_id = a.id WHERE aa.artist_id = %s", id)
+                print(genre.rows)
+                print(album.rows)
+                return render_template("artists_view.html", data=result.row, genres=genre.rows, albums=album.rows)
+            return render_template("artists_view.html", data=result.row)
+        else:
+            flash("Artist record not found", "danger")
     else:
         flash("Missing ID", "danger")
     return redirect(url_for("artists.list"))

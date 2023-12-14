@@ -14,6 +14,9 @@ print(CURR_DIR)
 sys.path.append(CURR_DIR)
 
 # custom error pages
+def not_logged_in(e):
+    return render_template('401.html'), 401
+
 def page_not_found(e):
     return render_template('404.html'), 404
 
@@ -27,6 +30,7 @@ def create_app(config_filename=''):
     app = Flask(__name__)
     app.register_error_handler(404, page_not_found)
     app.register_error_handler(403, permission_denied)
+    app.register_error_handler(401, not_logged_in)
     app.secret_key = os.environ.get("SECRET_KEY", "missing_secret")
     login_manager.init_app(app)
     # app.config.from_pyfile(config_filename)

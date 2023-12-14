@@ -5,7 +5,12 @@
 {% block content %}
 {% from "_table_helper.html" import render_table %}
 {% set view = "tracks.view" %}
-{% if current_user.has_role("Admin") %}
+{% if current_user and current_user.is_authenticated %}
+{% set assoc = "tracks.record" %}
+{% else %}
+{% set assoc = None %}
+{% endif %}
+{% if (current_user.has_role and current_user.has_role("Admin")) %}
 {% set edit = "tracks.edit" %}
 {% set delete = "tracks.delete" %}
 {% else %}
@@ -15,7 +20,20 @@
 <div class="container-fluid">
     {% include '_tracks_search.html' %}
 
+    {% if title and (current_user.is_authenticated or (current_user.has_role and current_user.has_role("Admin"))) %}
 
-    {{ render_table(rows, "Tracks", ["id"], view, edit, delete) }}
+    <form action="{{url_for('tracks.clear', id=request.args.get('id', current_user.id))}}"
+        onsubmit="return confirm('Are you sure?')">
+        <input type="hidden" name="id"
+            value="{{request.args.get('id', current_user.id)}}" />
+        <input type="submit" class="btn btn-danger" value="Clear Playlist" />
+    </form>
+    {% endif %}
+    <div class="row">
+        <div class="col">
+            Showing Results {{rows | length}}/{{total_records or 0}}
+        </div>
+    </div>
+    {{ render_table(rows, title if title else "Tracks", ["id", "is_assoc", "user_id","id"], view, edit, delete, assoc) }}
 </div>
 {% endblock %}

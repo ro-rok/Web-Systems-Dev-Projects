@@ -1,8 +1,39 @@
 {% extends "layout.html" %}
-{% block title %}Landing Page{% endblock %}
+{% block title %}{{current_user.username}} : Landing Page{% endblock %}
 {% block content %}
-<div class="container-fluid">
-    <div class="h3">Welcome</div>
-    {{current_user.username}}
+<div class="container-fluid animate__animated animate__backInLeft">
+    <h1 class="animate__animated animate__backInLeft">Welcome {{current_user.username}}</h1>
+    {% if tracks == []  %}
+    <p class="animate__animated animate__backInLeft">You have no tracks in your playlist.</p>
+    <a href="{{ url_for('tracks.list') }}" class="btn btn-primary animate__animated animate__backInLeft"><i class="fas fa-plus-circle"></i> Add Tracks</a>
+    {% else %}
+    <h2 class="animate__animated animate__backInLeft">Here are some of the tracks you have in your playlist</h2>
+    <div class="card-group animate__animated animate__fadeInUp">
+        {% for result in tracks %}
+        <div class="card bg-dark text-white" style="max-width: 20%;  margin: 0.5em; border-radius: 2em ">
+            <img src="{{ result.track_img }}" class="card-img-top" alt="{{ result.track_name }}" style="border-radius: 2em 2em 0 0;">
+            <div class="card-body">
+                <h5 class="card-title">{{ result.track_name }}</h5>
+                <p class="card-text"> {{result.album_name}}<br>
+                    <i class="fas fa-fire" style="color: red;"></i>{{result.track_popularity}}<br>
+                <a href="{{ result.uri }}" class="card-text" style="color: rgb(0, 168, 0);"><i class="fab fa-spotify"></i> Desktop</a> &nbsp;
+                                <a href="https://open.spotify.com/track/{{result.track_id}}" class="card-text" style="color: rgb(6, 177, 6);"><i class="fab fa-spotify"></i> Browser</a>
+                
+            </div>
+            <div class="card-footer">
+                <small class="text-muted" style="text-transform: capitalize; float: left;">
+                    <a href="{{url_for('tracks.view', id=result.id)}}" style="text-decoration: none; color:rgb(101, 101, 101)"><i class="fas fa-eye" style="color: aqua;"></i> View</a>
+                </small>
+                <small class="text-muted" style="text-transform: capitalize; float: right; color:yellow"><i class="fas fa-clock" style="color: yellow;"></i>
+                    {{ (result.duration_ms // 60000) }} minutes {{ ((result.duration_ms % 60000) // 1000) }} seconds
+                </small> 
+            </div>
+        </div>
+        {% if loop.index % 5 == 0 %}
+        <div class="w-100"></div>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+
+<!-- content -->
+{% block content %}
+<div class="container-fluid">
+    <h1 class="animate__animated animate__backInLeft">Welcome To MusiC</h1>
+    <h3 class="animate__animated animate__backInLeft">Your Music, Your Way</h3>
+    <!--
+    <div class="animate__animated animate__backInLeft">
+        <p>Search for your favorite artists, albums, and tracks.<BR>
+        View their details and play them on Spotify.
+        <BR>Register and login to add tracks to your playlist.</p>
+    </div>
+    <div class="animate__animated animate__backInLeft">
+        <p>Click on the links below to get started.</p>
+    </div> -->
+    <div class="carousel-container d-flex flex-wrap animate__animated animate__fadeInUp">
+        <div id="carouselDark-1" class="carousel carousel slide" >
+            <div style="text-align: center;">
+                <h3>Tracks</h3>
+            </div>
+            <div class="carousel-indicators">
+                {% for result in tracks %}
+                <button type="button" data-bs-target="#carouselDark-1" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" {% endif %} aria-label="Slide {{ loop.index }}"></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner">
+                {% for result in tracks %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="200">
+                    <img src="{{ result.track_img }}" class="d-block w-100" alt="{{ result.track_name }}" style="border-radius: 2em;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <a href="{{ url_for('tracks.view', id=result.id) }}" style="text-decoration: none; color:white">
+                        <div style="background-color: rgba(0, 0, 0, 0.5); border-radius: 20%">
+                        <h5>{{ result.track_name }}</h5>
+                        <p>{{ result.album_name }} <br>
+                            Popularity: {{ result.track_popularity }}</p>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselDark-1" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselDark-1" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+
+        <div id="carouselDark-2" class="carousel carousel slide" >
+            <div style="text-align: center;">
+                <h3>Albums</h3>
+            </div>
+            <div class="carousel-indicators">
+                {% for result in albums %}
+                <button type="button" data-bs-target="#carouselDark-2" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" {% endif %} aria-label="Slide {{ loop.index }}"></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner">
+                {% for result in albums %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="200">
+                    <img src="{{ result.album_img }}" class="d-block w-100" alt="{{ result.album_name }}" style="border-radius: 2em;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <a href="{{ url_for('albums.view', id=result.id) }}" style="text-decoration: none; color:white">
+                        <div style="background-color: rgba(0, 0, 0, 0.5); border-radius: 20%">
+                        <h5>{{ result.album_name }}</h5>
+                        <p>{{ result.artist_name }} <br>
+                            Popularity: {{ result.album_popularity }}</p>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselDark-2" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselDark-2" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+
+        <div id="carouselDark-3" class="carousel carousel slide" >
+            <div style="text-align: center;">
+                <h3>Artists</h3>
+            </div>
+            <div class="carousel-indicators">
+                {% for result in artists %}
+                <button type="button" data-bs-target="#carouselDark-3" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" {% endif %} aria-label="Slide {{ loop.index }}"></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner">
+                {% for result in artists %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="200">
+                    <img src="{{ result.artist_img }}" class="d-block w-100" alt="{{ artists.artist_name }}" style="border-radius: 2em;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <a href="{{ url_for('artists.view', id=result.id) }}" style="text-decoration: none; color:white">
+                        <div style="background-color: rgba(0, 0, 0, 0.5); border-radius: 20%">
+                        <h5>{{ result.artist_name }}</h5>
+                        <p>Followers {{ result.followers_total }}
+                            <br>
+                            Popularity: {{ result.artist_popularity }}</p>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselDark-3" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselDark-3" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media (min-width: 768px) {
+        .carousel-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+        }
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 100%;
+            scroll-snap-align: start;
+        }
+    }
+    .carousel {
+        width: 33.33333333333333333333333333333333333333333333%;
+    }
+</style>
+
+{% endblock %}
