@@ -8,7 +8,8 @@
     <div class="card-group">
         {% for result in tracks %}
         <div class="card bg-dark text-white" style="max-width: 20%;">
-            <img src="{{ result.track_img }}" class="card-img-top" alt="{{ result.name }}">
+            <div class="image-container text-right"> 
+                <img class="img-fluid img-thumbnail card-img-top" src="{{ result.track_img }}"  alt="{{ result.name }}">
             <div class="card-body">
                 <h5 class="card-title">{{ result.artist_name }}</h5>
                 <p class="card-text">{{ result.album_name }}</p>

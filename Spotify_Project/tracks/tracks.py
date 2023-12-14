@@ -212,6 +212,7 @@ def search():
 def view():
     #rk868 - 12/11/23 - This is the view function for tracks.
     id = request.args.get("id")
+    in_playlist = 0
     if id:
         track = DB.selectOne("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit,
                                 t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img
@@ -222,9 +223,10 @@ def view():
             album_artist= DB.selectAll("""SELECT a.artist_name, aa.artist_id FROM IS601_ArtistAlbums aa LEFT JOIN IS601_Artists a ON aa.artist_id = a.id WHERE aa.album_id = %s""", album_id)
             print("album_artist", album_artist)
             if album_artist.status:
-                in_playlist = DB.selectOne("""SELECT COUNT(1) as total FROM IS601_TrackPlaylist WHERE track_id = %s AND user_id = %s""", track.row.get("id"), current_user.id)
-                print("in_playlist", in_playlist)
-                return render_template("tracks_view.html", track=track.row, album_artists=album_artist.rows , in_playlist=in_playlist.row.get("total"))
+                if current_user.is_authenticated:
+                    in_playlist = DB.selectOne("""SELECT COUNT(1) as total FROM IS601_TrackPlaylist WHERE track_id = %s AND user_id = %s""", track.row.get("id"), current_user.id)
+                    print("in_playlist", in_playlist)
+                return render_template("tracks_view.html", track=track.row, album_artists=album_artist.rows , in_playlist=in_playlist.row.get("total") if in_playlist and in_playlist.status else 0)
             flash("No track found", "danger")
     else:
         flash("Missing ID", "danger")

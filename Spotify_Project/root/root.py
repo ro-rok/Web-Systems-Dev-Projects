@@ -83,13 +83,14 @@ def search():
             except Exception as e:
                 flash(f"Error searching for tracks: {e}", "danger")
         else:
-            query = request.args.get("query")
-            result = Spotify.search(query)
-            print("result", type(result), result)
-            if result:
-                return render_template("search_page.html", form=form, top_results=result)
-            else:
-                flash(f"No results found for {query}", "warning")
+            if request.args.get("query"):
+                query = request.args.get("query")
+                result = Spotify.search(query)
+                print("result", type(result), result)
+                if result:
+                    return render_template("search_page.html", form=form, top_results=result)
+                else:
+                    flash(f"No results found for {query}", "warning")
     except Exception as e:
         flash(f"Error performing search: {e}", "danger")
         

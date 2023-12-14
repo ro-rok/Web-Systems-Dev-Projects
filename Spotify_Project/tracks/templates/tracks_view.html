@@ -37,15 +37,15 @@
                     </div>
                     {% if current_user.is_authenticated %}
                         {% if in_playlist %}
-                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-danger">Remove it from your Playlist</a>
+                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-danger"><i class="fas fa-minus-circle"></i> Remove it from your Playlist</a>
                         {% else %}
-                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-success">Add it to your Playlist</a>
+                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add it to your Playlist</a>
                         {% endif %}
                     {% endif %}
-                    <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary">Back</a>
+                    <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
                     {% if (current_user.has_role and current_user.has_role("Admin")) %}
-                        <a href="{{ url_for('tracks.edit', id=track.id) }}" class="btn btn-primary">Edit</a>
-                        <a href="{{ url_for('tracks.delete', id=track.id) }}" class="btn btn-danger">Delete</a>
+                        <a href="{{ url_for('tracks.edit', id=track.id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="{{ url_for('tracks.delete', id=track.id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
                     {% endif %}
                 </div>
                 <div class="col-md-4">
@@ -54,9 +54,9 @@
                         <p>{{ track.track_popularity }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Play is on</strong>
-                        <p><a href="{{ track.track_uri }}">On Desktop</a><br>
-                        <a href="https://open.spotify.com/track/{{track.track_id}}">On Browser</a></p>
+                        <strong>Play it on</strong>
+                        <p><a href="{{ track.track_uri }}"><i class="fas fa-desktop"></i> On Desktop</a><br>
+                        <a href="https://open.spotify.com/track/{{track.track_id}}"><i class="fas fa-globe"></i> On Browser</a></p>
                     </div>
                     <div class="mb-3">
                         <strong>Explicit</strong>

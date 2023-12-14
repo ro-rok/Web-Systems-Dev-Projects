@@ -13,7 +13,9 @@
     <div class="card-group">
         {% for result in top_results %}
         <div class="card bg-dark text-white" style="max-width: 20%;">
-            <img src="{{ result.img }}" class="card-img-top" alt="{{ result.name }}">
+            <div class="image-container text-right"> 
+                <img class="img-fluid img-thumbnail card-img-top" src="{{ result.img }}" alt="{{ result.name }}">
+            </div>
             <div class="card-body">
                 <h5 class="card-title">{{ result.name }}</h5>
                 <p class="card-text" style="color: green;">Listen to it on Spotify :</p>
