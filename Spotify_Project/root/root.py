@@ -49,6 +49,8 @@ def api_call(uri):
 @root.route("/")
 def index():
     tracks = None
+    albums = None
+    artists = None
     try:
         print("getting tracks")
         tracks = DB.selectAll("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit,
@@ -58,11 +60,26 @@ def index():
                             WHERE t.track_popularity > 70
                             ORDER BY RAND()  
                             LIMIT 15""")
-        print(tracks)
+        print("getting albums")
+        albums = DB.selectAll("""SELECT a.id, a.album_id, a.album_name, a.album_popularity, a.album_uri, a.album_img, r.artist_name 
+                            FROM IS601_Albums a 
+                            LEFT JOIN IS601_ArtistAlbums ra ON ra.album_id = a.id
+                            LEFT JOIN IS601_Artists r ON r.id = ra.artist_id
+                            WHERE a.album_popularity > 60
+                            ORDER BY RAND()
+                            LIMIT 15""")
+        print("getting artists")
+        artists = DB.selectAll("""SELECT ar.id, ar.artist_name,  ar.artist_img, ar.artist_popularity , ar.followers_total
+                            FROM IS601_Artists ar
+                            WHERE ar.artist_popularity > 50
+                            ORDER BY RAND()
+                            LIMIT 15""")
+        
+        #print(tracks)
     except Exception as e:
-        flash(f"Error fetching tracks: {e}", "danger")
+        flash(f"Error fetching data: {e}", "danger")
     
-    return render_template("index.html", tracks=tracks.rows if tracks else [])
+    return render_template("index.html", tracks=tracks.rows if tracks else [], albums=albums.rows if albums else [], artists=artists.rows if artists else [])
 
 @root.route("/search", methods=["GET"])
 def search():
