@@ -507,17 +507,25 @@ def manage_assoc():
             for track in tracks:
                 mappings.append({"user_id":user, "track_id":track})
         if len(mappings) > 0:
+            ad = 0
+            su = 0
             for mapping in mappings:
                 print(f"mapping {mapping}")
                 try:
                     result = DB.insertOne("INSERT INTO IS601_TrackPlaylist (user_id, track_id) VALUES(%(user_id)s, %(track_id)s)", mapping)
                     if result.status:
-                        pass
-                        #flash(f"Successfully enabled/disabled roles for the user/role {len(mappings)} mappings", "success")
+                        ad += 1
+                        
                 except Exception as e:
                     print(f"Insert error {e}")
                     result = DB.delete("DELETE FROM IS601_TrackPlaylist WHERE user_id = %(user_id)s and track_id = %(track_id)s",mapping)
-            flash("Successfully applied mappings", "success")
+                    if result.status:
+                        su += 1
+            msg = "Successfully"
+            msg += f" added: {ad} " if ad > 0 else ""
+            msg += f" removed: {su} " if su > 0 else ""
+            msg += " associations"
+            flash(msg, "success")            
         else:
             flash("No user/track mappings", "danger")
 
