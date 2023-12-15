@@ -100,7 +100,6 @@ def assign():
                 (SELECT GROUP_CONCAT(name, ' (' , IF(ur.is_active = 1,'active','inactive') , ')') from 
                 IS601_UserRoles ur JOIN IS601_Roles on ur.role_id = IS601_Roles.id WHERE ur.user_id = IS601_Users.id) as roles
             FROM IS601_Users where email like %s limit 10
-            
             """, f"%{email}%")
             if result.status and result.rows:
                 users = result.rows

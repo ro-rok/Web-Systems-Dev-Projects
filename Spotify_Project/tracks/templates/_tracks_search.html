@@ -1,5 +1,5 @@
 {% from "_formhelpers.html" import render_field %}
-<form method="GET">
+<form method="GET" class="animate__animated animate__rotateInDownLeft">
     <div class="row mb-3">
         {% for field in form %}
         {% if field.name != 'csrf_token' %}

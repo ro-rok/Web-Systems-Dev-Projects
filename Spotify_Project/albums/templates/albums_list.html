@@ -5,7 +5,7 @@
 {% block content %}
 {% from "_table_helper.html" import render_table %}
 {% set view = "albums.view" %}
-{% if current_user.has_role("Admin") %}
+{% if (current_user.has_role and current_user.has_role("Admin")) %}
 {% set edit = "albums.edit" %}
 {% set delete = "albums.delete" %}
 {% else %}
@@ -14,7 +14,11 @@
 {% endif %}
 <div class="container-fluid">
     {% include '_albums_search.html' %}
-
+    <div class="row">
+        <div class="col">
+            Showing Results {{rows | length}}/{{total_records or 0}}
+        </div>
+    </div>
 
     {{ render_table(rows, "Albums", ["id"], view, edit, delete) }}
 </div>

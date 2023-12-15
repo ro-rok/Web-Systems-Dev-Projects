@@ -17,12 +17,16 @@ class TrackForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class TrackSearchForm(FlaskForm):
+    class Meta:
+        # This overrides the value from the base form.
+        csrf = False
     track_name = StringField('Track Name')
     track_popularity = IntegerField('Track Popularity')
     is_explicit = BooleanField('Is Explicit')
     album_name = StringField('Album Name')
     limit = IntegerField("Limit", default=10)
     sort = SelectField("Sort")
+    page = IntegerField("page")
     order = SelectField("Order", choices=[("asc","+"), ("desc","-")])
     submit = SubmitField("Filter")
 class TrackSQLSearchForm(FlaskForm):
@@ -32,3 +36,25 @@ class TrackSQLSearchForm(FlaskForm):
 class TrackFetchForm(FlaskForm):
     track_id = StringField('Track ID/s', validators=[DataRequired(), Length(min=1, max=500)])
     submit = SubmitField('Submit')
+
+class AdminTrackSearchForm(FlaskForm):
+    class Meta:
+        # This overrides the value from the base form.
+        csrf = False
+    username = StringField("Username")
+    track_name = StringField('Track Name')
+    track_popularity = IntegerField('Track Popularity')
+    is_explicit = BooleanField('Is Explicit')
+    album_name = StringField('Album Name')
+    limit = IntegerField("Limit", default=10)
+    sort = SelectField("Sort")
+    order = SelectField("Order", choices=[("asc","+"), ("desc","-")])
+    submit = SubmitField("Filter")
+
+class AssocForm(FlaskForm):
+    class Meta:
+        # This overrides the value from the base form.
+        csrf = False
+    username = StringField("Username")
+    track_name = StringField('Track Name')
+    submit = SubmitField("Filter")

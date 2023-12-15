@@ -1,69 +1,96 @@
 {% extends "layout.html" %}
-{% block title %}View Track{% endblock %}
+{% block title %}Track: {{ track.track_name }}{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
     <div class="h3">View Track</div>
     <div class="card bg-black">
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row animate__animated animate__slideInLeft">
+                <div class="col-md-4" style="width: 27%;">
                     <div class="mb-3">
-                        <strong>Spotify ID</strong>
+                        <strong><i class="fas fa-id-badge" style="color: #FF69B4;"></i> &nbsp; Spotify ID</strong>
                         <p>{{ track.track_id }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Track Name</strong>
+                        <strong><i class="fas fa-music" style="color: #FFD700;"></i> &nbsp; Name</strong>
                         <p>{{ track.track_name }}</p>
                     </div>
                     <div class="mb-3">
-                        <strong>Track Duration</strong>
-                        <p>{{ (track.duration_ms // 60000) }} minutes {{ ((track.duration_ms % 60000) // 1000) }} seconds</p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Track Popularity</strong>
-                        <p>{{ track.track_popularity }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Track URI</strong>
-                        <p><a href="{{ track.track_uri }}">On Desktop</a></p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Track URL</strong>
-                        <p><a href="https://open.spotify.com/track/{{track.track_id}}">On Browser</a></p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Track Explicit</strong>
-                        {% if track.is_explicit %}
-                            <p>True</p>
-                        {% else %}
-                            <p>False</p>
-                        {% endif %}
-                    </div>
-                    <div class="mb-3">
-                        <strong>Track Album</strong>
+                        <strong><i class="fas fa-compact-disc" style="color: #00BFFF;"></i> &nbsp; Album</strong>
                         <a href="{{ url_for('albums.view', id=track.album_id) }}"><p>{{ track.album_name }}</p></a>
                     </div>
                     <div class="mb-3">
-                        <strong>Track Artist</strong>
-                        <a href="{{ url_for('artists.view', id=artist_id) }}"><p>{{ album_artist.artist_name }}</p></a>
-                    </div>                
-                </div>
-                <div class="col-md-6">
-                    <div class="image-container text-right"> 
-                        <img src="{{ track.track_img }}" alt="Track Image" style="width: 25em; height: 30em;">
+                        <strong><i class="fas fa-user" style="color: #FF1493;"></i> &nbsp; Artist</strong>
+                        <p>
+                            {% for artist in album_artists %}
+                                <a href="{{ url_for('artists.view', id=artist.artist_id) }}">{{ artist.artist_name }}</a><br>
+                            {% endfor %}
+                        </p>
                     </div>
-                    <audio controls="controls" style="width: 26em" >
-                        <source src="{{ track.preview_url }}" type="audio/mpeg">
-                    </audio>
-
+                    <div class="mb-3">
+                        {% if featuring %}
+                            <strong><i class="fas fa-user-friends" style="color: #FF8C00;"></i> &nbsp; Featuring</strong>
+                            <p>
+                                {% for artist in featuring %}
+                                    <a href="{{ url_for('artists.view', id=artist.artist_id) }}">{{ artist.artist_name }}</a><br>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                    </div> 
+                    <div class="mb-3">
+                        <strong><i class="fas fa-chart-line" style="color: red;"></i> &nbsp; Popularity</strong>
+                        <p><i class="fas fa-fire" style="color: red;"></i> &nbsp; {{ track.track_popularity }}</p>
+                    </div>  
+                </div>
+                <div class="col-md-4" style="width: 42%;" >
+                    <div class="image-container text-right"> 
+                        <img class="img-fluid img-thumbnail" src="{{ track.track_img }}" alt="Image" style="width: 25em; height: 30em;">
+                    </div>
+                    {% if current_user.is_authenticated %}
+                        {% if in_playlist %}
+                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-danger"><i class="fas fa-minus-circle"></i> &nbsp; Remove it from your Playlist</a>
+                        {% else %}
+                            <a href="{{ url_for('tracks.record', id=track.id) }}" class="btn btn-success"><i class="fas fa-plus-circle"></i> &nbsp; Add it to your Playlist</a>
+                        {% endif %}
+                    {% endif %}
+                    <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary"><i class="fas fa-arrow-left" ></i> &nbsp; Back</a>
+                    {% if (current_user.has_role and current_user.has_role("Admin")) %}
+                        <a href="{{ url_for('tracks.edit', id=track.id) }}" class="btn btn-primary"><i class="fas fa-edit"></i> &nbsp; Edit</a>
+                        <a href="{{ url_for('tracks.delete', id=track.id) }}" class="btn btn-danger"><i class="fas fa-trash"></i> &nbsp; Delete</a>
+                    {% endif %}
+                </div>
+                <div class="col-md-4" style="width: 25%;">
+                    <div class="mb-3">
+                        <strong><i class="fas fa-clock" style="color: #808080;"></i> &nbsp; Duration</strong>
+                        <p>{{ (track.duration_ms // 60000) }} minutes {{ ((track.duration_ms % 60000) // 1000) }} seconds</p>
+                    </div> 
+                    <div class="mb-3">
+                        <strong><i class="fas fa-calendar-alt" style="color: #00FFFF;"></i> &nbsp; Release Date</strong>
+                        <p>{{ track.release_date }}</p>
+                    <div class="mb-3">
+                        <strong><i class="fab fa-spotify" style="color: #1DB954;"></i> &nbsp; Play the Track on Spoitfy</strong>
+                        <ul style="list-style-type: none;">
+                            <li><i class="fas fa-desktop" style="color: #FF69B4;"></i> &nbsp; <a href="{{ track.track_uri }}">On Desktop</a></li>
+                            <li><i class="fas fa-globe" style="color: #00BFFF;"></i> &nbsp; <a href="https://open.spotify.com/track/{{track.track_id}}">On Browser</a></li>
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        <strong><i class="fas fa-exclamation-triangle" style="color: #fff700;"></i> &nbsp; Explicit</strong>
+                        {% if track.is_explicit %}
+                            <p>Yes <i class="fas fa-exclamation-circle" style="color: #FF0000;"></i> &nbsp;</p>
+                        {% else %}
+                            <p>No <i class="fas fa-check-circle" style="color: #00ff0d;"></i> &nbsp;</p>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong><i class="fas fa-headphones" style="color: #555555;"></i> &nbsp; Preview</strong>
+                        <div class="embed-responsive embed-responsive-21by9">
+                            <iframe class="embed-responsive-item" src="https://open.spotify.com/embed/track/{{track.track_id}}" 
+                            frameborder="0" allowtransparency="true" allow="encrypted-media" style="width: 25em;"></iframe>
+                        </div>
                 </div>
             </div>
-            <a href="{{ url_for('tracks.list') }}" class="btn btn-secondary">Back</a>
-            {% if current_user.has_role("Admin") %}
-            <a href="{{ url_for('tracks.edit', id=track.id) }}" class="btn btn-primary">Edit</a>
-            <a href="{{ url_for('tracks.delete', id=track.id) }}" class="btn btn-danger">Delete</a>
-            {% endif %}
         </div>
     </div>
 </div>

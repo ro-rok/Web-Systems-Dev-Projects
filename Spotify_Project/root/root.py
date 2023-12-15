@@ -48,22 +48,43 @@ def api_call(uri):
 
 @root.route("/")
 def index():
-    tracks_info = []
+    tracks = None
+    albums = None
+    artists = None
     try:
-        tracks_info = DB.select("""
-            SELECT * 
-            FROM IS601_Tracks 
-            ORDER BY RAND()
-            LIMIT 10
-            """)
+        print("getting tracks")
+        tracks = DB.selectAll("""SELECT t.id, t.track_id, a.album_name, a.id as album_id, t.track_name, t.duration_ms, t.is_explicit,
+                            t.track_popularity, t.preview_url, t.track_number, t.track_uri, t.track_img
+                            FROM IS601_Tracks t
+                            LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+                            WHERE t.track_popularity > 70
+                            ORDER BY RAND()  
+                            LIMIT 15""")
+        print("getting albums")
+        albums = DB.selectAll("""SELECT a.id, a.album_id, a.album_name, a.album_popularity, a.album_uri, a.album_img, r.artist_name 
+                            FROM IS601_Albums a 
+                            LEFT JOIN IS601_ArtistAlbums ra ON ra.album_id = a.id
+                            LEFT JOIN IS601_Artists r ON r.id = ra.artist_id
+                            WHERE a.album_popularity > 60
+                            ORDER BY RAND()
+                            LIMIT 15""")
+        print("getting artists")
+        artists = DB.selectAll("""SELECT ar.id, ar.artist_name,  ar.artist_img, ar.artist_popularity , ar.followers_total
+                            FROM IS601_Artists ar
+                            WHERE ar.artist_popularity > 50
+                            ORDER BY RAND()
+                            LIMIT 15""")
+        
+        #print(tracks)
     except Exception as e:
-        flash(f"Error fetching tracks: {e}", "danger")
-    return render_template("index.html", tracks_info=tracks_info.rows)
+        flash(f"Error fetching data: {e}", "danger")
+    
+    return render_template("index.html", tracks=tracks.rows if tracks else [], albums=albums.rows if albums else [], artists=artists.rows if artists else [])
 
 @root.route("/search", methods=["GET"])
 def search():
     # rk868 12/12/23 - Added search form
-    form = SearchForm()
+    form = SearchForm(request.args)
     #print("searching")
     try:
         if form.validate_on_submit():
@@ -81,13 +102,14 @@ def search():
             except Exception as e:
                 flash(f"Error searching for tracks: {e}", "danger")
         else:
-            query = request.args.get("query")
-            result = Spotify.search(query)
-            print("result", type(result), result)
-            if result:
-                return render_template("search_page.html", form=form, top_results=result)
-            else:
-                flash(f"No results found for {query}", "warning")
+            if request.args.get("query"):
+                query = request.args.get("query")
+                result = Spotify.search(query)
+                print("result", type(result), result)
+                if result:
+                    return render_template("search_page.html", form=form, top_results=result)
+                else:
+                    flash(f"No results found for {query}", "warning")
     except Exception as e:
         flash(f"Error performing search: {e}", "danger")
         
@@ -99,7 +121,7 @@ def redirecter():
     if uri:
         id = checker(uri)
         if id:
-            return redirect(url_for(f"{uri.split(':')[-2]}.view", id=id))
+            return redirect(url_for(f"{uri.split(':')[-2]}s.view", id=id))
         else: 
             return api_call(uri)
     return redirect(url_for("root.index"))    

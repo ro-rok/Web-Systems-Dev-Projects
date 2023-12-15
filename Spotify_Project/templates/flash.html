@@ -2,7 +2,7 @@
 {% if messages %}
 <div class=flashes>
     {% for category, message in messages %}
-    <div class="alert alert-{{ category or 'info' }}" role="alert">{{ message }}</div>
+    <div class="alert alert-{{ category or 'info' }} animate__animated animate__pulse" role="alert">{{ message }}</div>
     {% endfor %}
 </div>
 {% endif %}

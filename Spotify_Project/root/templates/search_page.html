@@ -1,28 +1,30 @@
 {% extends "layout.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}Search {{form.query.data |title}} {% endblock %}
 
 <!-- content -->
 {% block content %}
 {% set redirect = '/redirect' %} 
 <div class="container-fluid">
     {% include '_search.html' %}
-    <h1>Top Results</h1>
+    <h1 class="animate__animated animate__backInLeft">Top Results : {{form.query.data |title}}</h1>
     {% if top_results == []  %}
-    <p>No results found.</p>
+    <p class="animate__animated animate__backInLeft">No results found.</p>
     {% else %}
-    <div class="card-group">
+    <div class="card-group animate__animated animate__fadeInUp">
         {% for result in top_results %}
-        <div class="card bg-dark text-white" style="max-width: 20%;">
-            <img src="{{ result.img }}" class="card-img-top" alt="{{ result.name }}">
+        <div class="card bg-dark text-white" style="max-width: 20%; margin: 0.5em; border-radius: 2em">
+            <div class="image-container text-right"> 
+                <img class="img-fluid img-thumbnail card-img-top" src="{{ result.img }}" alt="{{ result.name }}" style="border-radius: 2em 2em 0 0;">
+            </div>
             <div class="card-body">
                 <h5 class="card-title">{{ result.name }}</h5>
-                <p class="card-text" style="color: green;">Listen to it on Spotify :</p>
-                <a href="{{ result.uri }}" class="card-text">Desktop</a>
-                <a href="https://open.spotify.com/{{result.type}}/{{result.id}}" class="card-text">Browser</a>
+                <p class="card-text" style="color: rgb(0, 168, 0);">Listen to it on Spotify :</p>
+                <a href="{{ result.uri }}" class="card-text" style="color: rgb(0, 168, 0);"><i class="fab fa-spotify"></i> Desktop</a> &nbsp;
+                <a href="https://open.spotify.com/{{result.type}}/{{result.id}}" class="card-text " style="color: rgb(0, 168, 0);"><i class="fab fa-spotify"></i> Browser</a>
             </div>
             <div class="card-footer">
-                <small class="text-muted" style="text-transform: capitalize;">
-                    <a href="{{ redirect }}?uri={{ result.uri }}"> {{ result.type }} View </a>
+                <small class="text-muted" style="text-transform: capitalize;"> <i class="fas fa-eye" style="color: aqua;"></i>
+                    <a href="{{ redirect }}?uri={{ result.uri }}" style="text-decoration: none; color:rgb(101, 101, 101)"> {{ result.type }} View </a>
                 </small>
             </div>
         </div>

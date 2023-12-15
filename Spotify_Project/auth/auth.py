@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for,current_app, session
+from flask import Blueprint, render_template, flash, redirect, request, url_for,current_app, session
 from auth.forms import LoginForm, ProfileForm, RegisterForm
 from sql.db import DB
 
@@ -155,10 +155,30 @@ def login_register():
     return render_template("login_register.html", login_form=login_form, register_form=register_form)
 
 
-@auth.route("/landing-page", methods=["GET"])
+@auth.route("/home", methods=["GET"])
 @login_required
 def landing_page():
-    return render_template("landing_page.html")
+    tracks = None
+    try:
+        print("getting tracks")
+        tracks = DB.selectAll("""
+            SELECT t.id, t.track_id, a.album_name, t.track_name, t.track_popularity,
+            t.duration_ms, t.is_explicit,  t.track_img, t.track_uri
+            FROM IS601_Tracks t 
+            JOIN IS601_TrackPlaylist tp ON t.id = tp.track_id
+            LEFT JOIN IS601_Albums a ON t.album_id = a.album_id
+            WHERE tp.user_id = %(user_id)s 
+            AND t.id IN (
+                SELECT track_id
+                FROM IS601_TrackPlaylist
+                WHERE user_id = %(user_id)s
+            )
+            ORDER BY RAND() LIMIT 15
+        """, {'user_id': current_user.id})
+        print(tracks)
+    except Exception as e:
+        flash(f"Error fetching tracks: {e}", "danger")
+    return render_template("landing_page.html", tracks=tracks.rows if tracks else [])
 
 @auth.route("/logout", methods=["GET"])
 def logout():
@@ -171,47 +191,52 @@ def logout():
     identity_changed.send(current_app._get_current_object(),
                           identity=AnonymousIdentity())
     flash("Successfully logged out", "success")
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("root.index"))
 
 @auth.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    user_id = current_user.get_id()
+    user_id = request.args.get("id", current_user.id)
+    logged_in_user_id = current_user.id
+    is_my_profile = int(user_id) == int(logged_in_user_id)
     form = ProfileForm()
     if form.validate_on_submit():
-        is_valid = True
-        email = form.email.data
-        username = form.username.data
-        current_password = form.current_password.data
-        password = form.password.data
-        confirm = form.confirm.data
-        # handle password change only if all 3 are provided
-        if current_password and password and confirm:
-            try:
-                result = DB.selectOne("SELECT password FROM IS601_Users where id = %s", user_id)
-                if result.status and result.row:
-                    # verify current password
-                    if bcrypt.check_password_hash(result.row["password"], current_password):
-                        # update new password
-                        hash = bcrypt.generate_password_hash(password)
-                        try:
-                            result = DB.update("UPDATE IS601_Users SET password = %s WHERE id = %s", hash, user_id)
-                            if result.status:
-                                flash("Updated password", "success")
-                        except Exception as ue:
-                            flash(ue, "danger")
-                    else:
-                        flash("Invalid password","danger")
-            except Exception as se:
-                flash(se, "danger")
-        
-        if is_valid:
-            try: # update email, username (this will trigger if nothing changed but it's fine)
-                result = DB.update("UPDATE IS601_Users SET email = %s, username = %s WHERE id = %s", email, username, user_id)
-                if result.status:
-                    flash("Saved profile", "success")
-            except Exception as e:
-                check_duplicate(e)
+        if is_my_profile:
+            is_valid = True
+            email = form.email.data
+            username = form.username.data
+            current_password = form.current_password.data
+            password = form.password.data
+            confirm = form.confirm.data
+            # handle password change only if all 3 are provided
+            if current_password and password and confirm:
+                try:
+                    result = DB.selectOne("SELECT password FROM IS601_Users where id = %s", user_id)
+                    if result.status and result.row:
+                        # verify current password
+                        if bcrypt.check_password_hash(result.row["password"], current_password):
+                            # update new password
+                            hash = bcrypt.generate_password_hash(password)
+                            try:
+                                result = DB.update("UPDATE IS601_Users SET password = %s WHERE id = %s", hash, user_id)
+                                if result.status:
+                                    flash("Updated password", "success")
+                            except Exception as ue:
+                                flash(ue, "danger")
+                        else:
+                            flash("Invalid password","danger")
+                except Exception as se:
+                    flash(se, "danger")
+            
+            if is_valid:
+                try: # update email, username (this will trigger if nothing changed but it's fine)
+                    result = DB.update("UPDATE IS601_Users SET email = %s, username = %s WHERE id = %s", email, username, user_id)
+                    if result.status:
+                        flash("Saved profile", "success")
+                except Exception as e:
+                    check_duplicate(e)
+        else:
+            flash("You can't edit someone else's profile", "danger")
     try:
         # get latest info if anything changed
         result = DB.selectOne("SELECT id, email, username FROM IS601_Users where id = %s", user_id)
@@ -221,11 +246,11 @@ def profile():
             # form = ProfileForm(obj=user)
             print("loading user", user)
             form.username.data = user.username
-            form.email.data = user.email
-            # TODO update session
-            current_user.email = user.email
-            current_user.username = user.username
-            session["user"] = current_user.toJson()
+            if is_my_profile:
+                form.email.data = user.email
+                current_user.email = user.email
+                current_user.username = user.username
+                session["user"] = current_user.toJson()
     except Exception as e:
         flash(e, "danger")
-    return render_template("profile.html", form=form)
+    return render_template("profile.html", form=form,is_my_profile=is_my_profile)
