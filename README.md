@@ -1,4 +1,4 @@
-# IS601 - Course Projects
+# Web Systems Development - Course Projects
 
 This repository contains various projects and assignments for the IS601 course. Below is a brief overview of each module and project included in this repository.
 
